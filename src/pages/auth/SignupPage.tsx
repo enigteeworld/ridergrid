@@ -13,6 +13,8 @@ import {
   ArrowRight,
   Package,
   UserCircle,
+  CheckCircle2,
+  Truck,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -38,6 +40,7 @@ export function SignupPage() {
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const validateAccountStep = () => {
     const newErrors: Record<string, string> = {};
@@ -64,7 +67,9 @@ export function SignupPage() {
       newErrors.password = 'Password must be at least 8 characters';
     }
 
-    if (password !== confirmPassword) {
+    if (!confirmPassword) {
+      newErrors.confirmPassword = 'Please confirm your password';
+    } else if (password !== confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
     }
 
@@ -137,238 +142,454 @@ export function SignupPage() {
     }
   };
 
+  const fieldBaseClass =
+    'h-12 rounded-2xl border border-white/14 bg-white/[0.08] pl-12 pr-11 text-[15px] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-md placeholder:text-white/32 transition-all duration-200 focus:border-violet-400/70 focus:bg-white/[0.1] focus:text-white focus:ring-4 focus:ring-violet-500/10 focus-visible:ring-4 focus-visible:ring-violet-500/10 selection:bg-violet-500/30';
+
   return (
-    <div className="p-6 sm:p-8">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-gray-900">
-          {step === 'account' ? 'Create account' : 'Choose account type'}
-        </h2>
-        <p className="text-gray-500 mt-2">
-          {step === 'account'
-            ? 'Enter your details to get started'
-            : 'How will you use Dispatch NG?'}
-        </p>
-      </div>
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#090912] via-[#151529] to-[#0b0b14]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(139,92,246,0.28),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(217,70,239,0.24),transparent_30%),radial-gradient(circle_at_center,rgba(255,255,255,0.04),transparent_45%)]" />
+      <div className="absolute -top-24 -left-16 h-56 w-56 rounded-full bg-violet-600/20 blur-3xl" />
+      <div className="absolute -bottom-20 -right-14 h-56 w-56 rounded-full bg-fuchsia-600/20 blur-3xl" />
 
-      {step === 'account' ? (
-        <div className="space-y-5">
-          <div className="space-y-2">
-            <Label htmlFor="fullName">Full Name</Label>
-            <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <Input
-                id="fullName"
-                placeholder="John Doe"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                className={cn('pl-10', errors.fullName && 'border-red-500')}
-              />
-            </div>
-            {errors.fullName && <p className="text-sm text-red-500">{errors.fullName}</p>}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className={cn('pl-10', errors.email && 'border-red-500')}
-              />
-            </div>
-            {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="phone">Phone Number</Label>
-            <div className="relative">
-              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <Input
-                id="phone"
-                type="tel"
-                placeholder="+234 800 000 0000"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className={cn('pl-10', errors.phone && 'border-red-500')}
-              />
-            </div>
-            {errors.phone && <p className="text-sm text-red-500">{errors.phone}</p>}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <Input
-                id="password"
-                type={showPassword ? 'text' : 'password'}
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className={cn('pl-10 pr-10', errors.password && 'border-red-500')}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-              >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
-            </div>
-            {errors.password && <p className="text-sm text-red-500">{errors.password}</p>}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirm Password</Label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <Input
-                id="confirmPassword"
-                type={showPassword ? 'text' : 'password'}
-                placeholder="••••••••"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className={cn('pl-10', errors.confirmPassword && 'border-red-500')}
-              />
-            </div>
-            {errors.confirmPassword && (
-              <p className="text-sm text-red-500">{errors.confirmPassword}</p>
-            )}
-          </div>
-
-          <Button
-            onClick={handleContinue}
-            className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white py-6"
-          >
-            <div className="flex items-center gap-2">
-              Continue
-              <ArrowRight className="w-5 h-5" />
-            </div>
-          </Button>
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="grid grid-cols-2 gap-4">
-            <button
-              type="button"
-              onClick={() => setUserType('customer')}
-              className={cn(
-                'p-6 rounded-2xl border-2 transition-all text-center',
-                userType === 'customer'
-                  ? 'border-violet-500 bg-violet-50'
-                  : 'border-gray-200 hover:border-gray-300'
-              )}
-            >
-              <div
-                className={cn(
-                  'w-14 h-14 mx-auto rounded-full flex items-center justify-center mb-3',
-                  userType === 'customer'
-                    ? 'bg-violet-500 text-white'
-                    : 'bg-gray-100 text-gray-500'
-                )}
-              >
-                <Package className="w-7 h-7" />
-              </div>
-              <h3
-                className={cn(
-                  'font-semibold',
-                  userType === 'customer' ? 'text-violet-700' : 'text-gray-700'
-                )}
-              >
-                Customer
-              </h3>
-              <p className="text-sm text-gray-500 mt-1">Send packages</p>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setUserType('rider')}
-              className={cn(
-                'p-6 rounded-2xl border-2 transition-all text-center',
-                userType === 'rider'
-                  ? 'border-violet-500 bg-violet-50'
-                  : 'border-gray-200 hover:border-gray-300'
-              )}
-            >
-              <div
-                className={cn(
-                  'w-14 h-14 mx-auto rounded-full flex items-center justify-center mb-3',
-                  userType === 'rider'
-                    ? 'bg-violet-500 text-white'
-                    : 'bg-gray-100 text-gray-500'
-                )}
-              >
-                <UserCircle className="w-7 h-7" />
-              </div>
-              <h3
-                className={cn(
-                  'font-semibold',
-                  userType === 'rider' ? 'text-violet-700' : 'text-gray-700'
-                )}
-              >
-                Rider
-              </h3>
-              <p className="text-sm text-gray-500 mt-1">Deliver packages</p>
-            </button>
-          </div>
-
-          <div className="flex items-start gap-3">
-            <Checkbox
-              id="terms"
-              checked={agreedToTerms}
-              onCheckedChange={(checked) => setAgreedToTerms(checked as boolean)}
-            />
-            <Label htmlFor="terms" className="text-sm text-gray-600 cursor-pointer leading-relaxed">
-              I agree to the{' '}
-              <Link to="/terms" className="text-violet-600 hover:underline">
-                Terms of Service
-              </Link>{' '}
-              and{' '}
-              <Link to="/privacy" className="text-violet-600 hover:underline">
-                Privacy Policy
-              </Link>
-            </Label>
-          </div>
-
-          <Button
-            type="submit"
-            disabled={isSubmitting || !agreedToTerms}
-            className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white py-6 disabled:opacity-50"
-          >
-            {isSubmitting ? (
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                Creating account...
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                Create Account
-                <ArrowRight className="w-5 h-5" />
-              </div>
-            )}
-          </Button>
-
-          <Button
+      <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-5 sm:px-6 sm:py-8">
+        <div className="w-full max-w-md">
+          <button
             type="button"
-            variant="outline"
-            onClick={() => setStep('account')}
-            className="w-full"
+            onClick={() => navigate('/')}
+            className="mb-4 flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-white/8 px-4 py-3 text-left backdrop-blur-xl transition hover:bg-white/12 sm:mb-5"
           >
-            Back
-          </Button>
-        </form>
-      )}
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-600 shadow-lg shadow-violet-900/30">
+              <Truck className="h-5 w-5 text-white" />
+            </div>
+            <div className="min-w-0">
+              <p className="truncate text-base font-semibold text-white">Dispatch NG</p>
+              <p className="truncate text-xs text-white/60">Tap to return to homepage</p>
+            </div>
+          </button>
 
-      <p className="text-center mt-6 text-gray-600">
-        Already have an account?{' '}
-        <Link to="/login" className="text-violet-600 hover:text-violet-700 font-medium">
-          Sign in
-        </Link>
-      </p>
+          <div className="rounded-[28px] border border-white/12 bg-white/10 shadow-2xl shadow-black/30 backdrop-blur-2xl">
+            <div className="rounded-[28px] border border-white/5 bg-gradient-to-br from-white/10 via-white/5 to-transparent p-5 sm:p-6">
+              <div className="mb-6 text-center">
+                <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-violet-600 to-fuchsia-600 shadow-lg shadow-violet-900/30">
+                  <Truck className="h-8 w-8 text-white" />
+                </div>
+
+                <h2 className="mb-1.5 text-2xl font-bold text-white sm:text-3xl">
+                  {step === 'account' ? 'Create account' : 'Choose account type'}
+                </h2>
+
+                <p className="text-sm text-white/65 sm:text-[15px]">
+                  {step === 'account'
+                    ? 'Create your Dispatch NG account to continue'
+                    : 'Select how you want to use Dispatch NG'}
+                </p>
+              </div>
+
+              <div className="mb-5 flex items-center justify-center gap-2">
+                <div
+                  className={cn(
+                    'h-2 w-20 rounded-full transition-all duration-300',
+                    step === 'account'
+                      ? 'bg-gradient-to-r from-violet-500 to-fuchsia-500'
+                      : 'bg-white/10'
+                  )}
+                />
+                <div
+                  className={cn(
+                    'h-2 w-20 rounded-full transition-all duration-300',
+                    step === 'type'
+                      ? 'bg-gradient-to-r from-violet-500 to-fuchsia-500'
+                      : 'bg-white/10'
+                  )}
+                />
+              </div>
+
+              {step === 'account' ? (
+                <div className="space-y-4">
+                  <div
+                    className={cn(
+                      'space-y-1.5 transition-transform duration-200',
+                      focusedField === 'fullName' && 'scale-[1.005]'
+                    )}
+                  >
+                    <Label htmlFor="fullName" className="text-sm font-medium text-white/82">
+                      Full Name
+                    </Label>
+
+                    <div className="relative">
+                      <User
+                        className={cn(
+                          'absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 transition-colors duration-200',
+                          focusedField === 'fullName' ? 'text-violet-300' : 'text-white/45',
+                          errors.fullName && 'text-red-300'
+                        )}
+                      />
+
+                      <Input
+                        id="fullName"
+                        placeholder="John Doe"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        onFocus={() => setFocusedField('fullName')}
+                        onBlur={() => setFocusedField(null)}
+                        className={cn(
+                          fieldBaseClass,
+                          errors.fullName &&
+                            'border-red-300/70 focus:border-red-400 focus:ring-red-500/10'
+                        )}
+                      />
+
+                      {fullName && !errors.fullName && (
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                          <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+                        </div>
+                      )}
+                    </div>
+
+                    {errors.fullName && <p className="text-sm text-red-300">{errors.fullName}</p>}
+                  </div>
+
+                  <div
+                    className={cn(
+                      'space-y-1.5 transition-transform duration-200',
+                      focusedField === 'email' && 'scale-[1.005]'
+                    )}
+                  >
+                    <Label htmlFor="email" className="text-sm font-medium text-white/82">
+                      Email
+                    </Label>
+
+                    <div className="relative">
+                      <Mail
+                        className={cn(
+                          'absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 transition-colors duration-200',
+                          focusedField === 'email' ? 'text-violet-300' : 'text-white/45',
+                          errors.email && 'text-red-300'
+                        )}
+                      />
+
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="you@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        onFocus={() => setFocusedField('email')}
+                        onBlur={() => setFocusedField(null)}
+                        className={cn(
+                          fieldBaseClass,
+                          errors.email &&
+                            'border-red-300/70 focus:border-red-400 focus:ring-red-500/10'
+                        )}
+                      />
+
+                      {email && !errors.email && (
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                          <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+                        </div>
+                      )}
+                    </div>
+
+                    {errors.email && <p className="text-sm text-red-300">{errors.email}</p>}
+                  </div>
+
+                  <div
+                    className={cn(
+                      'space-y-1.5 transition-transform duration-200',
+                      focusedField === 'phone' && 'scale-[1.005]'
+                    )}
+                  >
+                    <Label htmlFor="phone" className="text-sm font-medium text-white/82">
+                      Phone Number
+                    </Label>
+
+                    <div className="relative">
+                      <Phone
+                        className={cn(
+                          'absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 transition-colors duration-200',
+                          focusedField === 'phone' ? 'text-violet-300' : 'text-white/45',
+                          errors.phone && 'text-red-300'
+                        )}
+                      />
+
+                      <Input
+                        id="phone"
+                        type="tel"
+                        placeholder="+234 800 000 0000"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        onFocus={() => setFocusedField('phone')}
+                        onBlur={() => setFocusedField(null)}
+                        className={cn(
+                          fieldBaseClass,
+                          errors.phone &&
+                            'border-red-300/70 focus:border-red-400 focus:ring-red-500/10'
+                        )}
+                      />
+
+                      {phone && !errors.phone && (
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                          <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+                        </div>
+                      )}
+                    </div>
+
+                    {errors.phone && <p className="text-sm text-red-300">{errors.phone}</p>}
+                  </div>
+
+                  <div
+                    className={cn(
+                      'space-y-1.5 transition-transform duration-200',
+                      focusedField === 'password' && 'scale-[1.005]'
+                    )}
+                  >
+                    <Label htmlFor="password" className="text-sm font-medium text-white/82">
+                      Password
+                    </Label>
+
+                    <div className="relative">
+                      <Lock
+                        className={cn(
+                          'absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 transition-colors duration-200',
+                          focusedField === 'password' ? 'text-violet-300' : 'text-white/45',
+                          errors.password && 'text-red-300'
+                        )}
+                      />
+
+                      <Input
+                        id="password"
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="••••••••"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        onFocus={() => setFocusedField('password')}
+                        onBlur={() => setFocusedField(null)}
+                        className={cn(
+                          fieldBaseClass,
+                          'pr-12',
+                          errors.password &&
+                            'border-red-300/70 focus:border-red-400 focus:ring-red-500/10'
+                        )}
+                      />
+
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-white/45 transition-colors hover:text-white/75"
+                      >
+                        {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                      </button>
+                    </div>
+
+                    {errors.password && <p className="text-sm text-red-300">{errors.password}</p>}
+                  </div>
+
+                  <div
+                    className={cn(
+                      'space-y-1.5 transition-transform duration-200',
+                      focusedField === 'confirmPassword' && 'scale-[1.005]'
+                    )}
+                  >
+                    <Label htmlFor="confirmPassword" className="text-sm font-medium text-white/82">
+                      Confirm Password
+                    </Label>
+
+                    <div className="relative">
+                      <Lock
+                        className={cn(
+                          'absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 transition-colors duration-200',
+                          focusedField === 'confirmPassword' ? 'text-violet-300' : 'text-white/45',
+                          errors.confirmPassword && 'text-red-300'
+                        )}
+                      />
+
+                      <Input
+                        id="confirmPassword"
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="••••••••"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        onFocus={() => setFocusedField('confirmPassword')}
+                        onBlur={() => setFocusedField(null)}
+                        className={cn(
+                          fieldBaseClass,
+                          errors.confirmPassword &&
+                            'border-red-300/70 focus:border-red-400 focus:ring-red-500/10'
+                        )}
+                      />
+
+                      {confirmPassword &&
+                        password === confirmPassword &&
+                        !errors.confirmPassword && (
+                          <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                            <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+                          </div>
+                        )}
+                    </div>
+
+                    {errors.confirmPassword && (
+                      <p className="text-sm text-red-300">{errors.confirmPassword}</p>
+                    )}
+                  </div>
+
+                  <div className="pt-2">
+                    <Button
+                      type="button"
+                      onClick={handleContinue}
+                      className="h-12 w-full rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg shadow-violet-900/30 transition-all duration-300 hover:from-violet-700 hover:to-fuchsia-700 hover:shadow-xl hover:shadow-violet-900/40"
+                    >
+                      <div className="flex items-center gap-2">
+                        Continue
+                        <ArrowRight className="h-5 w-5" />
+                      </div>
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <button
+                      type="button"
+                      onClick={() => setUserType('customer')}
+                      className={cn(
+                        'rounded-2xl border p-4 text-center transition-all',
+                        userType === 'customer'
+                          ? 'border-violet-400 bg-violet-500/12 shadow-lg shadow-violet-900/10'
+                          : 'border-white/12 bg-white/[0.05] hover:bg-white/[0.09]'
+                      )}
+                    >
+                      <div
+                        className={cn(
+                          'mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full',
+                          userType === 'customer'
+                            ? 'bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white'
+                            : 'bg-white/10 text-white/60'
+                        )}
+                      >
+                        <Package className="h-7 w-7" />
+                      </div>
+
+                      <h3
+                        className={cn(
+                          'font-semibold',
+                          userType === 'customer' ? 'text-violet-200' : 'text-white'
+                        )}
+                      >
+                        Customer
+                      </h3>
+
+                      <p className="mt-1 text-sm text-white/55">Send packages</p>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setUserType('rider')}
+                      className={cn(
+                        'rounded-2xl border p-4 text-center transition-all',
+                        userType === 'rider'
+                          ? 'border-violet-400 bg-violet-500/12 shadow-lg shadow-violet-900/10'
+                          : 'border-white/12 bg-white/[0.05] hover:bg-white/[0.09]'
+                      )}
+                    >
+                      <div
+                        className={cn(
+                          'mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full',
+                          userType === 'rider'
+                            ? 'bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white'
+                            : 'bg-white/10 text-white/60'
+                        )}
+                      >
+                        <UserCircle className="h-7 w-7" />
+                      </div>
+
+                      <h3
+                        className={cn(
+                          'font-semibold',
+                          userType === 'rider' ? 'text-violet-200' : 'text-white'
+                        )}
+                      >
+                        Rider
+                      </h3>
+
+                      <p className="mt-1 text-sm text-white/55">Deliver packages</p>
+                    </button>
+                  </div>
+
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.05] p-4">
+                    <div className="flex items-start gap-3">
+                      <Checkbox
+                        id="terms"
+                        checked={agreedToTerms}
+                        onCheckedChange={(checked) => setAgreedToTerms(checked as boolean)}
+                        className="mt-0.5 border-white/25 data-[state=checked]:border-violet-500 data-[state=checked]:bg-violet-600"
+                      />
+                      <Label
+                        htmlFor="terms"
+                        className="cursor-pointer text-sm leading-relaxed text-white/70"
+                      >
+                        I agree to the{' '}
+                        <Link to="/terms" className="font-medium text-violet-300 hover:text-violet-200">
+                          Terms of Service
+                        </Link>{' '}
+                        and{' '}
+                        <Link
+                          to="/privacy"
+                          className="font-medium text-violet-300 hover:text-violet-200"
+                        >
+                          Privacy Policy
+                        </Link>
+                      </Label>
+                    </div>
+                  </div>
+
+                  <div className="pt-2">
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting || !agreedToTerms}
+                      className="h-12 w-full rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg shadow-violet-900/30 transition-all duration-300 hover:from-violet-700 hover:to-fuchsia-700 hover:shadow-xl hover:shadow-violet-900/40 disabled:opacity-50"
+                    >
+                      {isSubmitting ? (
+                        <div className="flex items-center gap-2">
+                          <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                          Creating account...
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          Create Account
+                          <ArrowRight className="h-5 w-5" />
+                        </div>
+                      )}
+                    </Button>
+                  </div>
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setStep('account')}
+                    className="h-12 w-full rounded-2xl border-white/12 bg-white/[0.05] text-white hover:bg-white/[0.09] hover:text-white"
+                  >
+                    Back
+                  </Button>
+                </form>
+              )}
+
+              <p className="mt-6 text-center text-sm text-white/65">
+                Already have an account?{' '}
+                <Link
+                  to="/login"
+                  className="font-semibold text-violet-300 transition-colors hover:text-violet-200"
+                >
+                  Sign in
+                </Link>
+              </p>
+            </div>
+          </div>
+
+          <p className="mt-5 text-center text-xs text-white/35">
+            Customers book securely. Riders earn through protected in-platform delivery flow.
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
