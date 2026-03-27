@@ -12,6 +12,8 @@ import {
   MapPin,
   ChevronRight,
   AlertCircle,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -35,6 +37,8 @@ export function RiderDashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [acceptingJobId, setAcceptingJobId] = useState<string | null>(null);
   const [availableBalance, setAvailableBalance] = useState<number>(0);
+  const [showActiveJobs, setShowActiveJobs] = useState(true);
+  const [showAvailableJobs, setShowAvailableJobs] = useState(true);
 
   const [stats, setStats] = useState({
     totalEarnings: 0,
@@ -237,7 +241,7 @@ export function RiderDashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Rider Dashboard</h1>
           <p className="text-gray-500">Welcome back, {user?.full_name?.split(' ')[0]}</p>
@@ -245,7 +249,7 @@ export function RiderDashboardPage() {
 
         <div
           className={cn(
-            'flex items-center gap-2 px-4 py-2 rounded-full font-medium',
+            'inline-flex w-fit items-center gap-2 px-4 py-2 rounded-full font-medium',
             riderProfile?.is_online ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
           )}
         >
@@ -259,48 +263,48 @@ export function RiderDashboardPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Card className="bg-gradient-to-br from-violet-500 to-purple-600 text-white border-0">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
+          <CardContent className="p-4 sm:p-5">
+            <div className="flex items-center justify-between gap-3">
+              <div className="min-w-0">
                 <p className="text-violet-100 text-sm">Available to Withdraw</p>
-                <p className="text-2xl font-bold">{formatCurrency(availableBalance)}</p>
+                <p className="text-2xl font-bold break-words">{formatCurrency(availableBalance)}</p>
               </div>
-              <Wallet className="w-8 h-8 text-violet-200" />
+              <Wallet className="w-8 h-8 text-violet-200 shrink-0" />
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
+          <CardContent className="p-4 sm:p-5">
+            <div className="flex items-center justify-between gap-3">
+              <div className="min-w-0">
                 <p className="text-gray-500 text-sm">Lifetime Earnings</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-2xl font-bold text-gray-900 break-words">
                   {formatCurrency(stats.totalEarnings)}
                 </p>
               </div>
-              <TrendingUp className="w-8 h-8 text-green-500" />
+              <TrendingUp className="w-8 h-8 text-green-500 shrink-0" />
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
+          <CardContent className="p-4 sm:p-5">
+            <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-gray-500 text-sm">Deliveries</p>
                 <p className="text-2xl font-bold text-gray-900">{stats.totalDeliveries}</p>
               </div>
-              <CheckCircle className="w-8 h-8 text-blue-500" />
+              <CheckCircle className="w-8 h-8 text-blue-500 shrink-0" />
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
+          <CardContent className="p-4 sm:p-5">
+            <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-gray-500 text-sm">Rating</p>
                 <div className="flex items-center gap-1">
@@ -308,126 +312,183 @@ export function RiderDashboardPage() {
                   <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
                 </div>
               </div>
-              <Star className="w-8 h-8 text-amber-400" />
+              <Star className="w-8 h-8 text-amber-400 shrink-0" />
             </div>
           </CardContent>
         </Card>
       </div>
 
       {myJobs.length > 0 && (
-        <div>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">My Active Jobs</h2>
-            <Link
-              to="/rider/jobs"
-              className="text-violet-600 hover:text-violet-700 text-sm font-medium"
-            >
-              View All
-            </Link>
-          </div>
+        <div className="space-y-3">
+          <button
+            type="button"
+            onClick={() => setShowActiveJobs((prev) => !prev)}
+            className="w-full"
+          >
+            <Card className="border-violet-100 bg-violet-50/50 hover:bg-violet-50 transition-colors">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="text-left">
+                    <h2 className="text-lg font-semibold text-gray-900">My Active Jobs</h2>
+                    <p className="text-sm text-gray-500">
+                      {myJobs.length} active job{myJobs.length !== 1 ? 's' : ''} in progress
+                    </p>
+                  </div>
 
-          <div className="space-y-3">
-            {myJobs.slice(0, 3).map((job) => (
-              <Link key={job.id} to={`/rider/jobs/${job.id}`}>
-                <Card className="hover:shadow-md transition-shadow cursor-pointer">
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-sm font-medium text-gray-500">{job.job_number}</span>
-                          <span
-                            className={cn(
-                              'px-2 py-0.5 rounded-full text-xs font-medium',
-                              getStatusColorClass(job.status)
-                            )}
-                          >
-                            {formatJobStatus(job.status)}
-                          </span>
+                  <div className="flex items-center gap-3">
+                    <Link
+                      to="/rider/jobs"
+                      onClick={(e) => e.stopPropagation()}
+                      className="hidden sm:inline text-violet-600 hover:text-violet-700 text-sm font-medium"
+                    >
+                      View All
+                    </Link>
+                    {showActiveJobs ? (
+                      <ChevronUp className="w-5 h-5 text-violet-600" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-violet-600" />
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </button>
+
+          {showActiveJobs && (
+            <div className="space-y-3">
+              {myJobs.slice(0, 3).map((job) => (
+                <Link key={job.id} to={`/rider/jobs/${job.id}`}>
+                  <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                    <CardContent className="p-4 sm:p-5">
+                      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex flex-wrap items-center gap-2 mb-2">
+                            <span className="text-sm font-medium text-gray-500">{job.job_number}</span>
+                            <span
+                              className={cn(
+                                'px-2 py-0.5 rounded-full text-xs font-medium',
+                                getStatusColorClass(job.status)
+                              )}
+                            >
+                              {formatJobStatus(job.status)}
+                            </span>
+                          </div>
+
+                          <p className="text-gray-700 break-words">
+                            {job.pickup_address} → {job.delivery_address}
+                          </p>
                         </div>
-                        <p className="text-gray-700">
-                          {job.pickup_address} → {job.delivery_address}
-                        </p>
-                      </div>
 
-                      <div className="text-right">
-                        <p className="font-semibold text-violet-700">
-                          {formatCurrency(job.rider_earnings)}
-                        </p>
-                        <ChevronRight className="w-5 h-5 text-gray-400 ml-auto" />
+                        <div className="flex items-center justify-between sm:block sm:text-right shrink-0">
+                          <p className="font-semibold text-violet-700">
+                            {formatCurrency(job.rider_earnings)}
+                          </p>
+                          <ChevronRight className="w-5 h-5 text-gray-400 sm:ml-auto" />
+                        </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
-      <div>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">Available Jobs</h2>
-          <span className="text-sm text-gray-500">
-            {availableJobs.length} assigned job{availableJobs.length !== 1 ? 's' : ''}
-          </span>
-        </div>
+      <div className="space-y-3">
+        <button
+          type="button"
+          onClick={() => setShowAvailableJobs((prev) => !prev)}
+          className="w-full"
+        >
+          <Card className="border-emerald-100 bg-emerald-50/40 hover:bg-emerald-50 transition-colors">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between gap-3">
+                <div className="text-left">
+                  <h2 className="text-lg font-semibold text-gray-900">Available Jobs</h2>
+                  <p className="text-sm text-gray-500">
+                    {availableJobs.length} assigned job{availableJobs.length !== 1 ? 's' : ''}
+                  </p>
+                </div>
 
-        {availableJobs.length === 0 ? (
-          <Card className="border-dashed border-2">
-            <CardContent className="p-8 text-center">
-              <Package className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No jobs available</h3>
-              <p className="text-gray-500">No delivery is currently waiting for your acceptance.</p>
+                {showAvailableJobs ? (
+                  <ChevronUp className="w-5 h-5 text-emerald-600" />
+                ) : (
+                  <ChevronDown className="w-5 h-5 text-emerald-600" />
+                )}
+              </div>
             </CardContent>
           </Card>
-        ) : (
-          <div className="space-y-3">
-            {availableJobs.map((job) => (
-              <Card key={job.id}>
-                <CardContent className="p-4">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-sm font-medium text-gray-500">{job.job_number}</span>
-                        <span className="text-xs text-gray-400">
-                          {formatDistanceToNow(job.created_at)}
-                        </span>
-                      </div>
+        </button>
 
-                      <div className="space-y-1 mb-3">
-                        <div className="flex items-center gap-2 text-sm">
-                          <MapPin className="w-4 h-4 text-violet-500" />
-                          <span className="text-gray-600 truncate">{job.pickup_address}</span>
-                        </div>
-
-                        <div className="flex items-center gap-2 text-sm">
-                          <MapPin className="w-4 h-4 text-green-500" />
-                          <span className="text-gray-600 truncate">{job.delivery_address}</span>
-                        </div>
-                      </div>
-
-                      <p className="text-sm text-gray-500">{job.package_description}</p>
-                    </div>
-
-                    <div className="text-right ml-4">
-                      <p className="font-semibold text-violet-700">
-                        {formatCurrency(job.rider_earnings)}
-                      </p>
-                      <p className="text-xs text-gray-400">You earn</p>
-                    </div>
-                  </div>
-
-                  <Button
-                    onClick={() => handleAcceptJob(job.id)}
-                    disabled={acceptingJobId === job.id}
-                    className="w-full mt-4 bg-violet-600 hover:bg-violet-700 text-white"
-                  >
-                    {acceptingJobId === job.id ? 'Accepting...' : 'Accept Job'}
-                  </Button>
+        {showAvailableJobs && (
+          <>
+            {availableJobs.length === 0 ? (
+              <Card className="border-dashed border-2">
+                <CardContent className="p-8 text-center">
+                  <Package className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No jobs available</h3>
+                  <p className="text-gray-500">
+                    No delivery is currently waiting for your acceptance.
+                  </p>
                 </CardContent>
               </Card>
-            ))}
-          </div>
+            ) : (
+              <div className="space-y-3">
+                {availableJobs.map((job) => (
+                  <Card key={job.id}>
+                    <CardContent className="p-4 sm:p-5">
+                      <div className="flex flex-col gap-4">
+                        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                          <div className="min-w-0 flex-1">
+                            <div className="flex flex-wrap items-center gap-2 mb-2">
+                              <span className="text-sm font-medium text-gray-500">
+                                {job.job_number}
+                              </span>
+                              <span className="text-xs text-gray-400">
+                                {formatDistanceToNow(job.created_at)}
+                              </span>
+                            </div>
+
+                            <div className="space-y-2 mb-3">
+                              <div className="flex items-start gap-2 text-sm">
+                                <MapPin className="w-4 h-4 text-violet-500 mt-0.5 shrink-0" />
+                                <span className="text-gray-600 break-words">{job.pickup_address}</span>
+                              </div>
+
+                              <div className="flex items-start gap-2 text-sm">
+                                <MapPin className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />
+                                <span className="text-gray-600 break-words">{job.delivery_address}</span>
+                              </div>
+                            </div>
+
+                            <p className="text-sm text-gray-500 break-words">
+                              {job.package_description}
+                            </p>
+                          </div>
+
+                          <div className="sm:text-right shrink-0">
+                            <p className="font-semibold text-violet-700">
+                              {formatCurrency(job.rider_earnings)}
+                            </p>
+                            <p className="text-xs text-gray-400">You earn</p>
+                          </div>
+                        </div>
+
+                        <Button
+                          onClick={() => handleAcceptJob(job.id)}
+                          disabled={acceptingJobId === job.id}
+                          className="w-full bg-violet-600 hover:bg-violet-700 text-white"
+                        >
+                          {acceptingJobId === job.id ? 'Accepting...' : 'Accept Job'}
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

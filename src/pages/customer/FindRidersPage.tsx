@@ -67,26 +67,8 @@ export function FindRidersPage() {
       setIsLoading(true);
 
       const { data, error } = await supabase
-        .from('rider_profiles')
-        .select(`
-          id,
-          profile_id,
-          company_name,
-          vehicle_type,
-          vehicle_color,
-          rating_average,
-          total_deliveries,
-          service_radius_km,
-          verification_status,
-          is_online,
-          profile:profile_id (
-            id,
-            full_name,
-            email,
-            phone,
-            avatar_url
-          )
-        `)
+        .from('public_rider_cards')
+        .select('*')
         .eq('verification_status', 'verified')
         .order('rating_average', { ascending: false });
 
@@ -105,7 +87,7 @@ export function FindRidersPage() {
 
         if (completedJobsError) throw completedJobsError;
 
-        completedJobsMap = completedJobs.reduce((map: Map<string, number>, job: any) => {
+        completedJobsMap = (completedJobs || []).reduce((map: Map<string, number>, job: any) => {
           const current = map.get(job.rider_id) || 0;
           map.set(job.rider_id, current + 1);
           return map;
@@ -113,25 +95,30 @@ export function FindRidersPage() {
       }
 
       const formatted: CustomerRider[] =
-        data?.map((r: any) => ({
-          id: r.id,
-          profile_id: r.profile_id,
-          full_name: r.profile?.full_name || 'Rider',
-          avatar_url: r.profile?.avatar_url || null,
-          phone: r.profile?.phone || null,
-          company_name: r.company_name || null,
-          vehicle_type: r.vehicle_type,
-          vehicle_color: r.vehicle_color || null,
-          rating_average: Number(r.rating_average || 0),
-          total_deliveries: completedJobsMap.get(r.profile_id) || Number(r.total_deliveries || 0),
-          completed_jobs_count: completedJobsMap.get(r.profile_id) || Number(r.total_deliveries || 0),
-          lat: 0,
-          lng: 0,
-          service_radius_km: Number(r.service_radius_km || 0),
-          email: r.profile?.email || null,
-          verification_status: r.verification_status,
-          is_online: r.is_online ?? false,
-        })) || [];
+        data?.map((r: any) => {
+          const completedCount =
+            completedJobsMap.get(r.profile_id) || Number(r.total_deliveries || 0);
+
+          return {
+            id: r.id,
+            profile_id: r.profile_id,
+            full_name: r.full_name || 'Rider',
+            avatar_url: r.avatar_url || null,
+            phone: r.phone || null,
+            company_name: r.company_name || null,
+            vehicle_type: r.vehicle_type,
+            vehicle_color: r.vehicle_color || null,
+            rating_average: Number(r.rating_average || 0),
+            total_deliveries: completedCount,
+            completed_jobs_count: completedCount,
+            lat: Number(r.lat || 0),
+            lng: Number(r.lng || 0),
+            service_radius_km: Number(r.service_radius_km || 0),
+            email: r.email || null,
+            verification_status: r.verification_status,
+            is_online: r.is_online ?? false,
+          };
+        }) || [];
 
       setRiders(formatted);
     } catch (error) {
@@ -147,6 +134,7 @@ export function FindRidersPage() {
 
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
+
       filtered = filtered.filter(
         (rider) =>
           rider.full_name.toLowerCase().includes(query) ||
@@ -241,6 +229,7 @@ export function FindRidersPage() {
         <p className="text-gray-500">
           Showing {filteredRiders.length} verified rider{filteredRiders.length !== 1 ? 's' : ''}
         </p>
+
         <div className="flex items-center gap-1 text-sm text-gray-600">
           <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
           {onlineCount} online now
@@ -286,8 +275,8 @@ export function FindRidersPage() {
               >
                 <CardContent className="p-5">
                   <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <div className="relative">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="relative shrink-0">
                         {rider.avatar_url ? (
                           <img
                             src={rider.avatar_url}
@@ -296,7 +285,7 @@ export function FindRidersPage() {
                           />
                         ) : (
                           <div className="w-16 h-16 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 flex items-center justify-center text-white text-xl font-medium">
-                            {rider.full_name.charAt(0)}
+                            {rider.full_name.charAt(0).toUpperCase()}
                           </div>
                         )}
 
@@ -307,17 +296,17 @@ export function FindRidersPage() {
                         )}
                       </div>
 
-                      <div>
-                        <h3 className="font-semibold text-gray-900 group-hover:text-violet-600 transition-colors">
+                      <div className="min-w-0">
+                        <h3 className="font-semibold text-gray-900 group-hover:text-violet-600 transition-colors truncate">
                           {rider.full_name}
                         </h3>
                         {rider.company_name && (
-                          <p className="text-sm text-gray-500">{rider.company_name}</p>
+                          <p className="text-sm text-gray-500 truncate">{rider.company_name}</p>
                         )}
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded-lg">
+                    <div className="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded-lg shrink-0">
                       <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
                       <span className="text-sm font-medium text-amber-700">
                         {Number(rider.rating_average || 0).toFixed(1).replace('.0', '')}
@@ -337,19 +326,19 @@ export function FindRidersPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between text-sm mb-4">
-                    <div className="flex items-center gap-1 text-gray-500">
-                      <UserCircle className="w-4 h-4" />
+                  <div className="flex items-center justify-between text-sm mb-4 gap-2">
+                    <div className="flex items-center gap-1 text-gray-500 min-w-0">
+                      <UserCircle className="w-4 h-4 shrink-0" />
                       <span>{rider.service_radius_km}km radius</span>
                     </div>
 
                     {rider.is_online ? (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-100 text-green-700 font-medium">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-100 text-green-700 font-medium shrink-0">
                         <span className="w-2 h-2 rounded-full bg-green-500" />
                         Online now
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 font-medium">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 font-medium shrink-0">
                         <Clock3 className="w-3.5 h-3.5" />
                         Available on request
                       </span>
@@ -379,7 +368,7 @@ export function FindRidersPage() {
           {selectedRider && (
             <div className="space-y-6">
               <div className="flex items-center gap-4">
-                <div className="relative">
+                <div className="relative shrink-0">
                   {selectedRider.avatar_url ? (
                     <img
                       src={selectedRider.avatar_url}
@@ -388,7 +377,7 @@ export function FindRidersPage() {
                     />
                   ) : (
                     <div className="w-20 h-20 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 flex items-center justify-center text-white text-2xl font-medium">
-                      {selectedRider.full_name.charAt(0)}
+                      {selectedRider.full_name.charAt(0).toUpperCase()}
                     </div>
                   )}
 
@@ -397,31 +386,43 @@ export function FindRidersPage() {
                   )}
                 </div>
 
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900">{selectedRider.full_name}</h3>
+                <div className="min-w-0">
+                  <h3 className="text-xl font-bold text-gray-900 truncate">
+                    {selectedRider.full_name}
+                  </h3>
+
                   {selectedRider.company_name && (
-                    <p className="text-gray-500">{selectedRider.company_name}</p>
+                    <p className="text-gray-500 truncate">{selectedRider.company_name}</p>
                   )}
-                  <div className="flex items-center gap-2 mt-1">
+
+                  <div className="flex items-center gap-2 mt-1 flex-wrap">
                     <div className="flex items-center gap-1 bg-amber-50 px-2 py-0.5 rounded-lg">
                       <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
                       <span className="text-sm font-medium text-amber-700">
                         {Number(selectedRider.rating_average || 0).toFixed(1).replace('.0', '')}
                       </span>
                     </div>
+
                     <span className="text-gray-400">•</span>
-                    <span className="text-sm text-gray-500 capitalize">{selectedRider.vehicle_type}</span>
+                    <span className="text-sm text-gray-500 capitalize">
+                      {selectedRider.vehicle_type}
+                    </span>
                   </div>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gray-50 rounded-xl p-4 text-center">
-                  <p className="text-2xl font-bold text-gray-900">{selectedRider.completed_jobs_count || 0}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {selectedRider.completed_jobs_count || 0}
+                  </p>
                   <p className="text-sm text-gray-500">Deliveries</p>
                 </div>
+
                 <div className="bg-gray-50 rounded-xl p-4 text-center">
-                  <p className="text-2xl font-bold text-gray-900">{selectedRider.service_radius_km}km</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {selectedRider.service_radius_km}km
+                  </p>
                   <p className="text-sm text-gray-500">Service Radius</p>
                 </div>
               </div>
@@ -442,6 +443,7 @@ export function FindRidersPage() {
 
               <div className="space-y-3">
                 <p className="text-sm font-medium text-gray-700">Contact Rider</p>
+
                 <div className="grid grid-cols-3 gap-3">
                   <Button
                     variant="outline"
@@ -451,6 +453,7 @@ export function FindRidersPage() {
                     <Phone className="w-6 h-6 text-green-600" />
                     <span className="text-xs">Call</span>
                   </Button>
+
                   <Button
                     variant="outline"
                     onClick={() => handleContact('whatsapp')}
@@ -459,6 +462,7 @@ export function FindRidersPage() {
                     <MessageCircle className="w-6 h-6 text-green-500" />
                     <span className="text-xs">WhatsApp</span>
                   </Button>
+
                   <Button
                     variant="outline"
                     onClick={() => handleContact('sms')}

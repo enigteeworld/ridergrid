@@ -1,7 +1,6 @@
 // ============================================
 // DISPATCH NG - Rider Job Details Page
 // ============================================
-
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
@@ -171,20 +170,21 @@ export function RiderJobDetailsPage() {
     <div className="space-y-6">
       <button
         onClick={() => navigate('/rider/jobs')}
-        className="flex items-center gap-2 text-gray-500 hover:text-gray-700"
+        className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-700"
       >
         <ArrowLeft className="w-5 h-5" />
         Back to Jobs
       </button>
 
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">{job.job_number}</h1>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
+          <h1 className="text-2xl font-bold text-gray-900 break-words">{job.job_number}</h1>
           <p className="text-gray-500">{formatDateTime(job.created_at)}</p>
         </div>
+
         <span
           className={cn(
-            'px-3 py-1 rounded-full text-sm font-medium',
+            'inline-flex self-start px-3 py-1 rounded-full text-sm font-medium',
             getStatusColorClass(job.status)
           )}
         >
@@ -192,21 +192,23 @@ export function RiderJobDetailsPage() {
         </span>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-4 sm:p-5">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <MapPin className="w-5 h-5 text-violet-600" />
               Pickup
             </h3>
-            <p className="text-gray-700">{job.pickup_address}</p>
-            <div className="mt-3 space-y-1 text-sm text-gray-500">
-              <p>{job.pickup_contact_name}</p>
+
+            <p className="text-gray-700 break-words">{job.pickup_address}</p>
+
+            <div className="mt-3 space-y-2 text-sm text-gray-500">
+              <p className="break-words">{job.pickup_contact_name}</p>
               <a
                 href={`tel:${job.pickup_contact_phone}`}
-                className="text-violet-600 flex items-center gap-1"
+                className="text-violet-600 flex items-start gap-1 break-all"
               >
-                <Phone className="w-4 h-4" />
+                <Phone className="w-4 h-4 mt-0.5 shrink-0" />
                 {job.pickup_contact_phone}
               </a>
             </div>
@@ -214,19 +216,21 @@ export function RiderJobDetailsPage() {
         </Card>
 
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-4 sm:p-5">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <MapPin className="w-5 h-5 text-green-600" />
               Delivery
             </h3>
-            <p className="text-gray-700">{job.delivery_address}</p>
-            <div className="mt-3 space-y-1 text-sm text-gray-500">
-              <p>{job.delivery_contact_name}</p>
+
+            <p className="text-gray-700 break-words">{job.delivery_address}</p>
+
+            <div className="mt-3 space-y-2 text-sm text-gray-500">
+              <p className="break-words">{job.delivery_contact_name}</p>
               <a
                 href={`tel:${job.delivery_contact_phone}`}
-                className="text-violet-600 flex items-center gap-1"
+                className="text-violet-600 flex items-start gap-1 break-all"
               >
-                <Phone className="w-4 h-4" />
+                <Phone className="w-4 h-4 mt-0.5 shrink-0" />
                 {job.delivery_contact_phone}
               </a>
             </div>
@@ -235,12 +239,14 @@ export function RiderJobDetailsPage() {
       </div>
 
       <Card>
-        <CardContent className="p-4">
+        <CardContent className="p-4 sm:p-5">
           <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
             <Package className="w-5 h-5 text-amber-600" />
             Package Details
           </h3>
-          <p className="text-gray-700">{job.package_description}</p>
+
+          <p className="text-gray-700 break-words">{job.package_description}</p>
+
           {job.package_weight_kg && (
             <p className="mt-2 text-sm text-gray-500">Weight: {job.package_weight_kg} kg</p>
           )}
@@ -248,23 +254,24 @@ export function RiderJobDetailsPage() {
       </Card>
 
       <Card>
-        <CardContent className="p-4">
+        <CardContent className="p-4 sm:p-5">
           <h3 className="font-semibold text-gray-900 mb-4">Earnings</h3>
-          <div className="flex justify-between items-center">
+
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <span className="text-gray-600">You will receive</span>
-            <span className="text-2xl font-bold text-violet-700">
+            <span className="text-2xl font-bold text-violet-700 break-words">
               {formatCurrency(job.rider_earnings)}
             </span>
           </div>
         </CardContent>
       </Card>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:flex xl:flex-wrap gap-3">
         {job.status === 'funded' && (
           <Button
             onClick={handleMarkInProgress}
             disabled={isStarting}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white"
           >
             {isStarting ? (
               <div className="flex items-center gap-2">
@@ -283,7 +290,7 @@ export function RiderJobDetailsPage() {
         {job.status === 'in_progress' && (
           <Button
             onClick={() => setShowCompleteDialog(true)}
-            className="bg-green-600 hover:bg-green-700 text-white"
+            className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white"
           >
             <CheckCircle className="w-4 h-4 mr-2" />
             Mark as Complete
@@ -294,8 +301,9 @@ export function RiderJobDetailsPage() {
           href={`https://wa.me/${job.customer_phone?.replace(/\D/g, '')}`}
           target="_blank"
           rel="noopener noreferrer"
+          className="w-full sm:w-auto"
         >
-          <Button variant="outline">
+          <Button variant="outline" className="w-full">
             <MessageCircle className="w-4 h-4 mr-2" />
             Message Customer
           </Button>
@@ -303,10 +311,11 @@ export function RiderJobDetailsPage() {
       </div>
 
       <Dialog open={showCompleteDialog} onOpenChange={setShowCompleteDialog}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Complete Delivery</DialogTitle>
           </DialogHeader>
+
           <div className="space-y-4">
             <p className="text-gray-600">
               Mark this delivery as complete. The customer will then confirm delivery and your

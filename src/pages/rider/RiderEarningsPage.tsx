@@ -2,7 +2,7 @@
 // DISPATCH NG - Rider Earnings Page
 // ============================================
 import { useEffect, useState } from 'react';
-import { DollarSign } from 'lucide-react';
+import { DollarSign, ChevronDown, ChevronUp } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/stores/authStore';
@@ -24,6 +24,7 @@ interface CompletedEarningJob {
 
 export function RiderEarningsPage() {
   const { user, riderProfile } = useAuthStore();
+
   const [stats, setStats] = useState<EarningStats>({
     today: 0,
     thisWeek: 0,
@@ -33,6 +34,7 @@ export function RiderEarningsPage() {
   });
   const [recentEarnings, setRecentEarnings] = useState<CompletedEarningJob[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showRecentEarnings, setShowRecentEarnings] = useState(true);
 
   useEffect(() => {
     fetchEarnings();
@@ -59,8 +61,10 @@ export function RiderEarningsPage() {
 
       const now = new Date();
       const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
       const weekStart = new Date(todayStart);
       weekStart.setDate(todayStart.getDate() - 7);
+
       const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
 
       const todayEarnings = safeJobs
@@ -75,10 +79,7 @@ export function RiderEarningsPage() {
         .filter((job) => job.completed_at && new Date(job.completed_at) >= monthStart)
         .reduce((sum, job) => sum + Number(job.rider_earnings || 0), 0);
 
-      const totalEarnings = safeJobs.reduce(
-        (sum, job) => sum + Number(job.rider_earnings || 0),
-        0
-      );
+      const totalEarnings = safeJobs.reduce((sum, job) => sum + Number(job.rider_earnings || 0), 0);
 
       setStats({
         today: todayEarnings,
@@ -106,106 +107,141 @@ export function RiderEarningsPage() {
         <p className="text-gray-500">Track your income and performance</p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Card className="bg-gradient-to-br from-green-500 to-emerald-600 text-white border-0">
-          <CardContent className="p-4">
+          <CardContent className="p-4 sm:p-5">
             <p className="text-green-100 text-sm">Today</p>
-            <p className="text-2xl font-bold">{formatCurrency(stats.today)}</p>
+            <p className="text-2xl font-bold break-words">{formatCurrency(stats.today)}</p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-4 sm:p-5">
             <p className="text-gray-500 text-sm">This Week</p>
-            <p className="text-2xl font-bold text-gray-900">
+            <p className="text-2xl font-bold text-gray-900 break-words">
               {formatCurrency(stats.thisWeek)}
             </p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-4 sm:p-5">
             <p className="text-gray-500 text-sm">This Month</p>
-            <p className="text-2xl font-bold text-gray-900">
+            <p className="text-2xl font-bold text-gray-900 break-words">
               {formatCurrency(stats.thisMonth)}
             </p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-4 sm:p-5">
             <p className="text-gray-500 text-sm">Lifetime Earnings</p>
-            <p className="text-2xl font-bold text-gray-900">{formatCurrency(stats.total)}</p>
+            <p className="text-2xl font-bold text-gray-900 break-words">
+              {formatCurrency(stats.total)}
+            </p>
           </CardContent>
         </Card>
       </div>
 
       <Card>
-        <CardContent className="p-6">
+        <CardContent className="p-5 sm:p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance Stats</h3>
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 text-center">
+            <div className="rounded-xl bg-violet-50 p-4">
               <p className="text-3xl font-bold text-violet-600">{deliveryCount}</p>
-              <p className="text-sm text-gray-500">Total Deliveries</p>
+              <p className="text-sm text-gray-500 mt-1">Total Deliveries</p>
             </div>
-            <div>
+
+            <div className="rounded-xl bg-amber-50 p-4">
               <p className="text-3xl font-bold text-amber-500">
                 {riderProfile?.rating_average?.toFixed(1) || '0.0'}
               </p>
-              <p className="text-sm text-gray-500">Average Rating</p>
+              <p className="text-sm text-gray-500 mt-1">Average Rating</p>
             </div>
-            <div>
-              <p className="text-3xl font-bold text-green-600">
+
+            <div className="rounded-xl bg-green-50 p-4">
+              <p className="text-3xl font-bold text-green-600 break-words">
                 {formatCurrency(averagePerDelivery)}
               </p>
-              <p className="text-sm text-gray-500">Avg per Delivery</p>
+              <p className="text-sm text-gray-500 mt-1">Avg per Delivery</p>
             </div>
           </div>
         </CardContent>
       </Card>
 
-      <div>
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Earnings</h2>
+      <div className="space-y-3">
+        <button
+          type="button"
+          onClick={() => setShowRecentEarnings((prev) => !prev)}
+          className="w-full"
+        >
+          <Card className="border-emerald-100 bg-emerald-50/40 hover:bg-emerald-50 transition-colors">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between gap-3">
+                <div className="text-left">
+                  <h2 className="text-lg font-semibold text-gray-900">Recent Earnings</h2>
+                  <p className="text-sm text-gray-500">
+                    Last {Math.min(recentEarnings.length, 10)} completed earning
+                    {recentEarnings.length !== 1 ? 's' : ''}
+                  </p>
+                </div>
 
-        {isLoading ? (
-          <Card className="border-dashed border-2">
-            <CardContent className="p-6 text-center">
-              <p className="text-gray-500">Loading earnings...</p>
+                {showRecentEarnings ? (
+                  <ChevronUp className="w-5 h-5 text-emerald-600" />
+                ) : (
+                  <ChevronDown className="w-5 h-5 text-emerald-600" />
+                )}
+              </div>
             </CardContent>
           </Card>
-        ) : recentEarnings.length === 0 ? (
-          <Card className="border-dashed border-2">
-            <CardContent className="p-6 text-center">
-              <p className="text-gray-500">
-                No earnings yet. Complete deliveries to start earning.
-              </p>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="space-y-3">
-            {recentEarnings.map((earning) => (
-              <Card key={earning.id}>
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                        <DollarSign className="w-5 h-5 text-green-600" />
-                      </div>
-                      <div>
-                        <p className="font-medium text-gray-900">Delivery Completed</p>
-                        <p className="text-sm text-gray-500">
-                          {earning.completed_at ? formatDate(earning.completed_at) : '-'}
-                        </p>
-                      </div>
-                    </div>
-                    <p className="font-semibold text-green-600">
-                      +{formatCurrency(Number(earning.rider_earnings || 0))}
-                    </p>
-                  </div>
+        </button>
+
+        {showRecentEarnings && (
+          <>
+            {isLoading ? (
+              <Card className="border-dashed border-2">
+                <CardContent className="p-6 text-center">
+                  <p className="text-gray-500">Loading earnings...</p>
                 </CardContent>
               </Card>
-            ))}
-          </div>
+            ) : recentEarnings.length === 0 ? (
+              <Card className="border-dashed border-2">
+                <CardContent className="p-6 text-center">
+                  <p className="text-gray-500">
+                    No earnings yet. Complete deliveries to start earning.
+                  </p>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="space-y-3">
+                {recentEarnings.map((earning) => (
+                  <Card key={earning.id}>
+                    <CardContent className="p-4 sm:p-5">
+                      <div className="flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center shrink-0">
+                            <DollarSign className="w-5 h-5 text-green-600" />
+                          </div>
+
+                          <div className="min-w-0">
+                            <p className="font-medium text-gray-900">Delivery Completed</p>
+                            <p className="text-sm text-gray-500">
+                              {earning.completed_at ? formatDate(earning.completed_at) : '-'}
+                            </p>
+                          </div>
+                        </div>
+
+                        <p className="font-semibold text-green-600 shrink-0">
+                          +{formatCurrency(Number(earning.rider_earnings || 0))}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

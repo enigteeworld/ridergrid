@@ -27,7 +27,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/stores/authStore';
 import { showToast } from '@/stores/uiStore';
-import type { JobDetails, DeliveryProof, Rating, Wallet as WalletType } from '@/types';
+import type { JobDetails, Rating, Wallet as WalletType } from '@/types';
 import {
   formatCurrency,
   formatDateTime,
@@ -239,15 +239,13 @@ export function JobDetailsPage() {
     if (!job || !job.rider_id || !user?.id) return;
 
     try {
-      const { error } = await supabase
-        .from('ratings')
-        .insert({
-          dispatch_job_id: job.id,
-          rider_id: job.rider_id,
-          customer_id: user.id,
-          rating,
-          review: review.trim() || null,
-        });
+      const { error } = await supabase.from('ratings').insert({
+        dispatch_job_id: job.id,
+        rider_id: job.rider_id,
+        customer_id: user.id,
+        rating,
+        review: review.trim() || null,
+      });
 
       if (error) throw error;
 
@@ -263,14 +261,12 @@ export function JobDetailsPage() {
     if (!job || !disputeDescription.trim() || !user?.id) return;
 
     try {
-      const { error } = await supabase
-        .from('disputes')
-        .insert({
-          dispatch_job_id: job.id,
-          raised_by: user.id,
-          dispute_type: disputeReason || 'other',
-          description: disputeDescription.trim(),
-        });
+      const { error } = await supabase.from('disputes').insert({
+        dispatch_job_id: job.id,
+        raised_by: user.id,
+        dispute_type: disputeReason || 'other',
+        description: disputeDescription.trim(),
+      });
 
       if (error) throw error;
 
@@ -317,7 +313,7 @@ export function JobDetailsPage() {
   const getStatusStep = (status: string) => {
     const steps = [
       { status: 'awaiting_rider', label: 'Posted', icon: Package },
-      { status: 'awaiting_funding', label: 'Rider Assigned', icon: User },
+      { status: 'awaiting_funding', label: 'Assigned', icon: User },
       { status: 'funded', label: 'Funded', icon: CheckCircle },
       { status: 'in_progress', label: 'In Progress', icon: Clock },
       { status: 'completed', label: 'Completed', icon: CheckCircle },
@@ -358,20 +354,21 @@ export function JobDetailsPage() {
     <div className="space-y-6">
       <button
         onClick={() => navigate('/jobs')}
-        className="flex items-center gap-2 text-gray-500 hover:text-gray-700"
+        className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-700"
       >
         <ArrowLeft className="w-5 h-5" />
         Back to My Deliveries
       </button>
 
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">{job.job_number}</h1>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
+          <h1 className="text-2xl font-bold text-gray-900 break-words">{job.job_number}</h1>
           <p className="text-gray-500">Created {formatDateTime(job.created_at)}</p>
         </div>
+
         <span
           className={cn(
-            'px-3 py-1 rounded-full text-sm font-medium',
+            'inline-flex self-start px-3 py-1 rounded-full text-sm font-medium',
             getStatusColorClass(job.status)
           )}
         >
@@ -390,59 +387,64 @@ export function JobDetailsPage() {
       ].includes(job.status) && (
         <Card>
           <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              {steps.map((step, index) => {
-                const Icon = step.icon;
-                const isActive = index <= currentIndex;
-                const isCurrent = index === currentIndex;
+            <div className="overflow-x-auto">
+              <div className="flex min-w-[560px] items-start justify-between gap-3">
+                {steps.map((step, index) => {
+                  const Icon = step.icon;
+                  const isActive = index <= currentIndex;
+                  const isCurrent = index === currentIndex;
 
-                return (
-                  <div key={step.status} className="flex flex-col items-center">
-                    <div
-                      className={cn(
-                        'w-10 h-10 rounded-full flex items-center justify-center transition-colors',
-                        isActive ? 'bg-violet-600 text-white' : 'bg-gray-100 text-gray-400',
-                        isCurrent && 'ring-4 ring-violet-100'
-                      )}
-                    >
-                      <Icon className="w-5 h-5" />
+                  return (
+                    <div key={step.status} className="flex min-w-[92px] flex-col items-center text-center">
+                      <div
+                        className={cn(
+                          'w-10 h-10 rounded-full flex items-center justify-center transition-colors',
+                          isActive ? 'bg-violet-600 text-white' : 'bg-gray-100 text-gray-400',
+                          isCurrent && 'ring-4 ring-violet-100'
+                        )}
+                      >
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <span
+                        className={cn(
+                          'text-xs mt-2',
+                          isActive ? 'text-gray-900 font-medium' : 'text-gray-400'
+                        )}
+                      >
+                        {step.label}
+                      </span>
                     </div>
-                    <span
-                      className={cn(
-                        'text-xs mt-2 text-center hidden sm:block',
-                        isActive ? 'text-gray-900 font-medium' : 'text-gray-400'
-                      )}
-                    >
-                      {step.label}
-                    </span>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </CardContent>
         </Card>
       )}
 
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-4 sm:p-5">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <MapPin className="w-5 h-5 text-violet-600" />
               Pickup
             </h3>
-            <p className="text-gray-700">{job.pickup_address}</p>
-            <div className="mt-3 space-y-1 text-sm text-gray-500">
-              <p className="flex items-center gap-2">
-                <User className="w-4 h-4" />
-                {job.pickup_contact_name}
+
+            <p className="text-gray-700 break-words">{job.pickup_address}</p>
+
+            <div className="mt-3 space-y-2 text-sm text-gray-500">
+              <p className="flex items-start gap-2">
+                <User className="w-4 h-4 mt-0.5 shrink-0" />
+                <span className="break-words">{job.pickup_contact_name}</span>
               </p>
-              <p className="flex items-center gap-2">
-                <Phone className="w-4 h-4" />
-                {job.pickup_contact_phone}
+              <p className="flex items-start gap-2">
+                <Phone className="w-4 h-4 mt-0.5 shrink-0" />
+                <span className="break-words">{job.pickup_contact_phone}</span>
               </p>
             </div>
+
             {job.pickup_notes && (
-              <p className="mt-3 text-sm text-gray-500 bg-gray-50 p-2 rounded">
+              <p className="mt-3 text-sm text-gray-500 bg-gray-50 p-3 rounded-lg break-words">
                 Note: {job.pickup_notes}
               </p>
             )}
@@ -450,24 +452,27 @@ export function JobDetailsPage() {
         </Card>
 
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-4 sm:p-5">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <MapPin className="w-5 h-5 text-green-600" />
               Delivery
             </h3>
-            <p className="text-gray-700">{job.delivery_address}</p>
-            <div className="mt-3 space-y-1 text-sm text-gray-500">
-              <p className="flex items-center gap-2">
-                <User className="w-4 h-4" />
-                {job.delivery_contact_name}
+
+            <p className="text-gray-700 break-words">{job.delivery_address}</p>
+
+            <div className="mt-3 space-y-2 text-sm text-gray-500">
+              <p className="flex items-start gap-2">
+                <User className="w-4 h-4 mt-0.5 shrink-0" />
+                <span className="break-words">{job.delivery_contact_name}</span>
               </p>
-              <p className="flex items-center gap-2">
-                <Phone className="w-4 h-4" />
-                {job.delivery_contact_phone}
+              <p className="flex items-start gap-2">
+                <Phone className="w-4 h-4 mt-0.5 shrink-0" />
+                <span className="break-words">{job.delivery_contact_phone}</span>
               </p>
             </div>
+
             {job.delivery_notes && (
-              <p className="mt-3 text-sm text-gray-500 bg-gray-50 p-2 rounded">
+              <p className="mt-3 text-sm text-gray-500 bg-gray-50 p-3 rounded-lg break-words">
                 Note: {job.delivery_notes}
               </p>
             )}
@@ -475,14 +480,16 @@ export function JobDetailsPage() {
         </Card>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-4 sm:p-5">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Package className="w-5 h-5 text-amber-600" />
               Package Details
             </h3>
-            <p className="text-gray-700">{job.package_description}</p>
+
+            <p className="text-gray-700 break-words">{job.package_description}</p>
+
             {job.package_weight_kg && (
               <p className="mt-2 text-sm text-gray-500">Weight: {job.package_weight_kg} kg</p>
             )}
@@ -490,22 +497,25 @@ export function JobDetailsPage() {
         </Card>
 
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-4 sm:p-5">
             <h3 className="font-semibold text-gray-900 mb-4">Payment</h3>
-            <div className="space-y-2">
-              <div className="flex justify-between">
+
+            <div className="space-y-3">
+              <div className="flex items-start justify-between gap-3">
                 <span className="text-gray-600">Delivery Fee</span>
-                <span className="font-medium">{formatCurrency(job.agreed_amount)}</span>
+                <span className="font-medium text-right">{formatCurrency(job.agreed_amount)}</span>
               </div>
-              <div className="flex justify-between">
+
+              <div className="flex items-start justify-between gap-3">
                 <span className="text-gray-600">Platform Fee</span>
-                <span className="font-medium text-red-600">
+                <span className="font-medium text-red-600 text-right">
                   -{formatCurrency(job.platform_fee)}
                 </span>
               </div>
-              <div className="border-t pt-2 flex justify-between">
+
+              <div className="border-t pt-3 flex items-start justify-between gap-3">
                 <span className="font-medium text-gray-900">Rider Receives</span>
-                <span className="font-bold text-violet-700">
+                <span className="font-bold text-violet-700 text-right">
                   {formatCurrency(job.rider_earnings)}
                 </span>
               </div>
@@ -516,28 +526,35 @@ export function JobDetailsPage() {
 
       {job.rider_name && (
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-4 sm:p-5">
             <h3 className="font-semibold text-gray-900 mb-4">Rider</h3>
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 flex items-center justify-center text-white text-xl font-medium">
-                {job.rider_name.charAt(0)}
+
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+              <div className="flex items-center gap-4 min-w-0">
+                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 flex items-center justify-center text-white text-xl font-medium shrink-0">
+                  {job.rider_name.charAt(0)}
+                </div>
+
+                <div className="min-w-0">
+                  <p className="font-medium text-gray-900 break-words">{job.rider_name}</p>
+                  <p className="text-sm text-gray-500 break-words">{job.rider_phone}</p>
+                </div>
               </div>
-              <div>
-                <p className="font-medium text-gray-900">{job.rider_name}</p>
-                <p className="text-sm text-gray-500">{job.rider_phone}</p>
-              </div>
-              <div className="ml-auto flex gap-2">
-                <a href={`tel:${job.rider_phone}`}>
-                  <Button variant="outline" size="icon">
+
+              <div className="flex gap-2 sm:ml-auto">
+                <a href={`tel:${job.rider_phone}`} className="flex-1 sm:flex-none">
+                  <Button variant="outline" className="w-full sm:w-auto" size="icon">
                     <Phone className="w-4 h-4" />
                   </Button>
                 </a>
+
                 <a
                   href={`https://wa.me/${job.rider_phone?.replace(/\D/g, '')}`}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="flex-1 sm:flex-none"
                 >
-                  <Button variant="outline" size="icon">
+                  <Button variant="outline" className="w-full sm:w-auto" size="icon">
                     <MessageCircle className="w-4 h-4" />
                   </Button>
                 </a>
@@ -549,12 +566,13 @@ export function JobDetailsPage() {
 
       {deliveryProofs.length > 0 && (
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-4 sm:p-5">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Camera className="w-5 h-5" />
               Delivery Proof
             </h3>
-            <div className="grid grid-cols-3 gap-2">
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {deliveryProofs.map((proof, index) => (
                 <div key={proof.id} className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
                   {proof.image_url ? (
@@ -575,12 +593,12 @@ export function JobDetailsPage() {
         </Card>
       )}
 
-      <div className="flex flex-wrap gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:flex xl:flex-wrap gap-3">
         {job.status === 'awaiting_funding' && (
           <Button
             onClick={handleFundDelivery}
             disabled={isFunding}
-            className="bg-violet-600 hover:bg-violet-700 text-white"
+            className="w-full sm:w-auto bg-violet-600 hover:bg-violet-700 text-white"
           >
             {isFunding ? (
               <div className="flex items-center gap-2">
@@ -600,7 +618,7 @@ export function JobDetailsPage() {
           <Button
             onClick={handleMarkComplete}
             disabled={isConfirmingCompletion}
-            className="bg-green-600 hover:bg-green-700 text-white"
+            className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white"
           >
             {isConfirmingCompletion ? (
               <div className="flex items-center gap-2">
@@ -620,7 +638,7 @@ export function JobDetailsPage() {
           <Button
             onClick={handleCancelJob}
             variant="outline"
-            className="text-red-600 border-red-200 hover:bg-red-50"
+            className="w-full sm:w-auto text-red-600 border-red-200 hover:bg-red-50"
           >
             <XCircle className="w-4 h-4 mr-2" />
             Cancel Delivery
@@ -630,7 +648,7 @@ export function JobDetailsPage() {
         {job.status === 'completed' && !existingRating && (
           <Button
             onClick={() => setShowRatingDialog(true)}
-            className="bg-violet-600 hover:bg-violet-700 text-white"
+            className="w-full sm:w-auto bg-violet-600 hover:bg-violet-700 text-white"
           >
             <Star className="w-4 h-4 mr-2" />
             Rate Rider
@@ -641,7 +659,7 @@ export function JobDetailsPage() {
           <Button
             onClick={() => setShowDisputeDialog(true)}
             variant="outline"
-            className="text-amber-600 border-amber-200 hover:bg-amber-50"
+            className="w-full sm:w-auto text-amber-600 border-amber-200 hover:bg-amber-50"
           >
             <HelpCircle className="w-4 h-4 mr-2" />
             Report Issue
@@ -650,12 +668,13 @@ export function JobDetailsPage() {
       </div>
 
       <Dialog open={showRatingDialog} onOpenChange={setShowRatingDialog}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Rate Your Delivery</DialogTitle>
           </DialogHeader>
+
           <div className="space-y-4">
-            <div className="flex justify-center gap-2">
+            <div className="flex justify-center gap-2 flex-wrap">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button key={star} onClick={() => setRating(star)} className="p-1">
                   <Star
@@ -686,17 +705,18 @@ export function JobDetailsPage() {
       </Dialog>
 
       <Dialog open={showDisputeDialog} onOpenChange={setShowDisputeDialog}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Report an Issue</DialogTitle>
           </DialogHeader>
+
           <div className="space-y-4">
             <div>
               <label className="text-sm font-medium text-gray-700">Issue Type</label>
               <select
                 value={disputeReason}
                 onChange={(e) => setDisputeReason(e.target.value)}
-                className="w-full mt-1 p-2 border rounded-lg"
+                className="w-full mt-1 p-2 border rounded-lg bg-white"
               >
                 <option value="">Select an issue</option>
                 <option value="not_delivered">Package not delivered</option>
