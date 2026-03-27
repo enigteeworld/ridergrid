@@ -377,67 +377,120 @@ export function JobDetailsPage() {
       </div>
 
       {[
-        'awaiting_rider',
-        'awaiting_funding',
-        'funded',
-        'in_progress',
-        'rider_marked_complete',
-        'customer_marked_complete',
-        'completed',
-      ].includes(job.status) && (
-        <Card>
-          <CardContent className="p-4 sm:p-5">
-            <div className="overflow-x-auto">
-              <div className="min-w-[620px]">
-                <div className="relative px-2 pt-1 pb-3">
-                  <div className="absolute left-0 right-0 top-[58px] h-2 rounded-full bg-gray-200" />
+  'awaiting_rider',
+  'awaiting_funding',
+  'funded',
+  'in_progress',
+  'rider_marked_complete',
+  'customer_marked_complete',
+  'completed',
+].includes(job.status) && (
+  <Card>
+    <CardContent className="p-4">
+      {/* Mobile: vertical timeline */}
+      <div className="sm:hidden">
+        <div className="space-y-4">
+          {steps.map((step, index) => {
+            const Icon = step.icon;
+            const isActive = index <= currentIndex;
+            const isCurrent = index === currentIndex;
+            const isLast = index === steps.length - 1;
 
+            return (
+              <div key={step.status} className="flex items-start gap-3">
+                <div className="flex flex-col items-center">
                   <div
-                    className="absolute left-0 top-[58px] h-2 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 transition-all"
-                    style={{
-                      width: `${((currentIndex + 1) / steps.length) * 100}%`,
-                    }}
-                  />
-
-                  <div className="relative flex items-start justify-between gap-4">
-                    {steps.map((step, index) => {
-                      const Icon = step.icon;
-                      const isActive = index <= currentIndex;
-                      const isCurrent = index === currentIndex;
-
-                      return (
-                        <div
-                          key={step.status}
-                          className="flex min-w-[104px] flex-col items-center text-center"
-                        >
-                          <div
-                            className={cn(
-                              'relative z-10 flex h-11 w-11 items-center justify-center rounded-full border-4 border-white transition-colors',
-                              isActive ? 'bg-violet-600 text-white' : 'bg-gray-100 text-gray-400',
-                              isCurrent && 'ring-4 ring-violet-100'
-                            )}
-                          >
-                            <Icon className="w-5 h-5" />
-                          </div>
-
-                          <span
-                            className={cn(
-                              'mt-5 text-xs leading-tight',
-                              isActive ? 'font-medium text-gray-900' : 'text-gray-400'
-                            )}
-                          >
-                            {step.label}
-                          </span>
-                        </div>
-                      );
-                    })}
+                    className={cn(
+                      'w-10 h-10 rounded-full flex items-center justify-center transition-colors shrink-0',
+                      isActive ? 'bg-violet-600 text-white' : 'bg-gray-100 text-gray-400',
+                      isCurrent && 'ring-4 ring-violet-100'
+                    )}
+                  >
+                    <Icon className="w-5 h-5" />
                   </div>
+
+                  {!isLast && (
+                    <div
+                      className={cn(
+                        'mt-2 w-0.5 h-8 rounded-full',
+                        index < currentIndex ? 'bg-violet-600' : 'bg-gray-200'
+                      )}
+                    />
+                  )}
+                </div>
+
+                <div className="pt-1">
+                  <p
+                    className={cn(
+                      'text-sm',
+                      isActive ? 'text-gray-900 font-semibold' : 'text-gray-400'
+                    )}
+                  >
+                    {step.label}
+                  </p>
+
+                  <p className="mt-1 text-xs text-gray-500">
+                    {isCurrent
+                      ? 'Current step'
+                      : index < currentIndex
+                      ? 'Completed'
+                      : 'Pending'}
+                  </p>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Desktop: horizontal tracker */}
+      <div className="hidden sm:block">
+        <div className="relative">
+          <div className="absolute top-5 left-0 right-0 h-1 bg-gray-200 rounded-full" />
+          <div
+            className="absolute top-5 left-0 h-1 bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-full transition-all"
+            style={{
+              width: `${steps.length > 1 ? (currentIndex / (steps.length - 1)) * 100 : 0}%`,
+            }}
+          />
+
+          <div className="relative flex items-start justify-between gap-3">
+            {steps.map((step, index) => {
+              const Icon = step.icon;
+              const isActive = index <= currentIndex;
+              const isCurrent = index === currentIndex;
+
+              return (
+                <div key={step.status} className="flex min-w-[92px] flex-col items-center text-center">
+                  <div
+                    className={cn(
+                      'w-10 h-10 rounded-full flex items-center justify-center transition-colors bg-white border-4',
+                      isActive
+                        ? 'border-violet-600 text-violet-600'
+                        : 'border-gray-200 text-gray-400',
+                      isCurrent && 'ring-4 ring-violet-100'
+                    )}
+                  >
+                    <Icon className="w-5 h-5" />
+                  </div>
+
+                  <span
+                    className={cn(
+                      'text-xs mt-3',
+                      isActive ? 'text-gray-900 font-medium' : 'text-gray-400'
+                    )}
+                  >
+                    {step.label}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+)}
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card>
