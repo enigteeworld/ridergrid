@@ -245,10 +245,8 @@ export function RiderWalletPage() {
         'Withdrawal requested',
         'Your payout request has been submitted for the next Friday payout cycle'
       );
-
       setShowWithdrawDialog(false);
       setWithdrawAmount('');
-      setShowActiveWithdrawals(true);
       await fetchWalletData();
 
       if (!createdRequest) {
@@ -304,7 +302,7 @@ export function RiderWalletPage() {
     return 'bg-gray-100 text-gray-700';
   };
 
-  const SectionToggle = ({
+  const SectionHeader = ({
     title,
     count,
     isOpen,
@@ -318,17 +316,21 @@ export function RiderWalletPage() {
     <button
       type="button"
       onClick={onToggle}
-      className="w-full flex items-center justify-between text-left"
+      className="w-full rounded-2xl border border-gray-100 bg-white px-4 py-3 shadow-sm hover:border-violet-200 hover:shadow transition-all"
     >
-      <div className="flex items-center gap-2">
-        <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
-        <span className="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600">
-          {count}
-        </span>
-      </div>
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div>
+            <p className="text-base font-semibold text-gray-900">{title}</p>
+          </div>
+          <span className="inline-flex items-center rounded-full bg-violet-100 px-2.5 py-1 text-xs font-semibold text-violet-700">
+            {count}
+          </span>
+        </div>
 
-      <div className="text-gray-500">
-        {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+        <div className="flex items-center justify-center rounded-full bg-gray-100 p-2 text-gray-600">
+          {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+        </div>
       </div>
     </button>
   );
@@ -401,8 +403,8 @@ export function RiderWalletPage() {
         </Card>
       </div>
 
-      <div className="space-y-4">
-        <SectionToggle
+      <div className="space-y-3">
+        <SectionHeader
           title="Withdrawal Requests"
           count={activeWithdrawals.length}
           isOpen={showActiveWithdrawals}
@@ -459,8 +461,8 @@ export function RiderWalletPage() {
         )}
       </div>
 
-      <div className="space-y-4">
-        <SectionToggle
+      <div className="space-y-3">
+        <SectionHeader
           title="Processed Withdrawals"
           count={completedWithdrawals.length}
           isOpen={showCompletedWithdrawals}
@@ -532,8 +534,8 @@ export function RiderWalletPage() {
         )}
       </div>
 
-      <div className="space-y-4">
-        <SectionToggle
+      <div className="space-y-3">
+        <SectionHeader
           title="Recent Transactions"
           count={transactions.length}
           isOpen={showTransactions}

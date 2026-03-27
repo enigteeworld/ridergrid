@@ -1,7 +1,7 @@
 // ============================================
 // DISPATCH NG - Customer Home Page
 // ============================================
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Plus,
@@ -11,6 +11,7 @@ import {
   Star,
   Wallet,
   ChevronRight,
+  ChevronDown,
   Bike,
   CheckCircle,
   Clock3,
@@ -53,12 +54,17 @@ export function HomePage() {
 
   const [recentJobs, setRecentJobs] = useState<JobDetails[]>([]);
   const [nearbyRiders, setNearbyRiders] = useState<HomeRider[]>([]);
+  const [totalDeliveriesCount, setTotalDeliveriesCount] = useState(0);
+  const [activeJobsCount, setActiveJobsCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [showRecentDeliveries, setShowRecentDeliveries] = useState(true);
 
   const fetchData = useCallback(async () => {
     if (!user?.id) {
       setRecentJobs([]);
       setNearbyRiders([]);
+      setTotalDeliveriesCount(0);
+      setActiveJobsCount(0);
       setIsLoading(false);
       return;
     }
@@ -66,28 +72,48 @@ export function HomePage() {
     try {
       setIsLoading(true);
 
-      const { data: jobs, error: jobsError } = await supabase
-        .from('job_details')
-        .select('*')
-        .eq('customer_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(3);
+      const [
+        recentJobsRes,
+        allJobsRes,
+        activeJobsRes,
+        ridersRes,
+      ] = await Promise.all([
+        supabase
+          .from('job_details')
+          .select('*')
+          .eq('customer_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(10),
 
-      if (jobsError) throw jobsError;
-      setRecentJobs(jobs ?? []);
+        supabase
+          .from('dispatch_jobs')
+          .select('id', { count: 'exact', head: true })
+          .eq('customer_id', user.id),
 
-      const { data: ridersData, error: ridersError } = await supabase
-        .from('public_rider_cards')
-        .select('*')
-        .order('rating_average', { ascending: false })
-        .limit(4);
+        supabase
+          .from('dispatch_jobs')
+          .select('id', { count: 'exact', head: true })
+          .eq('customer_id', user.id)
+          .in('status', ['awaiting_rider', 'awaiting_funding', 'funded', 'in_progress']),
 
-      if (ridersError) throw ridersError;
+        supabase
+          .from('public_rider_cards')
+          .select('*')
+          .order('rating_average', { ascending: false })
+          .limit(4),
+      ]);
 
-      const profileIds =
-        (ridersData || [])
-          .map((r: any) => r.profile_id)
-          .filter(Boolean) || [];
+      if (recentJobsRes.error) throw recentJobsRes.error;
+      if (allJobsRes.error) throw allJobsRes.error;
+      if (activeJobsRes.error) throw activeJobsRes.error;
+      if (ridersRes.error) throw ridersRes.error;
+
+      setRecentJobs(recentJobsRes.data ?? []);
+      setTotalDeliveriesCount(allJobsRes.count ?? 0);
+      setActiveJobsCount(activeJobsRes.count ?? 0);
+
+      const ridersData = ridersRes.data ?? [];
+      const profileIds = ridersData.map((r: any) => r.profile_id).filter(Boolean);
 
       let completedJobsMap = new Map<string, number>();
 
@@ -110,30 +136,29 @@ export function HomePage() {
         );
       }
 
-      const formattedRiders: HomeRider[] =
-        (ridersData || []).map((r: any) => {
-          const completedCount =
-            completedJobsMap.get(r.profile_id) || Number(r.total_deliveries || 0);
+      const formattedRiders: HomeRider[] = ridersData.map((r: any) => {
+        const completedCount =
+          completedJobsMap.get(r.profile_id) || Number(r.total_deliveries || 0);
 
-          return {
-            id: r.id,
-            profile_id: r.profile_id,
-            full_name: r.full_name || 'Rider',
-            email: r.email || null,
-            phone: r.phone || null,
-            avatar_url: r.avatar_url || null,
-            company_name: r.company_name || null,
-            vehicle_type: r.vehicle_type,
-            vehicle_color: r.vehicle_color || null,
-            rating_average: Number(r.rating_average || 0),
-            total_deliveries: completedCount,
-            service_radius_km: Number(r.service_radius_km || 0),
-            verification_status: r.verification_status,
-            is_online: r.is_online ?? false,
-            created_at: r.created_at,
-            completed_jobs_count: completedCount,
-          };
-        }) || [];
+        return {
+          id: r.id,
+          profile_id: r.profile_id,
+          full_name: r.full_name || 'Rider',
+          email: r.email || null,
+          phone: r.phone || null,
+          avatar_url: r.avatar_url || null,
+          company_name: r.company_name || null,
+          vehicle_type: r.vehicle_type,
+          vehicle_color: r.vehicle_color || null,
+          rating_average: Number(r.rating_average || 0),
+          total_deliveries: completedCount,
+          service_radius_km: Number(r.service_radius_km || 0),
+          verification_status: r.verification_status,
+          is_online: r.is_online ?? false,
+          created_at: r.created_at,
+          completed_jobs_count: completedCount,
+        };
+      });
 
       setNearbyRiders(formattedRiders);
     } catch (error) {
@@ -210,13 +235,14 @@ export function HomePage() {
     return status.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
   };
 
-  const activeJobCount = recentJobs.filter((job) =>
-    ['awaiting_rider', 'awaiting_funding', 'funded', 'in_progress'].includes(job.status)
-  ).length;
+  const recentDeliveriesLabel = useMemo(() => {
+    if (isLoading) return 'Loading...';
+    return `${recentJobs.length}`;
+  }, [isLoading, recentJobs.length]);
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">
             Hello, {user?.full_name?.split(' ')[0] || 'there'}!
@@ -225,20 +251,20 @@ export function HomePage() {
         </div>
 
         <Link to="/create-job">
-          <Button className="bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white gap-2">
+          <Button className="w-full sm:w-auto bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white gap-2">
             <Plus className="w-5 h-5" />
             New Delivery
           </Button>
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         <Card className="bg-gradient-to-br from-violet-500 to-purple-600 text-white border-0">
-          <CardContent className="p-4">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-violet-100 text-sm">Wallet Balance</p>
-                <p className="text-2xl font-bold">{formatCurrency(wallet?.available_balance || 0)}</p>
+                <p className="text-3xl font-bold">{formatCurrency(wallet?.available_balance || 0)}</p>
               </div>
               <Wallet className="w-8 h-8 text-violet-200" />
             </div>
@@ -246,11 +272,11 @@ export function HomePage() {
         </Card>
 
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-500 text-sm">Total Deliveries</p>
-                <p className="text-2xl font-bold text-gray-900">{recentJobs.length}</p>
+                <p className="text-3xl font-bold text-gray-900">{totalDeliveriesCount}</p>
               </div>
               <Package className="w-8 h-8 text-violet-500" />
             </div>
@@ -258,11 +284,11 @@ export function HomePage() {
         </Card>
 
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-500 text-sm">Active Jobs</p>
-                <p className="text-2xl font-bold text-gray-900">{activeJobCount}</p>
+                <p className="text-3xl font-bold text-gray-900">{activeJobsCount}</p>
               </div>
               <Clock className="w-8 h-8 text-amber-500" />
             </div>
@@ -270,11 +296,11 @@ export function HomePage() {
         </Card>
 
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-500 text-sm">Riders Near You</p>
-                <p className="text-2xl font-bold text-gray-900">{nearbyRiders.length}</p>
+                <p className="text-3xl font-bold text-gray-900">{nearbyRiders.length}</p>
               </div>
               <Bike className="w-8 h-8 text-green-500" />
             </div>
@@ -282,92 +308,133 @@ export function HomePage() {
         </Card>
       </div>
 
-      <div>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">Recent Deliveries</h2>
-          <Link
-            to="/jobs"
-            className="text-violet-600 hover:text-violet-700 text-sm font-medium flex items-center gap-1"
-          >
-            View All
-            <ChevronRight className="w-4 h-4" />
-          </Link>
-        </div>
+      <Card className="border border-gray-100 shadow-sm">
+        <CardContent className="p-0">
+          <div className="flex items-center justify-between px-4 py-4 sm:px-5">
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">Recent Deliveries</h2>
+              <p className="text-sm text-gray-500">
+                Your latest bookings and delivery updates
+              </p>
+            </div>
 
-        {recentJobs.length === 0 ? (
-          <Card className="border-dashed border-2">
-            <CardContent className="p-8 text-center">
-              <div className="w-16 h-16 mx-auto bg-violet-100 rounded-full flex items-center justify-center mb-4">
-                <Package className="w-8 h-8 text-violet-500" />
+            <div className="flex items-center gap-3">
+              <span className="inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-full bg-violet-100 text-violet-700 text-xs font-semibold">
+                {recentDeliveriesLabel}
+              </span>
+
+              <button
+                type="button"
+                onClick={() => setShowRecentDeliveries((prev) => !prev)}
+                className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 transition-colors"
+              >
+                <ChevronDown
+                  className={cn(
+                    'w-4 h-4 transition-transform duration-200',
+                    showRecentDeliveries && 'rotate-180'
+                  )}
+                />
+              </button>
+            </div>
+          </div>
+
+          {showRecentDeliveries && (
+            <div className="border-t border-gray-100 px-4 py-4 sm:px-5">
+              <div className="flex items-center justify-end mb-4">
+                <Link
+                  to="/jobs"
+                  className="text-violet-600 hover:text-violet-700 text-sm font-medium flex items-center gap-1"
+                >
+                  View All
+                  <ChevronRight className="w-4 h-4" />
+                </Link>
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No deliveries yet</h3>
-              <p className="text-gray-500 mb-4">Create your first delivery to get started</p>
-              <Link to="/create-job">
-                <Button className="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white">
-                  Create Delivery
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="space-y-3">
-            {recentJobs.map((job) => (
-              <Link key={job.id} to={`/jobs/${job.id}`}>
-                <Card className="hover:shadow-md transition-shadow cursor-pointer">
-                  <CardContent className="p-4">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="text-sm font-medium text-gray-500">{job.job_number}</span>
-                          <span
-                            className={cn(
-                              'px-2 py-0.5 rounded-full text-xs font-medium',
-                              getStatusColor(job.status)
-                            )}
-                          >
-                            {getStatusLabel(job.status)}
-                          </span>
-                        </div>
 
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2 text-sm">
-                            <MapPin className="w-4 h-4 text-gray-400" />
-                            <span className="text-gray-600 truncate">{job.pickup_address}</span>
-                          </div>
-                          <div className="flex items-center gap-2 text-sm">
-                            <MapPin className="w-4 h-4 text-violet-500" />
-                            <span className="text-gray-600 truncate">{job.delivery_address}</span>
-                          </div>
-                        </div>
-
-                        {job.rider_name && (
-                          <div className="flex items-center gap-2 mt-2">
-                            <div className="w-6 h-6 rounded-full bg-violet-100 flex items-center justify-center text-xs font-medium text-violet-700">
-                              {job.rider_name.charAt(0)}
-                            </div>
-                            <span className="text-sm text-gray-600">{job.rider_name}</span>
-                            {job.rider_rating && (
-                              <div className="flex items-center gap-1">
-                                <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
-                                <span className="text-sm text-gray-500">{job.rider_rating}</span>
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="text-right">
-                        <p className="font-semibold text-gray-900">{formatCurrency(job.agreed_amount)}</p>
-                        <p className="text-xs text-gray-500">{formatDistanceToNow(job.created_at)}</p>
-                      </div>
+              {recentJobs.length === 0 ? (
+                <Card className="border-dashed border-2">
+                  <CardContent className="p-8 text-center">
+                    <div className="w-16 h-16 mx-auto bg-violet-100 rounded-full flex items-center justify-center mb-4">
+                      <Package className="w-8 h-8 text-violet-500" />
                     </div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">No deliveries yet</h3>
+                    <p className="text-gray-500 mb-4">Create your first delivery to get started</p>
+                    <Link to="/create-job">
+                      <Button className="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white">
+                        Create Delivery
+                      </Button>
+                    </Link>
                   </CardContent>
                 </Card>
-              </Link>
-            ))}
-          </div>
-        )}
-      </div>
+              ) : (
+                <div className="space-y-3">
+                  {recentJobs.map((job) => (
+                    <Link key={job.id} to={`/jobs/${job.id}`}>
+                      <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                        <CardContent className="p-4">
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="flex-1 min-w-0">
+                              <div className="flex flex-wrap items-center gap-2 mb-2">
+                                <span className="text-sm font-medium text-gray-500">
+                                  {job.job_number}
+                                </span>
+                                <span
+                                  className={cn(
+                                    'px-2 py-0.5 rounded-full text-xs font-medium',
+                                    getStatusColor(job.status)
+                                  )}
+                                >
+                                  {getStatusLabel(job.status)}
+                                </span>
+                              </div>
+
+                              <div className="space-y-1">
+                                <div className="flex items-center gap-2 text-sm">
+                                  <MapPin className="w-4 h-4 text-gray-400 shrink-0" />
+                                  <span className="text-gray-600 truncate">{job.pickup_address}</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm">
+                                  <MapPin className="w-4 h-4 text-violet-500 shrink-0" />
+                                  <span className="text-gray-600 truncate">{job.delivery_address}</span>
+                                </div>
+                              </div>
+
+                              {job.rider_name && (
+                                <div className="flex items-center gap-2 mt-2 min-w-0">
+                                  <div className="w-6 h-6 rounded-full bg-violet-100 flex items-center justify-center text-xs font-medium text-violet-700 shrink-0">
+                                    {job.rider_name.charAt(0)}
+                                  </div>
+                                  <span className="text-sm text-gray-600 truncate">
+                                    {job.rider_name}
+                                  </span>
+                                  {job.rider_rating && (
+                                    <div className="flex items-center gap-1 shrink-0">
+                                      <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
+                                      <span className="text-sm text-gray-500">{job.rider_rating}</span>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+
+                            <div className="text-right shrink-0">
+                              <p className="font-semibold text-gray-900">
+                                {formatCurrency(job.agreed_amount)}
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                {formatDistanceToNow(job.created_at)}
+                              </p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       <div>
         <div className="flex items-center justify-between mb-4">
