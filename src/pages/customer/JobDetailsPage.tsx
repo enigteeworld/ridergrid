@@ -386,36 +386,53 @@ export function JobDetailsPage() {
         'completed',
       ].includes(job.status) && (
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-4 sm:p-5">
             <div className="overflow-x-auto">
-              <div className="flex min-w-[560px] items-start justify-between gap-3">
-                {steps.map((step, index) => {
-                  const Icon = step.icon;
-                  const isActive = index <= currentIndex;
-                  const isCurrent = index === currentIndex;
+              <div className="min-w-[620px]">
+                <div className="relative px-2 pt-1 pb-3">
+                  <div className="absolute left-0 right-0 top-[58px] h-2 rounded-full bg-gray-200" />
 
-                  return (
-                    <div key={step.status} className="flex min-w-[92px] flex-col items-center text-center">
-                      <div
-                        className={cn(
-                          'w-10 h-10 rounded-full flex items-center justify-center transition-colors',
-                          isActive ? 'bg-violet-600 text-white' : 'bg-gray-100 text-gray-400',
-                          isCurrent && 'ring-4 ring-violet-100'
-                        )}
-                      >
-                        <Icon className="w-5 h-5" />
-                      </div>
-                      <span
-                        className={cn(
-                          'text-xs mt-2',
-                          isActive ? 'text-gray-900 font-medium' : 'text-gray-400'
-                        )}
-                      >
-                        {step.label}
-                      </span>
-                    </div>
-                  );
-                })}
+                  <div
+                    className="absolute left-0 top-[58px] h-2 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 transition-all"
+                    style={{
+                      width: `${((currentIndex + 1) / steps.length) * 100}%`,
+                    }}
+                  />
+
+                  <div className="relative flex items-start justify-between gap-4">
+                    {steps.map((step, index) => {
+                      const Icon = step.icon;
+                      const isActive = index <= currentIndex;
+                      const isCurrent = index === currentIndex;
+
+                      return (
+                        <div
+                          key={step.status}
+                          className="flex min-w-[104px] flex-col items-center text-center"
+                        >
+                          <div
+                            className={cn(
+                              'relative z-10 flex h-11 w-11 items-center justify-center rounded-full border-4 border-white transition-colors',
+                              isActive ? 'bg-violet-600 text-white' : 'bg-gray-100 text-gray-400',
+                              isCurrent && 'ring-4 ring-violet-100'
+                            )}
+                          >
+                            <Icon className="w-5 h-5" />
+                          </div>
+
+                          <span
+                            className={cn(
+                              'mt-5 text-xs leading-tight',
+                              isActive ? 'font-medium text-gray-900' : 'text-gray-400'
+                            )}
+                          >
+                            {step.label}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             </div>
           </CardContent>

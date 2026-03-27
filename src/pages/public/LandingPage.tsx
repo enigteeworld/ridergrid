@@ -1,345 +1,480 @@
 // ============================================
 // DISPATCH NG - Public Landing Page
 // ============================================
-
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  MapPin, 
-  Star, 
-  Phone, 
-  MessageCircle, 
-  Shield, 
-  Wallet, 
-  Truck, 
+import {
+  MapPin,
+  Star,
+  Shield,
+  Wallet,
+  Truck,
   CheckCircle,
   ArrowRight,
   Play,
-  Users
+  Users,
+  Menu,
+  X,
+  Lock,
+  BadgeCheck,
+  Smartphone,
+  MessageSquareWarning,
+  ChevronRight,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/stores/authStore';
+import { cn } from '@/lib/utils';
 
-// Mock featured riders data
 const featuredRiders = [
   {
     id: '1',
     name: 'Emmanuel Okafor',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+    avatar:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
     rating: 4.9,
     reviews: 127,
     location: 'Ikeja, Lagos',
     isOnline: true,
     deliveries: 342,
-    vehicleType: 'motorcycle'
+    vehicleType: 'motorcycle',
   },
   {
     id: '2',
     name: 'Adebayo Johnson',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face',
+    avatar:
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face',
     rating: 4.8,
     reviews: 89,
     location: 'Yaba, Lagos',
     isOnline: true,
     deliveries: 215,
-    vehicleType: 'bicycle'
+    vehicleType: 'bicycle',
   },
   {
     id: '3',
     name: 'Chioma Nwosu',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face',
+    avatar:
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face',
     rating: 5.0,
     reviews: 156,
     location: 'Lekki, Lagos',
     isOnline: false,
     deliveries: 478,
-    vehicleType: 'motorcycle'
+    vehicleType: 'motorcycle',
   },
   {
     id: '4',
     name: 'Ibrahim Mohammed',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+    avatar:
+      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
     rating: 4.7,
     reviews: 64,
     location: 'Victoria Island, Lagos',
     isOnline: true,
     deliveries: 128,
-    vehicleType: 'van'
-  }
+    vehicleType: 'van',
+  },
 ];
 
 const howItWorks = [
   {
-    icon: MapPin,
-    title: 'Find a Rider',
-    description: 'Browse verified dispatch riders near your location. Filter by rating, vehicle type, and availability.'
+    icon: Users,
+    title: 'Create an Account',
+    description:
+      'Sign up as a customer to unlock verified riders, secure booking, wallet funding, and delivery protection.',
   },
   {
     icon: Wallet,
-    title: 'Fund Your Wallet',
-    description: 'Add money to your wallet securely. Your funds stay locked in escrow until delivery is complete.'
+    title: 'Book Through the Platform',
+    description:
+      'Fund your wallet securely and create a delivery inside Dispatch NG so your payment stays protected.',
   },
   {
     icon: Truck,
-    title: 'Create a Delivery',
-    description: 'Enter pickup and drop-off details. Your rider gets notified instantly and heads your way.'
+    title: 'Rider Delivers',
+    description:
+      'Your assigned rider handles pickup and delivery while you track the job through the system.',
   },
   {
     icon: CheckCircle,
-    title: 'Track & Confirm',
-    description: 'Monitor delivery in real-time. Release payment only when you confirm successful delivery.'
-  }
+    title: 'Confirm & Close',
+    description:
+      'Confirm successful delivery before payout is released, with support and dispute handling available if needed.',
+  },
 ];
 
 const features = [
   {
     icon: Shield,
     title: 'Verified Riders',
-    description: 'All riders go through KYC verification before they can accept deliveries.'
+    description:
+      'Riders are reviewed before they can accept deliveries, helping customers book with more confidence.',
   },
   {
     icon: Wallet,
-    title: 'Secure Escrow',
-    description: 'Your money is safe. Funds are only released to riders after delivery confirmation.'
+    title: 'Protected Payments',
+    description:
+      'Funds stay inside the platform flow so delivery payments can be tracked and handled properly.',
   },
   {
-    icon: Star,
-    title: 'Rating System',
-    description: 'Rate your experience and help others find the best dispatch riders.'
+    icon: BadgeCheck,
+    title: 'Dispute & Support Coverage',
+    description:
+      'Bookings made through Dispatch NG can be reviewed by admin if an issue comes up during delivery.',
   },
   {
-    icon: Phone,
-    title: 'Direct Contact',
-    description: 'Call, WhatsApp, or SMS your rider directly once connected.'
-  }
+    icon: Smartphone,
+    title: 'Built for Fast Mobile Use',
+    description:
+      'Dispatch NG is designed for quick booking, rider discovery, wallet funding, and delivery tracking on mobile.',
+  },
+];
+
+const trustPoints = [
+  'Always book through Dispatch NG for payment protection.',
+  'Off-platform payments are not covered by escrow, support, or dispute review.',
+  'Rider payouts and delivery history are handled inside the system.',
 ];
 
 export function LandingPage() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuthStore();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const authCtaLabel = useMemo(
+    () => (isAuthenticated ? 'Go to Dashboard' : 'Get Started'),
+    [isAuthenticated]
+  );
+
+  const handlePrimaryCta = () => {
+    if (isAuthenticated) {
+      navigate('/');
+      return;
+    }
+
+    navigate('/signup');
+  };
+
+  const handleFindRiders = () => {
+    if (isAuthenticated) {
+      navigate('/riders');
+      return;
+    }
+
+    navigate('/login');
+  };
+
+  const handleBecomeRider = () => {
+    if (isAuthenticated) {
+      navigate('/signup');
+      return;
+    }
+
+    navigate('/signup');
+  };
+
+  const handleProtectedRidersPreview = () => {
+    if (isAuthenticated) {
+      navigate('/riders');
+      return;
+    }
+
+    navigate('/login');
+  };
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-violet-600 to-fuchsia-600 rounded-xl flex items-center justify-center">
-                <Truck className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">
-                Dispatch NG
-              </span>
+      <nav className="sticky top-0 z-50 border-b border-gray-100 bg-white/90 backdrop-blur-xl">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          <button
+            onClick={() => navigate('/')}
+            className="flex items-center gap-3"
+            type="button"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-600 shadow-sm">
+              <Truck className="h-5 w-5 text-white" />
             </div>
-
-            {/* Nav Links */}
-            <div className="hidden md:flex items-center gap-8">
-              <a href="#how-it-works" className="text-gray-600 hover:text-violet-600 transition-colors">How It Works</a>
-              <a href="#features" className="text-gray-600 hover:text-violet-600 transition-colors">Features</a>
-              <a href="#riders" className="text-gray-600 hover:text-violet-600 transition-colors">Find Riders</a>
+            <div className="text-left">
+              <div className="text-lg font-bold leading-none text-gray-900">Dispatch NG</div>
+              <div className="text-[11px] text-gray-500">Secure rider marketplace</div>
             </div>
+          </button>
 
-            {/* Auth Buttons */}
-            <div className="flex items-center gap-3">
-              {isAuthenticated ? (
-                <Button 
-                  onClick={() => navigate('/')}
-                  className="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white"
-                >
-                  Go to Dashboard
-                </Button>
-              ) : (
-                <>
-                  <Button 
-                    variant="ghost" 
-                    onClick={() => navigate('/login')}
-                    className="text-gray-600"
+          <div className="hidden items-center gap-8 md:flex">
+            <a href="#how-it-works" className="text-sm text-gray-600 transition-colors hover:text-violet-600">
+              How It Works
+            </a>
+            <a href="#why-book-inside" className="text-sm text-gray-600 transition-colors hover:text-violet-600">
+              Why Use Dispatch NG
+            </a>
+            <a href="#featured-riders" className="text-sm text-gray-600 transition-colors hover:text-violet-600">
+              Riders Preview
+            </a>
+          </div>
+
+          <div className="hidden items-center gap-3 md:flex">
+            {!isAuthenticated && (
+              <Button variant="ghost" onClick={() => navigate('/login')} className="text-gray-700">
+                Sign In
+              </Button>
+            )}
+            <Button
+              onClick={handlePrimaryCta}
+              className="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-700 hover:to-fuchsia-700"
+            >
+              {authCtaLabel}
+            </Button>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 text-gray-700 md:hidden"
+          >
+            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
+
+        {mobileMenuOpen && (
+          <div className="border-t border-gray-100 bg-white md:hidden">
+            <div className="space-y-3 px-4 py-4">
+              <a
+                href="#how-it-works"
+                className="block rounded-xl px-3 py-2 text-sm text-gray-700 hover:bg-violet-50"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                How It Works
+              </a>
+              <a
+                href="#why-book-inside"
+                className="block rounded-xl px-3 py-2 text-sm text-gray-700 hover:bg-violet-50"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Why Use Dispatch NG
+              </a>
+              <a
+                href="#featured-riders"
+                className="block rounded-xl px-3 py-2 text-sm text-gray-700 hover:bg-violet-50"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Riders Preview
+              </a>
+
+              <div className="grid grid-cols-1 gap-3 pt-2">
+                {!isAuthenticated && (
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      navigate('/login');
+                    }}
+                    className="w-full"
                   >
                     Sign In
                   </Button>
-                  <Button 
-                    onClick={() => navigate('/signup')}
-                    className="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white"
-                  >
-                    Get Started
-                  </Button>
-                </>
-              )}
+                )}
+                <Button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    handlePrimaryCta();
+                  }}
+                  className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white"
+                >
+                  {authCtaLabel}
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </nav>
 
-      {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-white to-fuchsia-50" />
-        <div className="absolute top-20 right-0 w-96 h-96 bg-violet-200/30 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-fuchsia-200/30 rounded-full blur-3xl" />
-        
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-violet-100 rounded-full">
-                <span className="w-2 h-2 bg-violet-600 rounded-full animate-pulse" />
-                <span className="text-sm font-medium text-violet-700">Now serving Lagos & Abuja</span>
-              </div>
-              
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                Find Trusted Dispatch
-                <span className="block bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">
-                  Riders Near You
+        <div className="absolute -top-20 right-0 h-72 w-72 rounded-full bg-violet-200/30 blur-3xl sm:h-96 sm:w-96" />
+        <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-fuchsia-200/30 blur-3xl sm:h-96 sm:w-96" />
+
+        <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-12 lg:items-center">
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-2 rounded-full bg-violet-100 px-4 py-2">
+                <span className="h-2 w-2 rounded-full bg-violet-600 animate-pulse" />
+                <span className="text-xs font-semibold uppercase tracking-wide text-violet-700">
+                  Secure dispatch booking for Lagos and beyond
                 </span>
-              </h1>
-              
-              <p className="text-lg text-gray-600 max-w-lg">
-                Connect with verified dispatch riders in your area. Secure payments, 
-                real-time tracking, and peace of mind with every delivery.
-              </p>
-              
-              <div className="flex flex-wrap gap-4">
-                <Button 
+              </div>
+
+              <div className="space-y-4">
+                <h1 className="max-w-2xl text-4xl font-bold leading-tight text-gray-900 sm:text-5xl lg:text-6xl">
+                  Book trusted dispatch riders
+                  <span className="block bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">
+                    inside a protected system
+                  </span>
+                </h1>
+
+                <p className="max-w-xl text-base leading-7 text-gray-600 sm:text-lg">
+                  Dispatch NG helps customers find verified riders, fund deliveries safely, track jobs,
+                  and keep payment, support, and dispute handling inside the platform.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <Button
                   size="lg"
-                  onClick={() => navigate('/riders')}
-                  className="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white px-8"
+                  onClick={handleFindRiders}
+                  className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-700 hover:to-fuchsia-700"
                 >
-                  Find a Rider
-                  <ArrowRight className="w-5 h-5 ml-2" />
+                  View Riders
+                  <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button 
+
+                <Button
                   size="lg"
                   variant="outline"
-                  onClick={() => navigate('/signup')}
-                  className="border-2 border-gray-200"
+                  onClick={handleBecomeRider}
+                  className="w-full border-2 border-gray-200"
                 >
-                  <Play className="w-5 h-5 mr-2" />
+                  <Play className="mr-2 h-5 w-5" />
                   Become a Rider
                 </Button>
               </div>
 
-              <div className="flex items-center gap-6 pt-4">
+              <div className="rounded-2xl border border-amber-100 bg-amber-50 p-4 sm:p-5">
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-100">
+                    <MessageSquareWarning className="h-5 w-5 text-amber-700" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-amber-900">Always book through Dispatch NG</p>
+                    <p className="mt-1 text-sm leading-6 text-amber-800">
+                      Payments made outside the platform are not covered by escrow, support review,
+                      or dispute resolution. Keep booking and payment inside Dispatch NG for protection.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 pt-1">
                 <div className="flex -space-x-3">
-                  {featuredRiders.slice(0, 4).map((rider, i) => (
+                  {featuredRiders.slice(0, 4).map((rider) => (
                     <img
-                      key={i}
+                      key={rider.id}
                       src={rider.avatar}
-                      alt=""
-                      className="w-10 h-10 rounded-full border-2 border-white object-cover"
+                      alt={rider.name}
+                      className="h-10 w-10 rounded-full border-2 border-white object-cover shadow-sm"
                     />
                   ))}
                 </div>
+
                 <div>
                   <div className="flex items-center gap-1">
                     {[1, 2, 3, 4, 5].map((star) => (
-                      <Star key={star} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                      <Star key={star} className="h-4 w-4 fill-amber-400 text-amber-400" />
                     ))}
                   </div>
                   <p className="text-sm text-gray-600">
-                    <span className="font-semibold text-gray-900">2,500+</span> deliveries completed
+                    Trusted by customers who want delivery handled through a proper system
                   </p>
                 </div>
               </div>
             </div>
 
             <div className="relative">
-              <div className="relative bg-white rounded-3xl shadow-2xl p-6 border border-gray-100">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="font-semibold text-gray-900">Featured Riders</h3>
-                  <span className="text-sm text-violet-600 font-medium cursor-pointer" onClick={() => navigate('/riders')}>
-                    View All
-                  </span>
+              <div className="rounded-[28px] border border-gray-100 bg-white p-5 shadow-[0_20px_80px_rgba(109,40,217,0.10)] sm:p-6">
+                <div className="mb-5 flex items-center justify-between">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">Rider network preview</h3>
+                    <p className="text-sm text-gray-500">Create an account to view and book riders</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleProtectedRidersPreview}
+                    className="text-sm font-medium text-violet-600 hover:text-violet-700"
+                  >
+                    Open
+                  </button>
                 </div>
-                
-                <div className="space-y-4">
+
+                <div className="space-y-3">
                   {featuredRiders.map((rider) => (
-                    <div 
+                    <button
                       key={rider.id}
-                      onClick={() => navigate('/riders')}
-                      className="flex items-center gap-4 p-4 rounded-xl bg-gray-50 hover:bg-violet-50 transition-colors cursor-pointer group"
+                      type="button"
+                      onClick={handleProtectedRidersPreview}
+                      className="flex w-full items-center gap-3 rounded-2xl border border-gray-100 bg-gray-50 p-3 text-left transition-colors hover:bg-violet-50"
                     >
-                      <div className="relative">
+                      <div className="relative shrink-0">
                         <img
                           src={rider.avatar}
                           alt={rider.name}
-                          className="w-12 h-12 rounded-full object-cover"
+                          className="h-12 w-12 rounded-full object-cover"
                         />
                         {rider.isOnline && (
-                          <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full" />
+                          <span className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-white bg-green-500" />
                         )}
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-medium text-gray-900 group-hover:text-violet-700 transition-colors">
-                          {rider.name}
-                        </h4>
-                        <div className="flex items-center gap-2 text-sm text-gray-500">
-                          <MapPin className="w-3.5 h-3.5" />
+
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate font-medium text-gray-900">{rider.name}</div>
+                        <div className="mt-1 flex items-center gap-1 text-sm text-gray-500">
+                          <MapPin className="h-3.5 w-3.5 shrink-0" />
                           <span className="truncate">{rider.location}</span>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <div className="flex items-center gap-1">
-                          <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+
+                      <div className="shrink-0 text-right">
+                        <div className="flex items-center justify-end gap-1">
+                          <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
                           <span className="font-medium text-gray-900">{rider.rating}</span>
                         </div>
-                        <span className="text-xs text-gray-500">{rider.reviews} reviews</span>
+                        <div className="text-xs text-gray-500">{rider.deliveries} deliveries</div>
                       </div>
-                    </div>
+                    </button>
                   ))}
                 </div>
+
+                <div className="mt-5 rounded-2xl border border-violet-100 bg-violet-50 p-4">
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white shadow-sm">
+                      <Lock className="h-5 w-5 text-violet-600" />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-violet-900">Login required for full access</p>
+                      <p className="mt-1 text-sm leading-6 text-violet-700">
+                        Customers need an account to view rider details, contact riders, create deliveries,
+                        and make protected payments through Dispatch NG.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-gradient-to-r from-violet-600 to-fuchsia-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-3xl md:text-4xl font-bold text-white">500+</div>
-              <div className="text-violet-100 mt-1">Verified Riders</div>
-            </div>
-            <div>
-              <div className="text-3xl md:text-4xl font-bold text-white">10K+</div>
-              <div className="text-violet-100 mt-1">Deliveries</div>
-            </div>
-            <div>
-              <div className="text-3xl md:text-4xl font-bold text-white">4.8</div>
-              <div className="text-violet-100 mt-1">Average Rating</div>
-            </div>
-            <div>
-              <div className="text-3xl md:text-4xl font-bold text-white">₦2M+</div>
-              <div className="text-violet-100 mt-1">Rider Earnings</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section id="how-it-works" className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              How It Works
+      <section id="why-book-inside" className="border-y border-gray-100 bg-gray-50 py-14 sm:py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-10 max-w-2xl">
+            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+              Why customers should book inside Dispatch NG
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Get your items delivered in 4 simple steps. Fast, secure, and reliable.
+            <p className="mt-3 text-base leading-7 text-gray-600">
+              Dispatch NG is designed to keep booking, payment, rider accountability, and issue handling
+              inside one trusted flow.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {howItWorks.map((step, index) => (
-              <div key={index} className="relative">
-                <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 h-full">
-                  <div className="w-14 h-14 bg-gradient-to-br from-violet-100 to-fuchsia-100 rounded-xl flex items-center justify-center mb-6">
-                    <step.icon className="w-7 h-7 text-violet-600" />
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {trustPoints.map((point) => (
+              <div
+                key={point}
+                className="rounded-2xl border border-white bg-white p-5 shadow-sm"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-violet-100">
+                    <Shield className="h-4 w-4 text-violet-700" />
                   </div>
-                  <div className="absolute -top-3 -left-3 w-8 h-8 bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                    {index + 1}
-                  </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">{step.title}</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">{step.description}</p>
+                  <p className="text-sm leading-6 text-gray-700">{point}</p>
                 </div>
               </div>
             ))}
@@ -347,30 +482,79 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Features */}
-      <section id="features" className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Why Choose Dispatch NG
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Built with security and convenience in mind for both customers and riders.
+      <section id="how-it-works" className="py-16 sm:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-12 text-center">
+            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">How it works</h2>
+            <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-gray-600">
+              A cleaner, safer delivery process for customers and riders.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {features.map((feature, index) => (
-              <div 
-                key={index}
-                className="flex gap-6 p-6 rounded-2xl bg-gray-50 hover:bg-violet-50 transition-colors"
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+            {howItWorks.map((step, index) => (
+              <div
+                key={step.title}
+                className="relative rounded-3xl border border-gray-100 bg-white p-6 shadow-sm"
               >
-                <div className="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center flex-shrink-0">
-                  <feature.icon className="w-7 h-7 text-violet-600" />
+                <div className="absolute -top-3 left-5 flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-sm font-bold text-white">
+                  {index + 1}
+                </div>
+
+                <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-100 to-fuchsia-100">
+                  <step.icon className="h-7 w-7 text-violet-600" />
+                </div>
+
+                <h3 className="text-lg font-semibold text-gray-900">{step.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-gray-600">{step.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-gradient-to-r from-violet-600 to-fuchsia-600 py-14 sm:py-16">
+        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-4 text-center sm:px-6 md:grid-cols-4 lg:px-8">
+          <div>
+            <div className="text-3xl font-bold text-white sm:text-4xl">500+</div>
+            <div className="mt-1 text-sm text-violet-100 sm:text-base">Verified Riders</div>
+          </div>
+          <div>
+            <div className="text-3xl font-bold text-white sm:text-4xl">10K+</div>
+            <div className="mt-1 text-sm text-violet-100 sm:text-base">Deliveries</div>
+          </div>
+          <div>
+            <div className="text-3xl font-bold text-white sm:text-4xl">4.8</div>
+            <div className="mt-1 text-sm text-violet-100 sm:text-base">Average Rating</div>
+          </div>
+          <div>
+            <div className="text-3xl font-bold text-white sm:text-4xl">₦2M+</div>
+            <div className="mt-1 text-sm text-violet-100 sm:text-base">Rider Earnings</div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 sm:py-20" id="features">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-12 text-center">
+            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">Why people choose Dispatch NG</h2>
+            <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-gray-600">
+              Built to help customers book properly and help riders operate inside a structured system.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+            {features.map((feature) => (
+              <div
+                key={feature.title}
+                className="flex gap-4 rounded-3xl border border-gray-100 bg-gray-50 p-5 sm:p-6"
+              >
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white shadow-sm">
+                  <feature.icon className="h-7 w-7 text-violet-600" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
-                  <p className="text-gray-600">{feature.description}</p>
+                  <h3 className="text-lg font-semibold text-gray-900">{feature.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-gray-600">{feature.description}</p>
                 </div>
               </div>
             ))}
@@ -378,116 +562,98 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Featured Riders Section */}
-      <section id="riders" className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-12">
+      <section id="featured-riders" className="bg-gray-50 py-16 sm:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-                Featured Riders
-              </h2>
-              <p className="text-gray-600">
-                Top-rated dispatch riders ready to deliver
+              <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">Featured riders</h2>
+              <p className="mt-2 text-base text-gray-600">
+                A preview of riders on the Dispatch NG network.
               </p>
             </div>
-            <Button 
-              variant="outline"
-              onClick={() => navigate('/riders')}
-              className="hidden md:flex"
-            >
-              View All Riders
-              <ArrowRight className="w-4 h-4 ml-2" />
+
+            <Button variant="outline" onClick={handleProtectedRidersPreview} className="w-full sm:w-auto">
+              Open rider network
+              <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
             {featuredRiders.map((rider) => (
-              <div 
+              <button
                 key={rider.id}
-                onClick={() => navigate('/riders')}
-                className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-lg hover:border-violet-200 transition-all cursor-pointer group"
+                type="button"
+                onClick={handleProtectedRidersPreview}
+                className="group rounded-3xl border border-gray-100 bg-white p-5 text-left shadow-sm transition-all hover:border-violet-200 hover:shadow-md"
               >
                 <div className="relative mb-4">
                   <img
                     src={rider.avatar}
                     alt={rider.name}
-                    className="w-20 h-20 rounded-full mx-auto object-cover"
+                    className="h-20 w-20 rounded-full object-cover"
                   />
                   {rider.isOnline && (
-                    <span className="absolute bottom-0 right-1/3 w-4 h-4 bg-green-500 border-2 border-white rounded-full" />
+                    <span className="absolute bottom-0 left-14 h-4 w-4 rounded-full border-2 border-white bg-green-500" />
                   )}
                 </div>
-                <div className="text-center">
-                  <h3 className="font-semibold text-gray-900 group-hover:text-violet-700 transition-colors">
-                    {rider.name}
-                  </h3>
-                  <div className="flex items-center justify-center gap-1 text-sm text-gray-500 mt-1">
-                    <MapPin className="w-3.5 h-3.5" />
-                    {rider.location}
-                  </div>
-                  <div className="flex items-center justify-center gap-4 mt-4">
-                    <div className="flex items-center gap-1">
-                      <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                      <span className="font-medium">{rider.rating}</span>
-                    </div>
-                    <span className="text-gray-300">|</span>
-                    <span className="text-sm text-gray-500">{rider.deliveries} deliveries</span>
-                  </div>
-                  <div className="flex justify-center gap-3 mt-4">
-                    <button className="w-9 h-9 bg-green-100 rounded-full flex items-center justify-center hover:bg-green-200 transition-colors">
-                      <Phone className="w-4 h-4 text-green-600" />
-                    </button>
-                    <button className="w-9 h-9 bg-emerald-100 rounded-full flex items-center justify-center hover:bg-emerald-200 transition-colors">
-                      <MessageCircle className="w-4 h-4 text-emerald-600" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
 
-          <div className="mt-8 text-center md:hidden">
-            <Button 
-              variant="outline"
-              onClick={() => navigate('/riders')}
-            >
-              View All Riders
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
+                <h3 className="font-semibold text-gray-900 transition-colors group-hover:text-violet-700">
+                  {rider.name}
+                </h3>
+
+                <div className="mt-1 flex items-center gap-1 text-sm text-gray-500">
+                  <MapPin className="h-3.5 w-3.5 shrink-0" />
+                  <span className="truncate">{rider.location}</span>
+                </div>
+
+                <div className="mt-4 flex items-center justify-between">
+                  <div className="flex items-center gap-1">
+                    <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                    <span className="font-medium text-gray-900">{rider.rating}</span>
+                  </div>
+                  <span className="text-sm text-gray-500">{rider.deliveries} deliveries</span>
+                </div>
+
+                <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-violet-50 px-3 py-1.5 text-sm font-medium text-violet-700">
+                  Sign in to view rider details
+                  <ChevronRight className="h-4 w-4" />
+                </div>
+              </button>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-3xl p-12 md:p-16 text-center relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" />
-            
+      <section className="py-16 sm:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="relative overflow-hidden rounded-[32px] bg-gradient-to-r from-violet-600 to-fuchsia-600 px-6 py-10 text-center sm:px-10 sm:py-14 md:px-14">
+            <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-white/10 blur-2xl" />
+            <div className="absolute -bottom-20 -left-12 h-52 w-52 rounded-full bg-white/10 blur-2xl" />
+
             <div className="relative">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                Ready to Get Started?
-              </h2>
-              <p className="text-violet-100 text-lg max-w-2xl mx-auto mb-8">
-                Join thousands of satisfied customers and riders on Nigeria's most trusted dispatch platform.
+              <h2 className="text-3xl font-bold text-white sm:text-4xl">Ready to use Dispatch NG properly?</h2>
+              <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-violet-100">
+                Create an account to browse riders, fund deliveries, track jobs, and keep your bookings
+                inside a secure platform flow.
               </p>
-              <div className="flex flex-wrap justify-center gap-4">
-                <Button 
+
+              <div className="mt-8 grid grid-cols-1 gap-3 sm:inline-flex sm:flex-wrap sm:justify-center">
+                <Button
                   size="lg"
                   onClick={() => navigate('/signup')}
-                  className="bg-white text-violet-600 hover:bg-gray-100"
+                  className="bg-white text-violet-700 hover:bg-gray-100"
                 >
-                  <Users className="w-5 h-5 mr-2" />
+                  <Users className="mr-2 h-5 w-5" />
                   Sign Up as Customer
                 </Button>
-                <Button 
+
+                <Button
                   size="lg"
                   variant="outline"
                   onClick={() => navigate('/signup')}
-                  className="border-2 border-white text-white hover:bg-white/10"
+                  className="border-2 border-white bg-transparent text-white hover:bg-white/10"
                 >
-                  <Truck className="w-5 h-5 mr-2" />
+                  <Truck className="mr-2 h-5 w-5" />
                   Become a Rider
                 </Button>
               </div>
@@ -496,54 +662,73 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-12">
+      <footer className="bg-gray-950 py-14 text-gray-300">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-4">
             <div>
-              <div className="flex items-center gap-2 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-br from-violet-600 to-fuchsia-600 rounded-xl flex items-center justify-center">
-                  <Truck className="w-5 h-5 text-white" />
+              <div className="mb-5 flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-600">
+                  <Truck className="h-5 w-5 text-white" />
                 </div>
-                <span className="text-xl font-bold text-white">
-                  Dispatch NG
-                </span>
+                <span className="text-xl font-bold text-white">Dispatch NG</span>
               </div>
-              <p className="text-gray-400">
-                Nigeria's most trusted logistics marketplace. Connecting customers with verified dispatch riders.
+              <p className="text-sm leading-6 text-gray-400">
+                A structured delivery marketplace helping customers and riders operate through a safer,
+                more accountable platform flow.
               </p>
             </div>
-            
+
             <div>
-              <h4 className="text-white font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2">
-                <li><a href="/riders" className="hover:text-violet-400 transition-colors">Find Riders</a></li>
-                <li><a href="/signup" className="hover:text-violet-400 transition-colors">Become a Rider</a></li>
-                <li><a href="#how-it-works" className="hover:text-violet-400 transition-colors">How It Works</a></li>
+              <h4 className="mb-4 font-semibold text-white">Quick Links</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li>
+                  <a href="#how-it-works" className="hover:text-violet-400 transition-colors">
+                    How It Works
+                  </a>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={handleProtectedRidersPreview}
+                    className="hover:text-violet-400 transition-colors"
+                  >
+                    Riders Preview
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => navigate('/signup')}
+                    className="hover:text-violet-400 transition-colors"
+                  >
+                    Become a Rider
+                  </button>
+                </li>
               </ul>
             </div>
-            
+
             <div>
-              <h4 className="text-white font-semibold mb-4">Support</h4>
-              <ul className="space-y-2">
-                <li><a href="#" className="hover:text-violet-400 transition-colors">Help Center</a></li>
-                <li><a href="#" className="hover:text-violet-400 transition-colors">Contact Us</a></li>
-                <li><a href="#" className="hover:text-violet-400 transition-colors">Terms of Service</a></li>
+              <h4 className="mb-4 font-semibold text-white">Protection</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li>Verified riders</li>
+                <li>Protected payment flow</li>
+                <li>Support and dispute review</li>
+                <li>Tracked delivery history</li>
               </ul>
             </div>
-            
+
             <div>
-              <h4 className="text-white font-semibold mb-4">Contact</h4>
-              <ul className="space-y-2">
+              <h4 className="mb-4 font-semibold text-white">Contact</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
                 <li>support@dispatchng.com</li>
                 <li>+234 800 123 4567</li>
                 <li>Lagos, Nigeria</li>
               </ul>
             </div>
           </div>
-          
-          <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500">
-            © 2025 Dispatch NG. All rights reserved.
+
+          <div className="mt-10 border-t border-gray-800 pt-6 text-center text-sm text-gray-500">
+            © 2026 Dispatch NG. All rights reserved.
           </div>
         </div>
       </footer>
