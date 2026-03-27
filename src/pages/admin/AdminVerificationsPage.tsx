@@ -3,7 +3,7 @@
 // ============================================
 
 import { useEffect, useState } from 'react';
-import { CheckCircle, XCircle, User, Bike, FileText } from 'lucide-react';
+import { CheckCircle, XCircle, User } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -14,14 +14,15 @@ import { showToast } from '@/stores/uiStore';
 interface PendingRider {
   id: string;
   profile_id: string;
-  full_name: string;
-  email: string;
-  phone: string;
+  full_name: string | null;
+  email: string | null;
+  phone: string | null;
+  avatar_url: string | null;
   company_name: string | null;
-  vehicle_type: string;
-  vehicle_plate: string;
-  vehicle_color: string;
-  license_number: string;
+  vehicle_type: string | null;
+  vehicle_plate: string | null;
+  vehicle_color: string | null;
+  license_number: string | null;
   created_at: string;
 }
 
@@ -38,23 +39,40 @@ export function AdminVerificationsPage() {
 
   const fetchPendingRiders = async () => {
     try {
+      setIsLoading(true);
+
       const { data, error } = await supabase
         .from('rider_profiles')
         .select(`
-          *,
-          profile:profile_id(id, full_name, email, phone)
+          id,
+          profile_id,
+          company_name,
+          vehicle_type,
+          vehicle_plate,
+          vehicle_color,
+          license_number,
+          created_at,
+          profile:profile_id(
+            id,
+            full_name,
+            email,
+            phone,
+            avatar_url
+          )
         `)
         .eq('verification_status', 'pending')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
 
-      const formatted = data?.map((r: any) => ({
-        ...r,
-        full_name: r.profile?.full_name,
-        email: r.profile?.email,
-        phone: r.profile?.phone,
-      })) || [];
+      const formatted =
+        data?.map((r: any) => ({
+          ...r,
+          full_name: r.profile?.full_name || null,
+          email: r.profile?.email || null,
+          phone: r.profile?.phone || null,
+          avatar_url: r.profile?.avatar_url || null,
+        })) || [];
 
       setPendingRiders(formatted);
     } catch (error) {
@@ -64,19 +82,23 @@ export function AdminVerificationsPage() {
     }
   };
 
-  const handleApprove = async (riderId: string) => {
+  const handleApprove = async (profileId: string) => {
     try {
       const { error } = await supabase
         .from('rider_profiles')
-        .update({ verification_status: 'verified' })
-        .eq('profile_id', riderId);
+        .update({
+          verification_status: 'verified',
+          updated_at: new Date().toISOString(),
+        })
+        .eq('profile_id', profileId);
 
       if (error) throw error;
+
       showToast('success', 'Rider approved', 'The rider can now start accepting jobs');
-      fetchPendingRiders();
       setSelectedRider(null);
+      fetchPendingRiders();
     } catch (error: any) {
-      showToast('error', 'Error', error.message);
+      showToast('error', 'Error', error.message || 'Failed to approve rider');
     }
   };
 
@@ -86,18 +108,40 @@ export function AdminVerificationsPage() {
     try {
       const { error } = await supabase
         .from('rider_profiles')
-        .update({ verification_status: 'rejected' })
+        .update({
+          verification_status: 'rejected',
+          updated_at: new Date().toISOString(),
+        })
         .eq('profile_id', selectedRider.profile_id);
 
       if (error) throw error;
+
       showToast('success', 'Rider rejected', 'The application has been rejected');
-      fetchPendingRiders();
       setShowRejectDialog(false);
       setSelectedRider(null);
       setRejectionReason('');
+      fetchPendingRiders();
     } catch (error: any) {
-      showToast('error', 'Error', error.message);
+      showToast('error', 'Error', error.message || 'Failed to reject rider');
     }
+  };
+
+  const renderAvatar = (rider: PendingRider) => {
+    if (rider.avatar_url) {
+      return (
+        <img
+          src={rider.avatar_url}
+          alt={rider.full_name || 'Rider'}
+          className="w-12 h-12 rounded-full object-cover border border-gray-200"
+        />
+      );
+    }
+
+    return (
+      <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center">
+        <User className="w-6 h-6 text-amber-600" />
+      </div>
+    );
   };
 
   return (
@@ -109,7 +153,9 @@ export function AdminVerificationsPage() {
 
       {isLoading ? (
         <div className="space-y-3">
-          {[1, 2, 3].map(i => <Card key={i} className="animate-pulse h-20" />)}
+          {[1, 2, 3].map((i) => (
+            <Card key={i} className="animate-pulse h-24" />
+          ))}
         </div>
       ) : pendingRiders.length === 0 ? (
         <Card className="border-dashed border-2">
@@ -121,20 +167,27 @@ export function AdminVerificationsPage() {
         </Card>
       ) : (
         <div className="space-y-3">
-          {pendingRiders.map(rider => (
-            <Card key={rider.id} className="cursor-pointer hover:shadow-md" onClick={() => setSelectedRider(rider)}>
+          {pendingRiders.map((rider) => (
+            <Card
+              key={rider.id}
+              className="cursor-pointer hover:shadow-md transition-shadow"
+              onClick={() => setSelectedRider(rider)}
+            >
               <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center">
-                      <User className="w-6 h-6 text-amber-600" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-gray-900">{rider.full_name}</p>
-                      <p className="text-sm text-gray-500 capitalize">{rider.vehicle_type} • {rider.vehicle_plate}</p>
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-4 min-w-0">
+                    {renderAvatar(rider)}
+
+                    <div className="min-w-0">
+                      <p className="font-semibold text-gray-900">{rider.full_name || 'Unnamed rider'}</p>
+                      <p className="text-sm text-gray-500">
+                        {rider.vehicle_type || 'Vehicle'} • {rider.vehicle_plate || 'No plate'}
+                      </p>
+                      <p className="text-sm text-gray-500 truncate">{rider.email || 'No email'}</p>
                     </div>
                   </div>
-                  <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-sm font-medium">
+
+                  <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-sm font-medium shrink-0">
                     Pending
                   </span>
                 </div>
@@ -149,51 +202,76 @@ export function AdminVerificationsPage() {
           <DialogHeader>
             <DialogTitle>Review Application</DialogTitle>
           </DialogHeader>
+
           {selectedRider && (
             <div className="space-y-4">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 flex items-center justify-center text-white text-xl font-medium">
-                  {selectedRider.full_name?.charAt(0)}
-                </div>
+                {selectedRider.avatar_url ? (
+                  <img
+                    src={selectedRider.avatar_url}
+                    alt={selectedRider.full_name || 'Rider'}
+                    className="w-16 h-16 rounded-full object-cover border border-gray-200"
+                  />
+                ) : (
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 flex items-center justify-center text-white text-xl font-medium">
+                    {(selectedRider.full_name || 'R').charAt(0)}
+                  </div>
+                )}
+
                 <div>
-                  <p className="text-xl font-semibold">{selectedRider.full_name}</p>
-                  <p className="text-gray-500">{selectedRider.email}</p>
+                  <p className="text-xl font-semibold">{selectedRider.full_name || 'Unnamed rider'}</p>
+                  <p className="text-gray-500">{selectedRider.email || 'No email'}</p>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gray-50 p-3 rounded-lg">
                   <p className="text-sm text-gray-500">Phone</p>
-                  <p className="font-medium">{selectedRider.phone}</p>
+                  <p className="font-medium">{selectedRider.phone || 'Not set'}</p>
                 </div>
+
                 <div className="bg-gray-50 p-3 rounded-lg">
                   <p className="text-sm text-gray-500">Company</p>
                   <p className="font-medium">{selectedRider.company_name || 'N/A'}</p>
                 </div>
+
                 <div className="bg-gray-50 p-3 rounded-lg">
                   <p className="text-sm text-gray-500">Vehicle</p>
-                  <p className="font-medium capitalize">{selectedRider.vehicle_type}</p>
+                  <p className="font-medium capitalize">{selectedRider.vehicle_type || 'Not set'}</p>
                 </div>
+
                 <div className="bg-gray-50 p-3 rounded-lg">
                   <p className="text-sm text-gray-500">Plate</p>
-                  <p className="font-medium uppercase">{selectedRider.vehicle_plate}</p>
+                  <p className="font-medium uppercase">{selectedRider.vehicle_plate || 'Not set'}</p>
                 </div>
+
                 <div className="bg-gray-50 p-3 rounded-lg">
                   <p className="text-sm text-gray-500">Color</p>
-                  <p className="font-medium">{selectedRider.vehicle_color}</p>
+                  <p className="font-medium">{selectedRider.vehicle_color || 'Not set'}</p>
                 </div>
+
                 <div className="bg-gray-50 p-3 rounded-lg">
                   <p className="text-sm text-gray-500">License</p>
-                  <p className="font-medium uppercase">{selectedRider.license_number}</p>
+                  <p className="font-medium uppercase">{selectedRider.license_number || 'Not set'}</p>
                 </div>
               </div>
 
               <div className="flex gap-3">
-                <Button onClick={() => handleApprove(selectedRider.profile_id)} className="flex-1 bg-green-600 hover:bg-green-700 text-white">
-                  <CheckCircle className="w-4 h-4 mr-2" /> Approve
+                <Button
+                  onClick={() => handleApprove(selectedRider.profile_id)}
+                  className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                >
+                  <CheckCircle className="w-4 h-4 mr-2" />
+                  Approve
                 </Button>
-                <Button onClick={() => setShowRejectDialog(true)} variant="outline" className="flex-1 text-red-600 border-red-200 hover:bg-red-50">
-                  <XCircle className="w-4 h-4 mr-2" /> Reject
+
+                <Button
+                  onClick={() => setShowRejectDialog(true)}
+                  variant="outline"
+                  className="flex-1 text-red-600 border-red-200 hover:bg-red-50"
+                >
+                  <XCircle className="w-4 h-4 mr-2" />
+                  Reject
                 </Button>
               </div>
             </div>
@@ -206,6 +284,7 @@ export function AdminVerificationsPage() {
           <DialogHeader>
             <DialogTitle>Reject Application</DialogTitle>
           </DialogHeader>
+
           <div className="space-y-4">
             <Textarea
               placeholder="Reason for rejection (optional)..."
@@ -213,9 +292,14 @@ export function AdminVerificationsPage() {
               onChange={(e) => setRejectionReason(e.target.value)}
               rows={3}
             />
+
             <div className="flex gap-3">
-              <Button onClick={() => setShowRejectDialog(false)} variant="outline" className="flex-1">Cancel</Button>
-              <Button onClick={handleReject} variant="destructive" className="flex-1">Confirm Reject</Button>
+              <Button onClick={() => setShowRejectDialog(false)} variant="outline" className="flex-1">
+                Cancel
+              </Button>
+              <Button onClick={handleReject} variant="destructive" className="flex-1">
+                Confirm Reject
+              </Button>
             </div>
           </div>
         </DialogContent>

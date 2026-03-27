@@ -45,6 +45,9 @@ import { AdminVerificationsPage } from '@/pages/admin/AdminVerificationsPage';
 import { AdminJobsPage } from '@/pages/admin/AdminJobsPage';
 import { AdminDisputesPage } from '@/pages/admin/AdminDisputesPage';
 import { AdminSettingsPage } from '@/pages/admin/AdminSettingsPage';
+import { AdminCustomersPage } from '@/pages/admin/AdminCustomersPage';
+import { AdminWithdrawalsPage } from '@/pages/admin/AdminWithdrawalsPage';
+import { AdminRevenuePage } from '@/pages/admin/AdminRevenuePage';
 
 // Components
 import { ProtectedRoute } from '@/components/ProtectedRoute';
@@ -170,10 +173,13 @@ function App() {
             }
           >
             <Route path="/admin" element={<AdminDashboardPage />} />
+            <Route path="/admin/customers" element={<AdminCustomersPage />} />
             <Route path="/admin/riders" element={<AdminRidersPage />} />
             <Route path="/admin/verifications" element={<AdminVerificationsPage />} />
             <Route path="/admin/jobs" element={<AdminJobsPage />} />
             <Route path="/admin/disputes" element={<AdminDisputesPage />} />
+            <Route path="/admin/withdrawals" element={<AdminWithdrawalsPage />} />
+            <Route path="/admin/revenue" element={<AdminRevenuePage />} />
             <Route path="/admin/settings" element={<AdminSettingsPage />} />
           </Route>
 

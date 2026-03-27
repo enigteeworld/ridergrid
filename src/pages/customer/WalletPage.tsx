@@ -1,11 +1,17 @@
 // ============================================
 // DISPATCH NG - Wallet Page (Customer)
 // ============================================
-
-import { useEffect, useState } from 'react';
-import { 
-  Wallet, ArrowUpRight, ArrowDownLeft, Lock, 
-  Plus, History, CreditCard 
+import { useEffect, useState, useCallback } from 'react';
+import {
+  Wallet,
+  ArrowUpRight,
+  ArrowDownLeft,
+  Lock,
+  Plus,
+  History,
+  CreditCard,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -15,109 +21,219 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/stores/authStore';
 import { showToast } from '@/stores/uiStore';
 import type { WalletTransaction } from '@/types';
-import { formatCurrency, formatDateTime, formatDistanceToNow } from '@/utils/format';
+import { formatCurrency, formatDistanceToNow } from '@/utils/format';
 import { cn } from '@/lib/utils';
 
-const MIN_FUNDING = 500;
+const MIN_FUNDING = Number(import.meta.env.VITE_MIN_WALLET_FUNDING || 500);
+
+type InitializeFundingResponse = {
+  ok?: boolean;
+  message?: string;
+  authorization_url?: string | null;
+  access_code?: string | null;
+  reference?: string | null;
+  error?: string;
+};
+
+type VerifyFundingResponse = {
+  ok?: boolean;
+  already_processed?: boolean;
+  message?: string;
+  wallet?: any;
+  amount?: number;
+  reference?: string;
+  error?: string;
+};
 
 export function WalletPage() {
   const { user, wallet, setWallet } = useAuthStore();
   const [transactions, setTransactions] = useState<WalletTransaction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  
-  // Fund wallet dialog
   const [showFundDialog, setShowFundDialog] = useState(false);
   const [fundAmount, setFundAmount] = useState('');
   const [isFunding, setIsFunding] = useState(false);
+  const [showTransactions, setShowTransactions] = useState(false);
 
-  useEffect(() => {
-    fetchWalletData();
-  }, []);
+  const fetchWalletData = useCallback(async () => {
+    if (!user?.id) {
+      setTransactions([]);
+      setIsLoading(false);
+      return;
+    }
 
-  const fetchWalletData = async () => {
     try {
       setIsLoading(true);
-      
-      // Fetch wallet
-      const { data: walletData } = await supabase
+
+      const { data: walletData, error: walletError } = await supabase
         .from('wallets')
         .select('*')
-        .eq('profile_id', user?.id)
+        .eq('profile_id', user.id)
         .single();
-      
+
+      if (walletError) throw walletError;
+
       if (walletData) {
         setWallet(walletData);
       }
 
-      // Fetch transactions
       if (walletData?.id) {
-        const { data: txData } = await supabase
+        const { data: txData, error: txError } = await supabase
           .from('wallet_transactions')
           .select('*')
           .eq('wallet_id', walletData.id)
           .order('created_at', { ascending: false })
           .limit(20);
-        
-        if (txData) {
-          setTransactions(txData);
-        }
+
+        if (txError) throw txError;
+        setTransactions(txData || []);
+      } else {
+        setTransactions([]);
       }
     } catch (error) {
       console.error('Error fetching wallet:', error);
+      showToast('error', 'Error', 'Failed to load wallet data');
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [user?.id, setWallet]);
+
+  useEffect(() => {
+    fetchWalletData();
+  }, [fetchWalletData]);
+
+  useEffect(() => {
+    const handleWindowFocus = () => {
+      fetchWalletData();
+    };
+
+    window.addEventListener('focus', handleWindowFocus);
+
+    return () => {
+      window.removeEventListener('focus', handleWindowFocus);
+    };
+  }, [fetchWalletData]);
+
+  useEffect(() => {
+    const verifyFundingFromUrl = async () => {
+      if (!user?.id) return;
+
+      const url = new URL(window.location.href);
+      const reference = url.searchParams.get('reference');
+      const trxref = url.searchParams.get('trxref');
+      const paymentReference = reference || trxref;
+
+      if (!paymentReference) return;
+
+      try {
+        setIsFunding(true);
+
+        const {
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession();
+
+        if (sessionError) throw sessionError;
+        if (!session?.access_token) {
+          throw new Error('You are not signed in');
+        }
+
+        const { data: result, error } = await supabase.functions.invoke<VerifyFundingResponse>(
+          'paystack-verify-wallet-funding',
+          {
+            body: {
+              reference: paymentReference,
+            },
+          }
+        );
+
+        if (error) {
+          throw new Error(error.message || 'Failed to verify payment');
+        }
+
+        if (!result?.ok) {
+          throw new Error(result?.error || result?.message || 'Failed to verify payment');
+        }
+
+        if (result.wallet) {
+          setWallet(result.wallet);
+        }
+
+        await fetchWalletData();
+
+        showToast(
+          'success',
+          'Wallet funded',
+          result.message || 'Your wallet has been funded successfully'
+        );
+
+        url.searchParams.delete('reference');
+        url.searchParams.delete('trxref');
+        window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
+      } catch (error: any) {
+        console.error('Funding verification error:', error);
+        showToast('error', 'Verification failed', error.message || 'Failed to verify payment');
+      } finally {
+        setIsFunding(false);
+      }
+    };
+
+    verifyFundingFromUrl();
+  }, [user?.id, fetchWalletData, setWallet]);
 
   const handleFundWallet = async () => {
     const amount = parseFloat(fundAmount);
-    
-    if (amount < MIN_FUNDING) {
-      showToast('error', 'Invalid amount', `Minimum funding amount is ${formatCurrency(MIN_FUNDING)}`);
+
+    if (!wallet?.id) {
+      showToast('error', 'Error', 'Wallet not found');
+      return;
+    }
+
+    if (!amount || Number.isNaN(amount) || amount < MIN_FUNDING) {
+      showToast(
+        'error',
+        'Invalid amount',
+        `Minimum funding amount is ${formatCurrency(MIN_FUNDING)}`
+      );
       return;
     }
 
     setIsFunding(true);
 
     try {
-      // In a real app, you would integrate with Paystack/Flutterwave here
-      // For now, we'll simulate a successful payment
-      
-      // Create deposit transaction
-      const { error: txError } = await supabase
-        .from('wallet_transactions')
-        .insert({
-          wallet_id: wallet?.id,
-          transaction_type: 'deposit',
-          amount: amount,
-          balance_before: wallet?.available_balance || 0,
-          balance_after: (wallet?.available_balance || 0) + amount,
-          description: 'Wallet funding via card',
-        });
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
 
-      if (txError) throw txError;
-
-      // Update wallet balance
-      const { data: updatedWallet } = await supabase
-        .from('wallets')
-        .update({
-          available_balance: (wallet?.available_balance || 0) + amount,
-          total_deposited: (wallet?.total_deposited || 0) + amount,
-        })
-        .eq('id', wallet?.id)
-        .select()
-        .single();
-
-      if (updatedWallet) {
-        setWallet(updatedWallet);
+      if (sessionError) throw sessionError;
+      if (!session?.access_token) {
+        throw new Error('You are not signed in');
       }
 
-      showToast('success', 'Success!', `Your wallet has been funded with ${formatCurrency(amount)}`);
+      const { data: result, error } = await supabase.functions.invoke<InitializeFundingResponse>(
+        'paystack-initialize-wallet-funding',
+        {
+          body: {
+            amount,
+            email: user?.email,
+          },
+        }
+      );
+
+      if (error) {
+        throw new Error(error.message || 'Failed to initialize payment');
+      }
+
+      if (!result?.ok || !result.authorization_url) {
+        throw new Error(result?.error || result?.message || 'Failed to initialize payment');
+      }
+
       setShowFundDialog(false);
       setFundAmount('');
-      fetchWalletData();
+      window.location.href = result.authorization_url;
     } catch (error: any) {
-      showToast('error', 'Error', error.message);
+      console.error('Wallet funding initialization error:', error);
+      showToast('error', 'Error', error.message || 'Failed to initialize wallet funding');
     } finally {
       setIsFunding(false);
     }
@@ -147,27 +263,76 @@ export function WalletPage() {
         return 'text-green-600';
       case 'withdrawal':
       case 'escrow_lock':
-        return 'text-red-600';
       case 'escrow_release':
-        return 'text-blue-600';
+        return 'text-red-600';
       default:
         return 'text-gray-600';
     }
   };
 
   const formatTransactionType = (type: string) => {
-    return type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    return type.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
   };
+
+  const getTransactionPrefix = (type: string) => {
+    switch (type) {
+      case 'deposit':
+      case 'escrow_refund':
+        return '+';
+      case 'withdrawal':
+      case 'escrow_lock':
+      case 'escrow_release':
+        return '-';
+      default:
+        return '';
+    }
+  };
+
+  const totalSpent = Math.max(
+    0,
+    Number(wallet?.total_deposited || 0) -
+      Number(wallet?.available_balance || 0) -
+      Number(wallet?.held_balance || 0)
+  );
+
+  const SectionHeader = ({
+    title,
+    count,
+    isOpen,
+    onToggle,
+  }: {
+    title: string;
+    count: number;
+    isOpen: boolean;
+    onToggle: () => void;
+  }) => (
+    <button
+      type="button"
+      onClick={onToggle}
+      className="w-full rounded-2xl border border-gray-100 bg-white px-4 py-3 shadow-sm hover:border-violet-200 hover:shadow transition-all"
+    >
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <p className="text-base font-semibold text-gray-900">{title}</p>
+          <span className="inline-flex items-center rounded-full bg-violet-100 px-2.5 py-1 text-xs font-semibold text-violet-700">
+            {count}
+          </span>
+        </div>
+
+        <div className="flex items-center justify-center rounded-full bg-gray-100 p-2 text-gray-600">
+          {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+        </div>
+      </div>
+    </button>
+  );
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900">My Wallet</h1>
         <p className="text-gray-500">Manage your funds and transactions</p>
       </div>
 
-      {/* Balance Cards */}
       <div className="grid md:grid-cols-2 gap-4">
         <Card className="bg-gradient-to-br from-violet-500 to-purple-600 text-white border-0">
           <CardContent className="p-6">
@@ -177,7 +342,11 @@ export function WalletPage() {
                 <span className="text-violet-100">Available Balance</span>
               </div>
             </div>
-            <p className="text-4xl font-bold">{formatCurrency(wallet?.available_balance || 0)}</p>
+
+            <p className="text-4xl font-bold">
+              {formatCurrency(Number(wallet?.available_balance || 0))}
+            </p>
+
             <Button
               onClick={() => setShowFundDialog(true)}
               className="mt-4 bg-white text-violet-600 hover:bg-violet-50"
@@ -196,100 +365,118 @@ export function WalletPage() {
                 <span className="text-gray-600">Held in Escrow</span>
               </div>
             </div>
-            <p className="text-4xl font-bold text-gray-900">{formatCurrency(wallet?.held_balance || 0)}</p>
-            <p className="text-sm text-gray-500 mt-2">
-              Funds locked for active deliveries
+
+            <p className="text-4xl font-bold text-gray-900">
+              {formatCurrency(Number(wallet?.held_balance || 0))}
             </p>
+            <p className="text-sm text-gray-500 mt-2">Funds locked for active deliveries</p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Stats */}
       <div className="grid grid-cols-2 gap-4">
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-gray-500">Total Deposited</p>
-            <p className="text-xl font-semibold text-gray-900">{formatCurrency(wallet?.total_deposited || 0)}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <p className="text-sm text-gray-500">Total Spent</p>
             <p className="text-xl font-semibold text-gray-900">
-              {formatCurrency((wallet?.total_deposited || 0) - (wallet?.available_balance || 0) - (wallet?.held_balance || 0))}
+              {formatCurrency(Number(wallet?.total_deposited || 0))}
             </p>
           </CardContent>
         </Card>
+
+        <Card>
+          <CardContent className="p-4">
+            <p className="text-sm text-gray-500">Total Spent</p>
+            <p className="text-xl font-semibold text-gray-900">{formatCurrency(totalSpent)}</p>
+          </CardContent>
+        </Card>
       </div>
 
-      {/* Transactions */}
-      <div>
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Transactions</h2>
-        
-        {isLoading ? (
-          <div className="space-y-3">
-            {[1, 2, 3].map((i) => (
-              <Card key={i} className="animate-pulse">
-                <CardContent className="p-4">
-                  <div className="h-12 bg-gray-200 rounded" />
+      <div className="space-y-3">
+        <SectionHeader
+          title="Recent Transactions"
+          count={transactions.length}
+          isOpen={showTransactions}
+          onToggle={() => setShowTransactions((prev) => !prev)}
+        />
+
+        {showTransactions && (
+          <>
+            {isLoading ? (
+              <div className="space-y-3">
+                {[1, 2, 3].map((i) => (
+                  <Card key={i} className="animate-pulse">
+                    <CardContent className="p-4">
+                      <div className="h-12 bg-gray-200 rounded" />
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : transactions.length === 0 ? (
+              <Card className="border-dashed border-2">
+                <CardContent className="p-8 text-center">
+                  <History className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No transactions yet</h3>
+                  <p className="text-gray-500">Fund your wallet to get started</p>
                 </CardContent>
               </Card>
-            ))}
-          </div>
-        ) : transactions.length === 0 ? (
-          <Card className="border-dashed border-2">
-            <CardContent className="p-8 text-center">
-              <History className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No transactions yet</h3>
-              <p className="text-gray-500">Fund your wallet to get started</p>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="space-y-3">
-            {transactions.map((tx) => (
-              <Card key={tx.id}>
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
-                        {getTransactionIcon(tx.transaction_type)}
+            ) : (
+              <div className="space-y-3">
+                {transactions.map((tx) => (
+                  <Card key={tx.id}>
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
+                            {getTransactionIcon(tx.transaction_type)}
+                          </div>
+
+                          <div className="min-w-0">
+                            <p className="font-medium text-gray-900">
+                              {formatTransactionType(tx.transaction_type)}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              {formatDistanceToNow(tx.created_at)}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="text-right shrink-0">
+                          <p className={cn('font-semibold', getTransactionColor(tx.transaction_type))}>
+                            {getTransactionPrefix(tx.transaction_type)}
+                            {formatCurrency(Number(tx.amount || 0))}
+                          </p>
+                          <p className="text-xs text-gray-400">
+                            Balance: {formatCurrency(Number(tx.balance_after || 0))}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-medium text-gray-900">{formatTransactionType(tx.transaction_type)}</p>
-                        <p className="text-sm text-gray-500">{formatDistanceToNow(tx.created_at)}</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className={cn('font-semibold', getTransactionColor(tx.transaction_type))}>
-                        {['deposit', 'escrow_refund'].includes(tx.transaction_type) ? '+' : '-'}
-                        {formatCurrency(tx.amount)}
-                      </p>
-                      <p className="text-xs text-gray-400">
-                        Balance: {formatCurrency(tx.balance_after)}
-                      </p>
-                    </div>
-                  </div>
-                  {tx.description && (
-                    <p className="mt-2 text-sm text-gray-500">{tx.description}</p>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+
+                      {tx.description && (
+                        <p className="mt-2 text-sm text-gray-500">{tx.description}</p>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
 
-      {/* Fund Wallet Dialog */}
       <Dialog open={showFundDialog} onOpenChange={setShowFundDialog}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Fund Your Wallet</DialogTitle>
           </DialogHeader>
+
           <div className="space-y-4">
             <div>
               <label className="text-sm font-medium text-gray-700">Amount (₦)</label>
               <div className="relative mt-1">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium">₦</span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium">
+                  ₦
+                </span>
                 <Input
                   type="number"
                   placeholder={`Minimum ${formatCurrency(MIN_FUNDING)}`}
@@ -298,15 +485,17 @@ export function WalletPage() {
                   className="pl-8"
                 />
               </div>
-              <p className="text-sm text-gray-500 mt-1">Minimum funding: {formatCurrency(MIN_FUNDING)}</p>
+              <p className="text-sm text-gray-500 mt-1">
+                Minimum funding: {formatCurrency(MIN_FUNDING)}
+              </p>
             </div>
-            
+
             <div className="bg-gray-50 rounded-lg p-4">
               <div className="flex items-center gap-2 mb-2">
                 <CreditCard className="w-5 h-5 text-gray-400" />
                 <span className="font-medium text-gray-700">Payment Method</span>
               </div>
-              <p className="text-sm text-gray-500">Card payment via Paystack (simulated)</p>
+              <p className="text-sm text-gray-500">Card payment via Paystack</p>
             </div>
 
             <Button

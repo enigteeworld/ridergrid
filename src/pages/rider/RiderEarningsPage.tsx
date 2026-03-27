@@ -13,6 +13,13 @@ interface EarningStats {
   thisWeek: number;
   thisMonth: number;
   total: number;
+  totalDeliveries: number;
+}
+
+interface CompletedEarningJob {
+  id: string;
+  rider_earnings: number | null;
+  completed_at: string | null;
 }
 
 export function RiderEarningsPage() {
@@ -22,8 +29,9 @@ export function RiderEarningsPage() {
     thisWeek: 0,
     thisMonth: 0,
     total: 0,
+    totalDeliveries: 0,
   });
-  const [recentEarnings, setRecentEarnings] = useState<any[]>([]);
+  const [recentEarnings, setRecentEarnings] = useState<CompletedEarningJob[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -32,6 +40,8 @@ export function RiderEarningsPage() {
 
   const fetchEarnings = async () => {
     try {
+      setIsLoading(true);
+
       const { data: jobs, error } = await supabase
         .from('dispatch_jobs')
         .select('id, rider_earnings, completed_at')
@@ -41,32 +51,41 @@ export function RiderEarningsPage() {
 
       if (error) throw error;
 
-      const safeJobs = jobs || [];
+      const safeJobs: CompletedEarningJob[] = (jobs || []).map((job) => ({
+        id: job.id,
+        rider_earnings: Number(job.rider_earnings || 0),
+        completed_at: job.completed_at || null,
+      }));
 
       const now = new Date();
-      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const weekStart = new Date(todayStart);
+      weekStart.setDate(todayStart.getDate() - 7);
       const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
 
       const todayEarnings = safeJobs
-        .filter((j) => j.completed_at && new Date(j.completed_at) >= today)
-        .reduce((sum, j) => sum + (j.rider_earnings || 0), 0);
+        .filter((job) => job.completed_at && new Date(job.completed_at) >= todayStart)
+        .reduce((sum, job) => sum + Number(job.rider_earnings || 0), 0);
 
       const weekEarnings = safeJobs
-        .filter((j) => j.completed_at && new Date(j.completed_at) >= weekAgo)
-        .reduce((sum, j) => sum + (j.rider_earnings || 0), 0);
+        .filter((job) => job.completed_at && new Date(job.completed_at) >= weekStart)
+        .reduce((sum, job) => sum + Number(job.rider_earnings || 0), 0);
 
       const monthEarnings = safeJobs
-        .filter((j) => j.completed_at && new Date(j.completed_at) >= monthStart)
-        .reduce((sum, j) => sum + (j.rider_earnings || 0), 0);
+        .filter((job) => job.completed_at && new Date(job.completed_at) >= monthStart)
+        .reduce((sum, job) => sum + Number(job.rider_earnings || 0), 0);
 
-      const totalEarnings = safeJobs.reduce((sum, j) => sum + (j.rider_earnings || 0), 0);
+      const totalEarnings = safeJobs.reduce(
+        (sum, job) => sum + Number(job.rider_earnings || 0),
+        0
+      );
 
       setStats({
         today: todayEarnings,
         thisWeek: weekEarnings,
         thisMonth: monthEarnings,
         total: totalEarnings,
+        totalDeliveries: safeJobs.length,
       });
 
       setRecentEarnings(safeJobs.slice(0, 10));
@@ -77,7 +96,7 @@ export function RiderEarningsPage() {
     }
   };
 
-  const deliveryCount = riderProfile?.total_deliveries || 0;
+  const deliveryCount = stats.totalDeliveries;
   const averagePerDelivery = deliveryCount > 0 ? stats.total / deliveryCount : 0;
 
   return (
@@ -98,14 +117,18 @@ export function RiderEarningsPage() {
         <Card>
           <CardContent className="p-4">
             <p className="text-gray-500 text-sm">This Week</p>
-            <p className="text-2xl font-bold text-gray-900">{formatCurrency(stats.thisWeek)}</p>
+            <p className="text-2xl font-bold text-gray-900">
+              {formatCurrency(stats.thisWeek)}
+            </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardContent className="p-4">
             <p className="text-gray-500 text-sm">This Month</p>
-            <p className="text-2xl font-bold text-gray-900">{formatCurrency(stats.thisMonth)}</p>
+            <p className="text-2xl font-bold text-gray-900">
+              {formatCurrency(stats.thisMonth)}
+            </p>
           </CardContent>
         </Card>
 
@@ -132,7 +155,9 @@ export function RiderEarningsPage() {
               <p className="text-sm text-gray-500">Average Rating</p>
             </div>
             <div>
-              <p className="text-3xl font-bold text-green-600">{formatCurrency(averagePerDelivery)}</p>
+              <p className="text-3xl font-bold text-green-600">
+                {formatCurrency(averagePerDelivery)}
+              </p>
               <p className="text-sm text-gray-500">Avg per Delivery</p>
             </div>
           </div>
@@ -151,7 +176,9 @@ export function RiderEarningsPage() {
         ) : recentEarnings.length === 0 ? (
           <Card className="border-dashed border-2">
             <CardContent className="p-6 text-center">
-              <p className="text-gray-500">No earnings yet. Complete deliveries to start earning.</p>
+              <p className="text-gray-500">
+                No earnings yet. Complete deliveries to start earning.
+              </p>
             </CardContent>
           </Card>
         ) : (
@@ -172,7 +199,7 @@ export function RiderEarningsPage() {
                       </div>
                     </div>
                     <p className="font-semibold text-green-600">
-                      +{formatCurrency(earning.rider_earnings || 0)}
+                      +{formatCurrency(Number(earning.rider_earnings || 0))}
                     </p>
                   </div>
                 </CardContent>

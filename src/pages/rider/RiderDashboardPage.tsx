@@ -28,11 +28,14 @@ import {
 import { cn } from '@/lib/utils';
 
 export function RiderDashboardPage() {
-  const { user, riderProfile, wallet } = useAuthStore();
+  const { user, riderProfile } = useAuthStore();
+
   const [availableJobs, setAvailableJobs] = useState<JobDetails[]>([]);
   const [myJobs, setMyJobs] = useState<JobDetails[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [acceptingJobId, setAcceptingJobId] = useState<string | null>(null);
+  const [availableBalance, setAvailableBalance] = useState<number>(0);
+
   const [stats, setStats] = useState({
     totalEarnings: 0,
     totalDeliveries: 0,
@@ -44,6 +47,7 @@ export function RiderDashboardPage() {
     if (!user?.id) {
       setAvailableJobs([]);
       setMyJobs([]);
+      setAvailableBalance(0);
       setStats({
         totalEarnings: 0,
         totalDeliveries: 0,
@@ -57,7 +61,18 @@ export function RiderDashboardPage() {
     try {
       setIsLoading(true);
 
-      // Jobs intentionally assigned to this rider, awaiting acceptance
+      const { data: walletData, error: walletError } = await supabase
+        .from('wallets')
+        .select('id, available_balance')
+        .eq('profile_id', user.id)
+        .single();
+
+      if (walletError && walletError.code !== 'PGRST116') {
+        throw walletError;
+      }
+
+      setAvailableBalance(Number(walletData?.available_balance || 0));
+
       const { data: jobsData, error: jobsError } = await supabase
         .from('job_details')
         .select('*')
@@ -87,19 +102,21 @@ export function RiderDashboardPage() {
 
       const { data: completedJobs, error: completedJobsError } = await supabase
         .from('dispatch_jobs')
-        .select('rider_earnings')
+        .select('id, rider_earnings')
         .eq('rider_id', user.id)
         .eq('status', 'completed');
 
       if (completedJobsError) throw completedJobsError;
 
       const totalEarnings =
-        completedJobs?.reduce((sum, job) => sum + (job.rider_earnings || 0), 0) || 0;
+        completedJobs?.reduce((sum, job) => sum + Number(job.rider_earnings || 0), 0) || 0;
+
+      const totalDeliveries = completedJobs?.length || 0;
 
       setStats({
         totalEarnings,
-        totalDeliveries: riderProfile?.total_deliveries || 0,
-        rating: riderProfile?.rating_average || 0,
+        totalDeliveries,
+        rating: Number(riderProfile?.rating_average || 0),
         pendingJobs: myJobsData?.length || 0,
       });
     } catch (error) {
@@ -108,7 +125,7 @@ export function RiderDashboardPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [user?.id, riderProfile?.total_deliveries, riderProfile?.rating_average]);
+  }, [user?.id, riderProfile?.rating_average]);
 
   useEffect(() => {
     fetchDashboardData();
@@ -120,6 +137,7 @@ export function RiderDashboardPage() {
     };
 
     window.addEventListener('focus', handleWindowFocus);
+
     return () => {
       window.removeEventListener('focus', handleWindowFocus);
     };
@@ -210,7 +228,8 @@ export function RiderDashboardPage() {
         <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
         <h2 className="text-xl font-semibold text-gray-900 mb-2">Application Rejected</h2>
         <p className="text-gray-500 max-w-md mx-auto">
-          Unfortunately, your rider application was not approved. Please contact support for more information.
+          Unfortunately, your rider application was not approved. Please contact support for more
+          information.
         </p>
       </div>
     );
@@ -223,6 +242,7 @@ export function RiderDashboardPage() {
           <h1 className="text-2xl font-bold text-gray-900">Rider Dashboard</h1>
           <p className="text-gray-500">Welcome back, {user?.full_name?.split(' ')[0]}</p>
         </div>
+
         <div
           className={cn(
             'flex items-center gap-2 px-4 py-2 rounded-full font-medium',
@@ -245,7 +265,7 @@ export function RiderDashboardPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-violet-100 text-sm">Available to Withdraw</p>
-                <p className="text-2xl font-bold">{formatCurrency(wallet?.available_balance || 0)}</p>
+                <p className="text-2xl font-bold">{formatCurrency(availableBalance)}</p>
               </div>
               <Wallet className="w-8 h-8 text-violet-200" />
             </div>
@@ -257,7 +277,9 @@ export function RiderDashboardPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-500 text-sm">Lifetime Earnings</p>
-                <p className="text-2xl font-bold text-gray-900">{formatCurrency(stats.totalEarnings)}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {formatCurrency(stats.totalEarnings)}
+                </p>
               </div>
               <TrendingUp className="w-8 h-8 text-green-500" />
             </div>
@@ -296,7 +318,10 @@ export function RiderDashboardPage() {
         <div>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-900">My Active Jobs</h2>
-            <Link to="/rider/jobs" className="text-violet-600 hover:text-violet-700 text-sm font-medium">
+            <Link
+              to="/rider/jobs"
+              className="text-violet-600 hover:text-violet-700 text-sm font-medium"
+            >
               View All
             </Link>
           </div>
@@ -323,8 +348,11 @@ export function RiderDashboardPage() {
                           {job.pickup_address} → {job.delivery_address}
                         </p>
                       </div>
+
                       <div className="text-right">
-                        <p className="font-semibold text-violet-700">{formatCurrency(job.rider_earnings)}</p>
+                        <p className="font-semibold text-violet-700">
+                          {formatCurrency(job.rider_earnings)}
+                        </p>
                         <ChevronRight className="w-5 h-5 text-gray-400 ml-auto" />
                       </div>
                     </div>
@@ -361,7 +389,9 @@ export function RiderDashboardPage() {
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-sm font-medium text-gray-500">{job.job_number}</span>
-                        <span className="text-xs text-gray-400">{formatDistanceToNow(job.created_at)}</span>
+                        <span className="text-xs text-gray-400">
+                          {formatDistanceToNow(job.created_at)}
+                        </span>
                       </div>
 
                       <div className="space-y-1 mb-3">
@@ -369,6 +399,7 @@ export function RiderDashboardPage() {
                           <MapPin className="w-4 h-4 text-violet-500" />
                           <span className="text-gray-600 truncate">{job.pickup_address}</span>
                         </div>
+
                         <div className="flex items-center gap-2 text-sm">
                           <MapPin className="w-4 h-4 text-green-500" />
                           <span className="text-gray-600 truncate">{job.delivery_address}</span>
@@ -379,7 +410,9 @@ export function RiderDashboardPage() {
                     </div>
 
                     <div className="text-right ml-4">
-                      <p className="font-semibold text-violet-700">{formatCurrency(job.rider_earnings)}</p>
+                      <p className="font-semibold text-violet-700">
+                        {formatCurrency(job.rider_earnings)}
+                      </p>
                       <p className="text-xs text-gray-400">You earn</p>
                     </div>
                   </div>

@@ -3,14 +3,14 @@
 // ============================================
 
 import { useEffect, useState } from 'react';
-import { AlertTriangle, CheckCircle, MessageSquare } from 'lucide-react';
+import { AlertTriangle, CheckCircle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { supabase } from '@/lib/supabase';
 import { showToast } from '@/stores/uiStore';
-import { formatDateTime, formatCurrency } from '@/utils/format';
+import { formatDateTime } from '@/utils/format';
 import { cn } from '@/lib/utils';
 
 interface DisputeWithDetails {
@@ -38,6 +38,8 @@ export function AdminDisputesPage() {
 
   const fetchDisputes = async () => {
     try {
+      setIsLoading(true);
+
       const { data, error } = await supabase
         .from('disputes')
         .select(`
@@ -49,11 +51,12 @@ export function AdminDisputesPage() {
 
       if (error) throw error;
 
-      const formatted = data?.map((d: any) => ({
-        ...d,
-        job_number: d.job?.job_number,
-        raised_by_name: d.raised_by_profile?.full_name,
-      })) || [];
+      const formatted =
+        data?.map((d: any) => ({
+          ...d,
+          job_number: d.job?.job_number || 'Unknown job',
+          raised_by_name: d.raised_by_profile?.full_name || 'Unknown user',
+        })) || [];
 
       setDisputes(formatted);
     } catch (error) {
@@ -67,12 +70,18 @@ export function AdminDisputesPage() {
     if (!selectedDispute) return;
 
     try {
+      const nextStatus =
+        resolutionType === 'customer'
+          ? 'resolved_customer_favor'
+          : resolutionType === 'rider'
+          ? 'resolved_rider_favor'
+          : 'resolved_split';
+
       const { error } = await supabase
         .from('disputes')
         .update({
-          status: resolutionType === 'customer' ? 'resolved_customer_favor' : 
-                  resolutionType === 'rider' ? 'resolved_rider_favor' : 'resolved_split',
-          resolution_notes: resolution,
+          status: nextStatus,
+          resolution_notes: resolution || null,
           resolved_at: new Date().toISOString(),
         })
         .eq('id', selectedDispute.id);
@@ -80,11 +89,11 @@ export function AdminDisputesPage() {
       if (error) throw error;
 
       showToast('success', 'Dispute resolved', 'The dispute has been resolved');
-      fetchDisputes();
       setSelectedDispute(null);
       setResolution('');
+      fetchDisputes();
     } catch (error: any) {
-      showToast('error', 'Error', error.message);
+      showToast('error', 'Error', error.message || 'Failed to resolve dispute');
     }
   };
 
@@ -97,6 +106,7 @@ export function AdminDisputesPage() {
       resolved_split: 'bg-purple-100 text-purple-700',
       closed: 'bg-gray-100 text-gray-700',
     };
+
     return styles[status] || 'bg-gray-100 text-gray-700';
   };
 
@@ -109,7 +119,9 @@ export function AdminDisputesPage() {
 
       {isLoading ? (
         <div className="space-y-3">
-          {[1, 2, 3].map(i => <Card key={i} className="animate-pulse h-20" />)}
+          {[1, 2, 3].map((i) => (
+            <Card key={i} className="animate-pulse h-24" />
+          ))}
         </div>
       ) : disputes.length === 0 ? (
         <Card className="border-dashed border-2">
@@ -121,21 +133,38 @@ export function AdminDisputesPage() {
         </Card>
       ) : (
         <div className="space-y-3">
-          {disputes.map(dispute => (
-            <Card key={dispute.id} className="cursor-pointer hover:shadow-md" onClick={() => setSelectedDispute(dispute)}>
+          {disputes.map((dispute) => (
+            <Card
+              key={dispute.id}
+              className="cursor-pointer hover:shadow-md transition-shadow"
+              onClick={() => {
+                setSelectedDispute(dispute);
+                setResolution(dispute.resolution_notes || '');
+              }}
+            >
               <CardContent className="p-4">
-                <div className="flex items-center justify-between">
+                <div className="flex items-start justify-between gap-4">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
                       <AlertTriangle className="w-5 h-5 text-red-600" />
                     </div>
+
                     <div>
                       <p className="font-semibold text-gray-900">{dispute.job_number}</p>
-                      <p className="text-sm text-gray-500 capitalize">{dispute.dispute_type.replace(/_/g, ' ')}</p>
+                      <p className="text-sm text-gray-500 capitalize">
+                        {dispute.dispute_type.replace(/_/g, ' ')}
+                      </p>
+                      <p className="text-sm text-gray-500">Raised by {dispute.raised_by_name}</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <span className={cn('px-2 py-1 rounded-full text-xs font-medium', getStatusBadge(dispute.status))}>
+
+                  <div className="text-right shrink-0">
+                    <span
+                      className={cn(
+                        'px-2 py-1 rounded-full text-xs font-medium',
+                        getStatusBadge(dispute.status)
+                      )}
+                    >
                       {dispute.status.replace(/_/g, ' ')}
                     </span>
                     <p className="text-xs text-gray-400 mt-1">{formatDateTime(dispute.created_at)}</p>
@@ -152,20 +181,26 @@ export function AdminDisputesPage() {
           <DialogHeader>
             <DialogTitle>Dispute Details</DialogTitle>
           </DialogHeader>
+
           {selectedDispute && (
             <div className="space-y-4">
               <div>
                 <p className="text-sm text-gray-500">Job</p>
                 <p className="font-medium">{selectedDispute.job_number}</p>
               </div>
+
               <div>
                 <p className="text-sm text-gray-500">Raised By</p>
                 <p className="font-medium">{selectedDispute.raised_by_name}</p>
               </div>
+
               <div>
                 <p className="text-sm text-gray-500">Issue Type</p>
-                <p className="font-medium capitalize">{selectedDispute.dispute_type.replace(/_/g, ' ')}</p>
+                <p className="font-medium capitalize">
+                  {selectedDispute.dispute_type.replace(/_/g, ' ')}
+                </p>
               </div>
+
               <div>
                 <p className="text-sm text-gray-500">Description</p>
                 <p className="text-gray-700 bg-gray-50 p-3 rounded-lg">{selectedDispute.description}</p>
@@ -177,16 +212,29 @@ export function AdminDisputesPage() {
                     placeholder="Resolution notes..."
                     value={resolution}
                     onChange={(e) => setResolution(e.target.value)}
-                    rows={3}
+                    rows={4}
                   />
+
                   <div className="flex gap-2">
-                    <Button onClick={() => handleResolve('customer')} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
+                    <Button
+                      onClick={() => handleResolve('customer')}
+                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                    >
                       Customer Wins
                     </Button>
-                    <Button onClick={() => handleResolve('rider')} className="flex-1 bg-green-600 hover:bg-green-700 text-white">
+
+                    <Button
+                      onClick={() => handleResolve('rider')}
+                      className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                    >
                       Rider Wins
                     </Button>
-                    <Button onClick={() => handleResolve('split')} variant="outline" className="flex-1">
+
+                    <Button
+                      onClick={() => handleResolve('split')}
+                      variant="outline"
+                      className="flex-1"
+                    >
                       Split
                     </Button>
                   </div>
@@ -194,7 +242,9 @@ export function AdminDisputesPage() {
               ) : (
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                   <p className="text-green-800 font-medium">Resolved</p>
-                  <p className="text-green-600 text-sm">{selectedDispute.resolution_notes || 'No notes provided'}</p>
+                  <p className="text-green-700 text-sm mt-1">
+                    {selectedDispute.resolution_notes || 'No notes provided'}
+                  </p>
                 </div>
               )}
             </div>

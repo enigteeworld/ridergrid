@@ -1,27 +1,34 @@
 // ============================================
 // DISPATCH NG - Supabase Client Configuration
 // ============================================
-
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn('Supabase credentials not found. Please check your .env file.');
+  console.warn('Supabase credentials not found. Please check your .env.local file.');
 }
 
-export const supabase = createClient(
-  supabaseUrl || '',
-  supabaseAnonKey || ''
-);
+export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '', {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+    storageKey: 'dispatch-ng-auth',
+  },
+});
 
 // Auth helpers
-export const signUp = async (email: string, password: string, userData: {
-  full_name: string;
-  phone: string;
-  user_type: 'customer' | 'rider';
-}) => {
+export const signUp = async (
+  email: string,
+  password: string,
+  userData: {
+    full_name: string;
+    phone: string;
+    user_type: 'customer' | 'rider';
+  }
+) => {
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -46,12 +53,18 @@ export const signOut = async () => {
 };
 
 export const getCurrentUser = async () => {
-  const { data: { user }, error } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
   return { user, error };
 };
 
 export const getSession = async () => {
-  const { data: { session }, error } = await supabase.auth.getSession();
+  const {
+    data: { session },
+    error,
+  } = await supabase.auth.getSession();
   return { session, error };
 };
 
@@ -366,12 +379,10 @@ export const subscribeToNotifications = (profileId: string, callback: (payload: 
 
 // File upload helpers
 export const uploadFile = async (bucket: string, path: string, file: File) => {
-  const { data, error } = await supabase.storage
-    .from(bucket)
-    .upload(path, file, {
-      cacheControl: '3600',
-      upsert: true,
-    });
+  const { data, error } = await supabase.storage.from(bucket).upload(path, file, {
+    cacheControl: '3600',
+    upsert: true,
+  });
   return { data, error };
 };
 
