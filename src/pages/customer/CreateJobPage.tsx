@@ -87,8 +87,8 @@ export function CreateJobPage() {
         newErrors.agreedAmount = 'Please enter a valid amount';
       }
 
-      if (amountNumber < 500) {
-        newErrors.agreedAmount = 'Minimum delivery amount is ₦500';
+      if (amountNumber < 200) {
+        newErrors.agreedAmount = 'Minimum delivery amount is ₦200';
       }
     }
 
