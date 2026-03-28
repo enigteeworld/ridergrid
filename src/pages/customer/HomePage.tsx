@@ -249,7 +249,7 @@ export function HomePage() {
   ).length;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-7">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">
           Hello, {user?.full_name?.split(' ')[0] || 'there'}!
@@ -257,7 +257,7 @@ export function HomePage() {
         <p className="text-gray-500">Ready to send a package today?</p>
       </div>
 
-      <Card className="border-violet-100 bg-gradient-to-r from-violet-50 via-white to-fuchsia-50 shadow-sm">
+      <Card className="overflow-hidden border-violet-100 bg-gradient-to-r from-violet-50 via-white to-fuchsia-50 shadow-sm">
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
             <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-100">
@@ -275,56 +275,84 @@ export function HomePage() {
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 gap-4">
-        <Card className="border-0 bg-gradient-to-br from-violet-500 to-purple-600 text-white">
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between">
+      <div className="space-y-4 rounded-3xl bg-gray-50/60 p-2">
+        <Card className="overflow-hidden border-0 bg-gradient-to-br from-violet-500 to-purple-600 text-white shadow-[0_10px_30px_rgba(124,58,237,0.25)]">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-sm text-violet-100">Wallet Balance</p>
-                <p className="mt-2 text-3xl font-bold">
+                <p className="mt-2 text-4xl font-bold tracking-tight">
                   {formatCurrency(wallet?.available_balance || 0)}
                 </p>
               </div>
-              <Wallet className="h-9 w-9 text-violet-200" />
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm">
+                <Wallet className="h-8 w-8 text-violet-100" />
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-500">Total Deliveries</p>
-                <p className="mt-2 text-3xl font-bold text-gray-900">{totalDeliveries}</p>
-              </div>
-              <Package className="h-9 w-9 text-violet-500" />
-            </div>
-          </CardContent>
-        </Card>
+        <div className="grid grid-cols-1 gap-4">
+          <Card className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+            <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-violet-500 to-fuchsia-500" />
+            <CardContent className="p-6 pl-7">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-sm font-medium uppercase tracking-[0.14em] text-gray-400">
+                    Total Deliveries
+                  </p>
+                  <p className="mt-3 text-4xl font-bold tracking-tight text-gray-900">
+                    {totalDeliveries}
+                  </p>
+                </div>
 
-        <Card>
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-500">Active Jobs</p>
-                <p className="mt-2 text-3xl font-bold text-gray-900">{activeJobCount}</p>
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-50 text-violet-500 transition-colors duration-200 group-hover:bg-violet-100">
+                  <Package className="h-8 w-8" />
+                </div>
               </div>
-              <Clock className="h-9 w-9 text-amber-500" />
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-500">Riders Near You</p>
-                <p className="mt-2 text-3xl font-bold text-gray-900">{nearbyRiders.length}</p>
+          <Card className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+            <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-amber-400 to-orange-500" />
+            <CardContent className="p-6 pl-7">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-sm font-medium uppercase tracking-[0.14em] text-gray-400">
+                    Active Jobs
+                  </p>
+                  <p className="mt-3 text-4xl font-bold tracking-tight text-gray-900">
+                    {activeJobCount}
+                  </p>
+                </div>
+
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-50 text-amber-500 transition-colors duration-200 group-hover:bg-amber-100">
+                  <Clock className="h-8 w-8" />
+                </div>
               </div>
-              <Bike className="h-9 w-9 text-green-500" />
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+
+          <Card className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+            <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-400 to-green-500" />
+            <CardContent className="p-6 pl-7">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-sm font-medium uppercase tracking-[0.14em] text-gray-400">
+                    Riders Near You
+                  </p>
+                  <p className="mt-3 text-4xl font-bold tracking-tight text-gray-900">
+                    {nearbyRiders.length}
+                  </p>
+                </div>
+
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-500 transition-colors duration-200 group-hover:bg-emerald-100">
+                  <Bike className="h-8 w-8" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       <div>
@@ -514,17 +542,18 @@ export function HomePage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="space-y-6 rounded-3xl bg-gray-50/60 p-2">
             {nearbyRiders.map((rider) => (
               <Card
                 key={rider.id}
-                className="w-full overflow-hidden border border-gray-100 transition-all hover:shadow-lg"
+                className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]"
               >
-                <CardContent className="p-5">
+                <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-400 to-green-500" />
+                <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
                   <div className="relative">
                     <div className="absolute right-0 top-0">
                       <div
-                        className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500"
+                        className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-500 shadow-sm"
                         title="Verified"
                       >
                         <CheckCircle className="h-4 w-4 text-white" />
@@ -550,69 +579,73 @@ export function HomePage() {
                         )}
                       </div>
 
-                      <h3 className="mt-4 font-semibold text-gray-900">{rider.full_name}</h3>
+                      <h3 className="mt-4 text-2xl font-semibold tracking-tight text-gray-900">
+                        {rider.full_name}
+                      </h3>
 
-                      <div className="mt-1 flex items-center justify-center gap-1 text-sm text-gray-500">
+                      <div className="mt-2 flex items-center justify-center gap-1 text-base text-gray-500">
                         <UserCircle className="h-4 w-4" />
                         <span className="capitalize">{rider.vehicle_type}</span>
                       </div>
 
                       {rider.company_name && (
-                        <p className="mt-1 text-sm text-gray-500">{rider.company_name}</p>
+                        <p className="mt-2 text-base text-gray-500">{rider.company_name}</p>
                       )}
                     </div>
 
-                    <div className="my-5 grid grid-cols-3 gap-4">
+                    <div className="my-6 grid grid-cols-3 gap-4">
                       <div className="text-center">
-                        <div className="flex items-center justify-center gap-1">
-                          <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-                          <span className="font-semibold">
+                        <div className="flex items-center justify-center gap-1 text-2xl font-bold text-gray-900">
+                          <Star className="h-5 w-5 fill-amber-400 text-amber-400" />
+                          <span>
                             {Number(rider.rating_average || 0).toFixed(1).replace('.0', '')}
                           </span>
                         </div>
-                        <span className="text-xs text-gray-500">rating</span>
+                        <span className="mt-1 block text-sm text-gray-500">rating</span>
                       </div>
 
                       <div className="border-x border-gray-100 text-center">
-                        <div className="font-semibold">{rider.completed_jobs_count || 0}</div>
-                        <span className="text-xs text-gray-500">deliveries</span>
+                        <div className="text-2xl font-bold text-gray-900">
+                          {rider.completed_jobs_count || 0}
+                        </div>
+                        <span className="mt-1 block text-sm text-gray-500">deliveries</span>
                       </div>
 
                       <div className="text-center">
                         <div
                           className={cn(
-                            'font-semibold',
+                            'text-2xl font-bold',
                             rider.is_online ? 'text-green-600' : 'text-amber-700'
                           )}
                         >
                           {rider.is_online ? 'Online' : 'Available'}
                         </div>
-                        <span className="text-xs text-gray-500">status</span>
+                        <span className="mt-1 block text-sm text-gray-500">status</span>
                       </div>
                     </div>
 
                     <div className="mb-4 flex justify-center">
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-4 py-2 text-base text-gray-600">
                         <MapPin className="h-4 w-4" />
                         {rider.service_radius_km || 0}km radius
                       </span>
                     </div>
 
-                    <div className="mb-4 flex justify-center">
+                    <div className="mb-5 flex justify-center">
                       {rider.is_online ? (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-1 text-sm font-medium text-green-700">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1.5 text-base font-medium text-green-700">
                           <span className="h-2 w-2 rounded-full bg-green-500" />
                           Online now
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-sm font-medium text-amber-700">
-                          <Clock3 className="h-3.5 w-3.5" />
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1.5 text-base font-medium text-amber-700">
+                          <Clock3 className="h-4 w-4" />
                           Available on request
                         </span>
                       )}
                     </div>
 
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                       <Button
                         className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white"
                         onClick={() => handleBookRider(rider)}
@@ -621,21 +654,21 @@ export function HomePage() {
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
 
-                      <div className="flex gap-2">
+                      <div className="flex gap-3">
                         <button
                           onClick={() => handleContactRider(rider, 'call')}
-                          className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-green-100 py-2.5 transition-colors hover:bg-green-200"
+                          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-green-100 py-3 transition-colors hover:bg-green-200"
                         >
-                          <Phone className="h-4 w-4 text-green-600" />
-                          <span className="text-sm font-medium text-green-700">Call</span>
+                          <Phone className="h-5 w-5 text-green-600" />
+                          <span className="text-base font-medium text-green-700">Call</span>
                         </button>
 
                         <button
                           onClick={() => handleContactRider(rider, 'whatsapp')}
-                          className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-emerald-100 py-2.5 transition-colors hover:bg-emerald-200"
+                          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-100 py-3 transition-colors hover:bg-emerald-200"
                         >
-                          <MessageCircle className="h-4 w-4 text-emerald-600" />
-                          <span className="text-sm font-medium text-emerald-700">WhatsApp</span>
+                          <MessageCircle className="h-5 w-5 text-emerald-600" />
+                          <span className="text-base font-medium text-emerald-700">WhatsApp</span>
                         </button>
                       </div>
                     </div>
