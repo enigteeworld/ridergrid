@@ -97,9 +97,7 @@ export function HomePage() {
       if (ridersError) throw ridersError;
 
       const profileIds =
-        (ridersData || [])
-          .map((r: any) => r.profile_id)
-          .filter(Boolean) || [];
+        (ridersData || []).map((r: any) => r.profile_id).filter(Boolean) || [];
 
       let completedJobsMap = new Map<string, number>();
 
@@ -215,6 +213,7 @@ export function HomePage() {
         return 'bg-violet-100 text-violet-700';
       case 'cancelled':
       case 'refunded':
+      case 'disputed':
         return 'bg-red-100 text-red-700';
       default:
         return 'bg-gray-100 text-gray-700';
@@ -223,6 +222,26 @@ export function HomePage() {
 
   const getStatusLabel = (status: string) => {
     return status.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+  };
+
+  const getCardAccent = (status: string) => {
+    switch (status) {
+      case 'completed':
+        return 'from-emerald-400 to-green-500';
+      case 'in_progress':
+      case 'rider_marked_complete':
+        return 'from-blue-400 to-cyan-500';
+      case 'awaiting_rider':
+      case 'awaiting_funding':
+      case 'funded':
+        return 'from-violet-500 to-fuchsia-500';
+      case 'cancelled':
+      case 'refunded':
+      case 'disputed':
+        return 'from-rose-400 to-red-500';
+      default:
+        return 'from-gray-300 to-gray-400';
+    }
   };
 
   const activeJobCount = recentJobs.filter((job) =>
@@ -338,25 +357,32 @@ export function HomePage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-6 rounded-3xl bg-gray-50/60 p-2">
             {recentJobs.map((job) => {
               const isExpanded = expandedJobs.includes(job.id);
 
               return (
                 <Card
                   key={job.id}
-                  className="overflow-hidden border border-violet-100 bg-gradient-to-br from-white to-violet-50/40 shadow-sm transition-all hover:shadow-md"
+                  className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]"
                 >
+                  <div
+                    className={cn(
+                      'absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b',
+                      getCardAccent(job.status)
+                    )}
+                  />
+
                   <button
                     type="button"
                     onClick={() => toggleJobExpanded(job.id)}
-                    className="w-full text-left"
+                    className="w-full text-left active:scale-[0.985] transition-transform duration-150"
                   >
-                    <CardContent className="p-4">
+                    <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
                       <div className="flex items-start justify-between gap-4">
                         <div className="min-w-0 flex-1">
-                          <div className="mb-2 flex flex-wrap items-center gap-2">
-                            <span className="text-sm font-semibold text-gray-700">
+                          <div className="mb-4 flex flex-wrap items-center gap-2">
+                            <span className="text-sm font-semibold tracking-tight text-gray-600">
                               {job.job_number}
                             </span>
                             <span
@@ -369,22 +395,22 @@ export function HomePage() {
                             </span>
                           </div>
 
-                          <div className="flex items-center gap-2 text-sm text-gray-500">
-                            <Clock className="h-4 w-4 shrink-0" />
+                          <div className="mb-4 flex items-center gap-2 text-sm text-gray-400">
+                            <Clock3 className="h-4 w-4" />
                             <span>{formatDistanceToNow(job.created_at)}</span>
                           </div>
 
-                          <div className="mt-3 flex items-center justify-between gap-3">
+                          <div className="flex items-center justify-between gap-3">
                             <div className="min-w-0">
-                              <p className="text-xs uppercase tracking-wide text-gray-400">
+                              <p className="text-xs uppercase tracking-[0.16em] text-gray-400">
                                 Delivery Fee
                               </p>
-                              <p className="text-lg font-bold text-gray-900">
+                              <p className="mt-1 text-lg font-semibold text-gray-900">
                                 {formatCurrency(job.agreed_amount)}
                               </p>
                             </div>
 
-                            <div className="flex items-center gap-2 rounded-full bg-violet-100 px-3 py-1 text-sm font-medium text-violet-700">
+                            <div className="flex items-center gap-2 rounded-full bg-violet-50 px-4 py-2 text-sm font-semibold text-violet-700 transition-colors duration-200 group-hover:bg-violet-100">
                               <span>{isExpanded ? 'Hide details' : 'View details'}</span>
                               <ChevronDown
                                 className={cn(
@@ -406,42 +432,44 @@ export function HomePage() {
                     )}
                   >
                     <div className="overflow-hidden">
-                      <div className="border-t border-violet-100/80 bg-white/70 px-4 pb-4 pt-1">
-                        <div className="space-y-3 pt-3">
-                          <div className="rounded-xl bg-gray-50 p-3">
-                            <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                      <div className="border-t border-violet-100/80 bg-white/80 px-5 pb-5 pt-2 sm:px-6">
+                        <div className="space-y-4 pt-3">
+                          <div className="rounded-2xl bg-gray-50 p-4">
+                            <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">
                               <MapPin className="h-3.5 w-3.5 text-gray-400" />
                               Pickup
                             </div>
-                            <p className="text-sm text-gray-700">{job.pickup_address}</p>
+                            <p className="text-sm leading-6 text-gray-700">{job.pickup_address}</p>
                           </div>
 
-                          <div className="rounded-xl bg-violet-50 p-3">
-                            <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-violet-600">
+                          <div className="rounded-2xl bg-violet-50 p-4">
+                            <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-violet-600">
                               <MapPin className="h-3.5 w-3.5 text-violet-500" />
                               Delivery
                             </div>
-                            <p className="text-sm text-gray-700">{job.delivery_address}</p>
+                            <p className="text-sm leading-6 text-gray-700">{job.delivery_address}</p>
                           </div>
 
                           {job.rider_name && (
-                            <div className="flex items-center justify-between gap-3 rounded-xl border border-violet-100 bg-white p-3">
-                              <div className="flex min-w-0 items-center gap-3">
-                                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-violet-100 text-sm font-semibold text-violet-700">
-                                  {job.rider_name.charAt(0)}
-                                </div>
-                                <div className="min-w-0">
-                                  <p className="truncate text-sm font-medium text-gray-900">
-                                    {job.rider_name}
-                                  </p>
-                                  <div className="mt-0.5 flex items-center gap-2 text-xs text-gray-500">
-                                    <span>Assigned rider</span>
-                                    {job.rider_rating && (
-                                      <span className="flex items-center gap-1">
-                                        <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                                        {job.rider_rating}
-                                      </span>
-                                    )}
+                            <div className="rounded-2xl border border-violet-100 bg-white p-4">
+                              <div className="flex items-center justify-between gap-3">
+                                <div className="flex min-w-0 items-center gap-3">
+                                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-violet-100 text-sm font-semibold text-violet-700">
+                                    {job.rider_name.charAt(0)}
+                                  </div>
+                                  <div className="min-w-0">
+                                    <p className="truncate text-sm font-medium text-gray-900">
+                                      {job.rider_name}
+                                    </p>
+                                    <div className="mt-0.5 flex items-center gap-2 text-xs text-gray-500">
+                                      <span>Assigned rider</span>
+                                      {job.rider_rating && (
+                                        <span className="flex items-center gap-1">
+                                          <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                                          {job.rider_rating}
+                                        </span>
+                                      )}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
