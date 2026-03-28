@@ -58,8 +58,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     isInitializingAuth = true;
 
     try {
+      const hasExistingUser = !!get().user;
+
       set({
-        isLoading: true,
+        isLoading: hasExistingUser ? false : true,
         error: null,
       });
 
@@ -221,6 +223,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         riderProfile,
         wallet,
         isAuthenticated: true,
+        isLoading: false,
+        error: null,
       });
     } catch (error) {
       console.error('Refresh user error:', error);
@@ -249,10 +253,12 @@ export const initializeAuthListener = () => {
   const {
     data: { subscription },
   } = supabase.auth.onAuthStateChange((event) => {
-    const { initializeAuth, resetAuthState } = useAuthStore.getState();
+    const { initializeAuth, refreshUser, resetAuthState } = useAuthStore.getState();
 
-    if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+    if (event === 'SIGNED_IN') {
       initializeAuth();
+    } else if (event === 'TOKEN_REFRESHED') {
+      refreshUser();
     } else if (event === 'SIGNED_OUT') {
       resetAuthState();
     }
