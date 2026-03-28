@@ -200,7 +200,7 @@ export function LoginPage() {
                     focusedField === 'email' && 'scale-[1.005]'
                   )}
                 >
-                  <Label htmlFor="email" className="text-sm font-medium text-white/82">
+                  <Label htmlFor="email" className="text-sm font-medium text-white/70">
                     Email
                   </Label>
 
@@ -247,7 +247,7 @@ export function LoginPage() {
                     focusedField === 'password' && 'scale-[1.005]'
                   )}
                 >
-                  <Label htmlFor="password" className="text-sm font-medium text-white/82">
+                  <Label htmlFor="password" className="text-sm font-medium text-white/70">
                     Password
                   </Label>
 

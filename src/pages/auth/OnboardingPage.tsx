@@ -216,7 +216,7 @@ export function OnboardingPage() {
                 focusedField === 'companyName' && 'scale-[1.005]'
               )}
             >
-              <Label htmlFor="companyName" className="text-sm font-medium text-white/82">
+              <Label htmlFor="companyName" className="text-sm font-medium text-white/70">
                 Company Name <span className="text-white/40">(Optional)</span>
               </Label>
 
@@ -245,7 +245,7 @@ export function OnboardingPage() {
                 focusedField === 'vehiclePlate' && 'scale-[1.005]'
               )}
             >
-              <Label htmlFor="vehiclePlate" className="text-sm font-medium text-white/82">
+              <Label htmlFor="vehiclePlate" className="text-sm font-medium text-white/70">
                 Vehicle Plate Number
               </Label>
 
@@ -282,7 +282,7 @@ export function OnboardingPage() {
                 focusedField === 'vehicleColor' && 'scale-[1.005]'
               )}
             >
-              <Label htmlFor="vehicleColor" className="text-sm font-medium text-white/82">
+              <Label htmlFor="vehicleColor" className="text-sm font-medium text-white/70">
                 Vehicle Color
               </Label>
 
@@ -351,7 +351,7 @@ export function OnboardingPage() {
                 focusedField === 'licenseNumber' && 'scale-[1.005]'
               )}
             >
-              <Label htmlFor="licenseNumber" className="text-sm font-medium text-white/82">
+              <Label htmlFor="licenseNumber" className="text-sm font-medium text-white/70">
                 License Number
               </Label>
 
@@ -390,7 +390,7 @@ export function OnboardingPage() {
                 focusedField === 'serviceRadius' && 'scale-[1.005]'
               )}
             >
-              <Label htmlFor="serviceRadius" className="text-sm font-medium text-white/82">
+              <Label htmlFor="serviceRadius" className="text-sm font-medium text-white/70">
                 Service Radius (km)
               </Label>
 

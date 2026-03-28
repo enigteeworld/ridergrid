@@ -212,7 +212,7 @@ export function SignupPage() {
                       focusedField === 'fullName' && 'scale-[1.005]'
                     )}
                   >
-                    <Label htmlFor="fullName" className="text-sm font-medium text-white/82">
+                    <Label htmlFor="fullName" className="text-sm font-medium text-white/70">
                       Full Name
                     </Label>
 
@@ -255,7 +255,7 @@ export function SignupPage() {
                       focusedField === 'email' && 'scale-[1.005]'
                     )}
                   >
-                    <Label htmlFor="email" className="text-sm font-medium text-white/82">
+                    <Label htmlFor="email" className="text-sm font-medium text-white/70">
                       Email
                     </Label>
 
@@ -299,7 +299,7 @@ export function SignupPage() {
                       focusedField === 'phone' && 'scale-[1.005]'
                     )}
                   >
-                    <Label htmlFor="phone" className="text-sm font-medium text-white/82">
+                    <Label htmlFor="phone" className="text-sm font-medium text-white/70">
                       Phone Number
                     </Label>
 
@@ -343,7 +343,7 @@ export function SignupPage() {
                       focusedField === 'password' && 'scale-[1.005]'
                     )}
                   >
-                    <Label htmlFor="password" className="text-sm font-medium text-white/82">
+                    <Label htmlFor="password" className="text-sm font-medium text-white/70">
                       Password
                     </Label>
 
@@ -390,7 +390,10 @@ export function SignupPage() {
                       focusedField === 'confirmPassword' && 'scale-[1.005]'
                     )}
                   >
-                    <Label htmlFor="confirmPassword" className="text-sm font-medium text-white/82">
+                    <Label
+                      htmlFor="confirmPassword"
+                      className="text-sm font-medium text-white/70"
+                    >
                       Confirm Password
                     </Label>
 
@@ -528,7 +531,10 @@ export function SignupPage() {
                         className="cursor-pointer text-sm leading-relaxed text-white/70"
                       >
                         I agree to the{' '}
-                        <Link to="/terms" className="font-medium text-violet-300 hover:text-violet-200">
+                        <Link
+                          to="/terms"
+                          className="font-medium text-violet-300 hover:text-violet-200"
+                        >
                           Terms of Service
                         </Link>{' '}
                         and{' '}
