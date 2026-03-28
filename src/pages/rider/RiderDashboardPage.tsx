@@ -15,6 +15,7 @@ import {
   ChevronDown,
   ChevronUp,
   Clock3,
+  Sparkles,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -224,6 +225,7 @@ export function RiderDashboardPage() {
     subtitle,
     valueClassName,
     children,
+    featured = false,
   }: {
     title: string;
     value: string;
@@ -233,24 +235,47 @@ export function RiderDashboardPage() {
     subtitle?: string;
     valueClassName?: string;
     children?: React.ReactNode;
+    featured?: boolean;
   }) => (
-    <Card className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+    <Card
+      className={cn(
+        'group relative overflow-hidden rounded-[30px] border shadow-[0_10px_35px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_20px_45px_rgba(15,23,42,0.10)]',
+        featured
+          ? 'border-violet-100 bg-gradient-to-br from-white via-violet-50/60 to-fuchsia-50/60'
+          : 'border-gray-100 bg-white'
+      )}
+    >
       <div className={cn('absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b', accent)} />
-      <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
+      {featured && (
+        <>
+          <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-violet-200/25 blur-2xl" />
+          <div className="absolute -bottom-12 left-10 h-28 w-28 rounded-full bg-fuchsia-200/20 blur-2xl" />
+        </>
+      )}
+
+      <CardContent className="relative p-5 pl-6 sm:p-6 sm:pl-7">
         <div className="flex items-center justify-between gap-4">
           <div className="min-w-0">
-            <p className="text-sm font-medium uppercase tracking-[0.14em] text-gray-400">
+            <p
+              className={cn(
+                'text-sm font-medium uppercase tracking-[0.18em]',
+                featured ? 'text-gray-500' : 'text-gray-400'
+              )}
+            >
               {title}
             </p>
+
             <div className="mt-3">
               <p
                 className={cn(
-                  'text-3xl font-bold tracking-tight text-gray-900 break-words',
+                  'break-words text-3xl font-bold tracking-tight text-gray-950',
+                  featured && 'text-[2.2rem] sm:text-[2.35rem]',
                   valueClassName
                 )}
               >
                 {value}
               </p>
+
               {subtitle && <p className="mt-2 text-sm text-gray-500">{subtitle}</p>}
               {children}
             </div>
@@ -258,11 +283,12 @@ export function RiderDashboardPage() {
 
           <div
             className={cn(
-              'flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl transition-colors duration-200',
+              'flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl transition-all duration-200',
+              featured ? 'shadow-sm ring-1 ring-white/70' : '',
               iconClassName
             )}
           >
-            <Icon className="h-8 w-8" />
+            <Icon className={cn('h-8 w-8', featured && 'scale-105')} />
           </div>
         </div>
       </CardContent>
@@ -287,16 +313,16 @@ export function RiderDashboardPage() {
     <button type="button" onClick={onToggle} className="w-full">
       <Card
         className={cn(
-          'overflow-hidden shadow-sm transition-all duration-200 hover:shadow-md',
+          'overflow-hidden rounded-[28px] shadow-sm transition-all duration-200 hover:shadow-md',
           tone === 'violet'
-            ? 'border-violet-100 bg-gradient-to-br from-violet-50/70 via-white to-fuchsia-50/50'
-            : 'border-emerald-100 bg-gradient-to-br from-emerald-50/70 via-white to-green-50/50'
+            ? 'border-violet-100 bg-gradient-to-br from-violet-50/80 via-white to-fuchsia-50/60'
+            : 'border-emerald-100 bg-gradient-to-br from-emerald-50/80 via-white to-green-50/60'
         )}
       >
         <CardContent className="p-5">
           <div className="flex items-center justify-between gap-4">
             <div className="min-w-0 flex-1 text-left">
-              <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+              <h2 className="text-xl font-semibold tracking-tight text-gray-900">{title}</h2>
               <p className="mt-1 text-sm text-gray-500">{subtitle}</p>
             </div>
 
@@ -346,35 +372,51 @@ export function RiderDashboardPage() {
 
   return (
     <div className="space-y-7">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Rider Dashboard</h1>
-          <p className="text-gray-500">Welcome back, {user?.full_name?.split(' ')[0]}</p>
-        </div>
+      <div className="relative overflow-hidden rounded-[32px] border border-violet-100 bg-gradient-to-br from-violet-50 via-white to-fuchsia-50/70 p-5 shadow-sm sm:p-6">
+        <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-violet-200/25 blur-3xl" />
+        <div className="absolute -bottom-14 left-8 h-32 w-32 rounded-full bg-fuchsia-200/20 blur-3xl" />
 
-        <div
-          className={cn(
-            'inline-flex w-fit items-center gap-2 rounded-full px-4 py-2 font-medium',
-            riderProfile?.is_online ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
-          )}
-        >
+        <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-violet-700 ring-1 ring-violet-100 backdrop-blur-sm">
+              <Sparkles className="h-3.5 w-3.5" />
+              Dispatch NG Rider
+            </div>
+
+            <h1 className="text-3xl font-bold tracking-tight text-gray-950">Rider Dashboard</h1>
+            <p className="mt-2 text-base text-gray-600">
+              Welcome back, {user?.full_name?.split(' ')[0]}
+            </p>
+          </div>
+
           <div
             className={cn(
-              'h-2 w-2 rounded-full',
-              riderProfile?.is_online ? 'bg-green-500 animate-pulse' : 'bg-gray-400'
+              'inline-flex w-fit items-center gap-2 rounded-full px-4 py-2.5 font-medium shadow-sm ring-1',
+              riderProfile?.is_online
+                ? 'bg-green-100 text-green-700 ring-green-200'
+                : 'bg-gray-100 text-gray-600 ring-gray-200'
             )}
-          />
-          {riderProfile?.is_online ? 'Online' : 'Offline'}
+          >
+            <div
+              className={cn(
+                'h-2.5 w-2.5 rounded-full',
+                riderProfile?.is_online ? 'bg-green-500 animate-pulse' : 'bg-gray-400'
+              )}
+            />
+            {riderProfile?.is_online ? 'Online' : 'Offline'}
+          </div>
         </div>
       </div>
 
-      <div className="space-y-4 rounded-3xl bg-gray-50/60 p-2">
+      <div className="space-y-4 rounded-[32px] bg-gradient-to-b from-gray-50/90 to-white p-2">
         <MetricCard
           title="Available to Withdraw"
           value={formatCurrency(availableBalance)}
           icon={Wallet}
           accent="from-violet-500 to-fuchsia-500"
           iconClassName="bg-violet-50 text-violet-500 group-hover:bg-violet-100"
+          subtitle="Ready for payout when you request withdrawal"
+          featured
         />
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -384,6 +426,7 @@ export function RiderDashboardPage() {
             icon={TrendingUp}
             accent="from-emerald-400 to-green-500"
             iconClassName="bg-emerald-50 text-emerald-500 group-hover:bg-emerald-100"
+            subtitle="Total confirmed rider income"
           />
 
           <MetricCard
@@ -392,6 +435,7 @@ export function RiderDashboardPage() {
             icon={CheckCircle}
             accent="from-blue-400 to-cyan-500"
             iconClassName="bg-blue-50 text-blue-500 group-hover:bg-blue-100"
+            subtitle="Completed successfully"
           />
 
           <MetricCard
@@ -400,10 +444,11 @@ export function RiderDashboardPage() {
             icon={Star}
             accent="from-amber-400 to-orange-500"
             iconClassName="bg-amber-50 text-amber-500 group-hover:bg-amber-100"
+            subtitle="Current customer average"
           >
             <div className="mt-2 flex items-center gap-1 text-amber-500">
               <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-              <span className="text-sm font-medium text-gray-500">Current average rating</span>
+              <span className="text-sm font-medium text-gray-500">Based on completed jobs</span>
             </div>
           </MetricCard>
         </div>
@@ -429,16 +474,17 @@ export function RiderDashboardPage() {
           />
 
           {showActiveJobs && (
-            <div className="space-y-6 rounded-3xl bg-gray-50/60 p-2">
+            <div className="space-y-5 rounded-[32px] bg-gradient-to-b from-gray-50/90 to-white p-2">
               {myJobs.slice(0, 3).map((job) => (
                 <Link key={job.id} to={`/rider/jobs/${job.id}`}>
-                  <Card className="group relative cursor-pointer overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+                  <Card className="group relative cursor-pointer overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 active:scale-[0.995] hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
                     <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-violet-500 to-fuchsia-500" />
+
                     <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
                       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div className="min-w-0 flex-1">
                           <div className="mb-3 flex flex-wrap items-center gap-2">
-                            <span className="text-sm font-semibold tracking-tight text-gray-600">
+                            <span className="text-sm font-semibold tracking-tight text-gray-700">
                               {job.job_number}
                             </span>
                             <span
@@ -451,28 +497,40 @@ export function RiderDashboardPage() {
                             </span>
                           </div>
 
-                          <div className="space-y-2">
-                            <div className="flex items-start gap-2 text-sm">
-                              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-violet-500" />
-                              <span className="break-words text-gray-600">{job.pickup_address}</span>
+                          <div className="space-y-3">
+                            <div className="rounded-2xl bg-gray-50 p-4">
+                              <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">
+                                <MapPin className="h-3.5 w-3.5 text-violet-500" />
+                                Pickup
+                              </div>
+                              <p className="break-words text-sm leading-6 text-gray-700">
+                                {job.pickup_address}
+                              </p>
                             </div>
 
-                            <div className="flex items-start gap-2 text-sm">
-                              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-green-500" />
-                              <span className="break-words text-gray-600">{job.delivery_address}</span>
+                            <div className="rounded-2xl bg-violet-50/70 p-4">
+                              <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-violet-700">
+                                <MapPin className="h-3.5 w-3.5 text-green-500" />
+                                Delivery
+                              </div>
+                              <p className="break-words text-sm leading-6 text-gray-700">
+                                {job.delivery_address}
+                              </p>
                             </div>
                           </div>
                         </div>
 
-                        <div className="flex shrink-0 items-center justify-between sm:block sm:text-right">
+                        <div className="flex shrink-0 items-center justify-between sm:block sm:w-[132px] sm:text-right">
                           <div>
-                            <p className="font-semibold text-violet-700">
+                            <p className="text-2xl font-bold tracking-tight text-violet-700">
                               {formatCurrency(job.rider_earnings)}
                             </p>
-                            <p className="text-xs text-gray-400">You earn</p>
+                            <p className="mt-1 text-xs uppercase tracking-[0.14em] text-gray-400">
+                              You earn
+                            </p>
                           </div>
 
-                          <div className="mt-2 flex h-10 w-10 items-center justify-center rounded-full bg-violet-50 text-gray-400 transition-colors duration-200 group-hover:bg-violet-100 group-hover:text-violet-600 sm:ml-auto">
+                          <div className="mt-3 flex h-11 w-11 items-center justify-center rounded-full bg-violet-50 text-gray-400 transition-colors duration-200 group-hover:bg-violet-100 group-hover:text-violet-600 sm:ml-auto">
                             <ChevronRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
                           </div>
                         </div>
@@ -498,7 +556,7 @@ export function RiderDashboardPage() {
         {showAvailableJobs && (
           <>
             {availableJobs.length === 0 ? (
-              <Card className="border-2 border-dashed">
+              <Card className="rounded-[28px] border-2 border-dashed">
                 <CardContent className="p-8 text-center">
                   <Package className="mx-auto mb-4 h-12 w-12 text-gray-300" />
                   <h3 className="mb-2 text-lg font-medium text-gray-900">No jobs available</h3>
@@ -508,7 +566,7 @@ export function RiderDashboardPage() {
                 </CardContent>
               </Card>
             ) : (
-              <div className="space-y-6 rounded-3xl bg-gray-50/60 p-2">
+              <div className="space-y-5 rounded-[32px] bg-gradient-to-b from-gray-50/90 to-white p-2">
                 {availableJobs.map((job) => (
                   <Card
                     key={job.id}
@@ -521,7 +579,7 @@ export function RiderDashboardPage() {
                         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                           <div className="min-w-0 flex-1">
                             <div className="mb-3 flex flex-wrap items-center gap-2">
-                              <span className="text-sm font-semibold tracking-tight text-gray-600">
+                              <span className="text-sm font-semibold tracking-tight text-gray-700">
                                 {job.job_number}
                               </span>
                               <span className="flex items-center gap-1 text-xs text-gray-400">
@@ -541,7 +599,7 @@ export function RiderDashboardPage() {
                                 </p>
                               </div>
 
-                              <div className="rounded-2xl bg-emerald-50 p-4">
+                              <div className="rounded-2xl bg-emerald-50/80 p-4">
                                 <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-emerald-700">
                                   <MapPin className="h-3.5 w-3.5 text-green-500" />
                                   Delivery

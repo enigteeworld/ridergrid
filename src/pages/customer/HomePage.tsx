@@ -19,6 +19,7 @@ import {
   MessageCircle,
   ArrowRight,
   ShieldCheck,
+  Sparkles,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -248,19 +249,131 @@ export function HomePage() {
     ['awaiting_rider', 'awaiting_funding', 'funded', 'in_progress'].includes(job.status)
   ).length;
 
+  const MetricCard = ({
+    title,
+    value,
+    icon: Icon,
+    accent,
+    iconClassName,
+    subtitle,
+    featured = false,
+  }: {
+    title: string;
+    value: string;
+    icon: React.ElementType;
+    accent: string;
+    iconClassName: string;
+    subtitle?: string;
+    featured?: boolean;
+  }) => (
+    <Card
+      className={cn(
+        'group relative overflow-hidden rounded-[30px] border shadow-[0_10px_35px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_20px_45px_rgba(15,23,42,0.10)]',
+        featured
+          ? 'border-violet-100 bg-gradient-to-br from-white via-violet-50/60 to-fuchsia-50/60'
+          : 'border-gray-100 bg-white'
+      )}
+    >
+      <div className={cn('absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b', accent)} />
+      {featured && (
+        <>
+          <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-violet-200/25 blur-2xl" />
+          <div className="absolute -bottom-12 left-10 h-28 w-28 rounded-full bg-fuchsia-200/20 blur-2xl" />
+        </>
+      )}
+
+      <CardContent className="relative p-5 pl-6 sm:p-6 sm:pl-7">
+        <div className="flex items-center justify-between gap-4">
+          <div className="min-w-0">
+            <p
+              className={cn(
+                'text-sm font-medium uppercase tracking-[0.18em]',
+                featured ? 'text-gray-500' : 'text-gray-400'
+              )}
+            >
+              {title}
+            </p>
+            <div className="mt-3">
+              <p
+                className={cn(
+                  'break-words text-3xl font-bold tracking-tight text-gray-950',
+                  featured && 'text-[2.2rem] sm:text-[2.35rem]'
+                )}
+              >
+                {value}
+              </p>
+              {subtitle && <p className="mt-2 text-sm text-gray-500">{subtitle}</p>}
+            </div>
+          </div>
+
+          <div
+            className={cn(
+              'flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl transition-all duration-200',
+              featured ? 'shadow-sm ring-1 ring-white/70' : '',
+              iconClassName
+            )}
+          >
+            <Icon className={cn('h-8 w-8', featured && 'scale-105')} />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  const SectionHeader = ({
+    title,
+    subtitle,
+    tone = 'violet',
+    action,
+  }: {
+    title: string;
+    subtitle?: string;
+    tone?: 'violet' | 'emerald';
+    action?: React.ReactNode;
+  }) => (
+    <Card
+      className={cn(
+        'overflow-hidden rounded-[28px] shadow-sm',
+        tone === 'violet'
+          ? 'border-violet-100 bg-gradient-to-br from-violet-50/80 via-white to-fuchsia-50/60'
+          : 'border-emerald-100 bg-gradient-to-br from-emerald-50/80 via-white to-green-50/60'
+      )}
+    >
+      <CardContent className="p-5">
+        <div className="flex items-center justify-between gap-4">
+          <div className="min-w-0 flex-1">
+            <h2 className="text-xl font-semibold tracking-tight text-gray-900">{title}</h2>
+            {subtitle && <p className="mt-1 text-sm text-gray-500">{subtitle}</p>}
+          </div>
+          {action}
+        </div>
+      </CardContent>
+    </Card>
+  );
+
   return (
     <div className="space-y-7">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">
-          Hello, {user?.full_name?.split(' ')[0] || 'there'}!
-        </h1>
-        <p className="text-gray-500">Ready to send a package today?</p>
+      <div className="relative overflow-hidden rounded-[32px] border border-violet-100 bg-gradient-to-br from-violet-50 via-white to-fuchsia-50/70 p-5 shadow-sm sm:p-6">
+        <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-violet-200/25 blur-3xl" />
+        <div className="absolute -bottom-14 left-8 h-32 w-32 rounded-full bg-fuchsia-200/20 blur-3xl" />
+
+        <div className="relative">
+          <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-violet-700 ring-1 ring-violet-100 backdrop-blur-sm">
+            <Sparkles className="h-3.5 w-3.5" />
+            Dispatch NG Customer
+          </div>
+
+          <h1 className="text-3xl font-bold tracking-tight text-gray-950">
+            Hello, {user?.full_name?.split(' ')[0] || 'there'}!
+          </h1>
+          <p className="mt-2 text-base text-gray-600">Ready to send a package today?</p>
+        </div>
       </div>
 
-      <Card className="overflow-hidden border-violet-100 bg-gradient-to-r from-violet-50 via-white to-fuchsia-50 shadow-sm">
-        <CardContent className="p-4">
+      <Card className="overflow-hidden rounded-[28px] border-violet-100 bg-gradient-to-r from-violet-50 via-white to-fuchsia-50 shadow-sm">
+        <CardContent className="p-4 sm:p-5">
           <div className="flex items-start gap-3">
-            <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-100">
+            <div className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-violet-100">
               <ShieldCheck className="h-5 w-5 text-violet-600" />
             </div>
 
@@ -275,100 +388,69 @@ export function HomePage() {
         </CardContent>
       </Card>
 
-      <div className="space-y-4 rounded-3xl bg-gray-50/60 p-2">
-        <Card className="overflow-hidden border-0 bg-gradient-to-br from-violet-500 to-purple-600 text-white shadow-[0_10px_30px_rgba(124,58,237,0.25)]">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <p className="text-sm text-violet-100">Wallet Balance</p>
-                <p className="mt-2 text-4xl font-bold tracking-tight">
-                  {formatCurrency(wallet?.available_balance || 0)}
-                </p>
-              </div>
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm">
-                <Wallet className="h-8 w-8 text-violet-100" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="space-y-4 rounded-[32px] bg-gradient-to-b from-gray-50/90 to-white p-2">
+        <MetricCard
+          title="Wallet Balance"
+          value={formatCurrency(wallet?.available_balance || 0)}
+          icon={Wallet}
+          accent="from-violet-500 to-fuchsia-500"
+          iconClassName="bg-violet-50 text-violet-500 group-hover:bg-violet-100"
+          subtitle="Available now for funding deliveries"
+          featured
+        />
 
-        <div className="grid grid-cols-1 gap-4">
-          <Card className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
-            <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-violet-500 to-fuchsia-500" />
-            <CardContent className="p-6 pl-7">
-              <div className="flex items-center justify-between gap-4">
-                <div>
-                  <p className="text-sm font-medium uppercase tracking-[0.14em] text-gray-400">
-                    Total Deliveries
-                  </p>
-                  <p className="mt-3 text-4xl font-bold tracking-tight text-gray-900">
-                    {totalDeliveries}
-                  </p>
-                </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <MetricCard
+            title="Total Deliveries"
+            value={`${totalDeliveries}`}
+            icon={Package}
+            accent="from-violet-500 to-fuchsia-500"
+            iconClassName="bg-violet-50 text-violet-500 group-hover:bg-violet-100"
+            subtitle="All delivery requests created"
+          />
 
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-50 text-violet-500 transition-colors duration-200 group-hover:bg-violet-100">
-                  <Package className="h-8 w-8" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <MetricCard
+            title="Active Jobs"
+            value={`${activeJobCount}`}
+            icon={Clock}
+            accent="from-amber-400 to-orange-500"
+            iconClassName="bg-amber-50 text-amber-500 group-hover:bg-amber-100"
+            subtitle="Currently moving or awaiting action"
+          />
 
-          <Card className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
-            <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-amber-400 to-orange-500" />
-            <CardContent className="p-6 pl-7">
-              <div className="flex items-center justify-between gap-4">
-                <div>
-                  <p className="text-sm font-medium uppercase tracking-[0.14em] text-gray-400">
-                    Active Jobs
-                  </p>
-                  <p className="mt-3 text-4xl font-bold tracking-tight text-gray-900">
-                    {activeJobCount}
-                  </p>
-                </div>
-
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-50 text-amber-500 transition-colors duration-200 group-hover:bg-amber-100">
-                  <Clock className="h-8 w-8" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
-            <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-400 to-green-500" />
-            <CardContent className="p-6 pl-7">
-              <div className="flex items-center justify-between gap-4">
-                <div>
-                  <p className="text-sm font-medium uppercase tracking-[0.14em] text-gray-400">
-                    Riders Near You
-                  </p>
-                  <p className="mt-3 text-4xl font-bold tracking-tight text-gray-900">
-                    {nearbyRiders.length}
-                  </p>
-                </div>
-
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-500 transition-colors duration-200 group-hover:bg-emerald-100">
-                  <Bike className="h-8 w-8" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <MetricCard
+            title="Riders Near You"
+            value={`${nearbyRiders.length}`}
+            icon={Bike}
+            accent="from-emerald-400 to-green-500"
+            iconClassName="bg-emerald-50 text-emerald-500 group-hover:bg-emerald-100"
+            subtitle="Verified riders available to book"
+          />
         </div>
       </div>
 
-      <div>
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900">Recent Deliveries</h2>
-          <Link
-            to="/jobs"
-            className="flex items-center gap-1 text-sm font-medium text-violet-600 hover:text-violet-700"
-          >
-            View All
-            <ChevronRight className="h-4 w-4" />
-          </Link>
-        </div>
+      <div className="space-y-3">
+        <SectionHeader
+          title="Recent Deliveries"
+          subtitle={
+            recentJobs.length > 0
+              ? `${recentJobs.length} recent delivery${recentJobs.length !== 1 ? 'ies' : ''}`
+              : 'Your most recent delivery activity'
+          }
+          tone="violet"
+          action={
+            <Link
+              to="/jobs"
+              className="flex items-center gap-1 text-sm font-medium text-violet-600 hover:text-violet-700"
+            >
+              View All
+              <ChevronRight className="h-4 w-4" />
+            </Link>
+          }
+        />
 
         {recentJobs.length === 0 ? (
-          <Card className="border-2 border-dashed">
+          <Card className="rounded-[28px] border-2 border-dashed">
             <CardContent className="p-8 text-center">
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-violet-100">
                 <Package className="h-8 w-8 text-violet-500" />
@@ -385,7 +467,7 @@ export function HomePage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="space-y-6 rounded-3xl bg-gray-50/60 p-2">
+          <div className="space-y-5 rounded-[32px] bg-gradient-to-b from-gray-50/90 to-white p-2">
             {recentJobs.map((job) => {
               const isExpanded = expandedJobs.includes(job.id);
 
@@ -404,13 +486,13 @@ export function HomePage() {
                   <button
                     type="button"
                     onClick={() => toggleJobExpanded(job.id)}
-                    className="w-full text-left active:scale-[0.985] transition-transform duration-150"
+                    className="w-full text-left transition-transform duration-150 active:scale-[0.995]"
                   >
                     <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
                       <div className="flex items-start justify-between gap-4">
                         <div className="min-w-0 flex-1">
                           <div className="mb-4 flex flex-wrap items-center gap-2">
-                            <span className="text-sm font-semibold tracking-tight text-gray-600">
+                            <span className="text-sm font-semibold tracking-tight text-gray-700">
                               {job.job_number}
                             </span>
                             <span
@@ -523,32 +605,37 @@ export function HomePage() {
         )}
       </div>
 
-      <div>
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900">Riders Near You</h2>
-          <Link
-            to="/find-riders"
-            className="flex items-center gap-1 text-sm font-medium text-violet-600 hover:text-violet-700"
-          >
-            Find More
-            <ChevronRight className="h-4 w-4" />
-          </Link>
-        </div>
+      <div className="space-y-3">
+        <SectionHeader
+          title="Riders Near You"
+          subtitle={`${nearbyRiders.length} verified rider${nearbyRiders.length !== 1 ? 's' : ''} nearby`}
+          tone="emerald"
+          action={
+            <Link
+              to="/find-riders"
+              className="flex items-center gap-1 text-sm font-medium text-violet-600 hover:text-violet-700"
+            >
+              Find More
+              <ChevronRight className="h-4 w-4" />
+            </Link>
+          }
+        />
 
         {nearbyRiders.length === 0 ? (
-          <Card className="border-2 border-dashed">
+          <Card className="rounded-[28px] border-2 border-dashed">
             <CardContent className="p-6 text-center">
               <p className="text-gray-500">No riders available at the moment</p>
             </CardContent>
           </Card>
         ) : (
-          <div className="space-y-6 rounded-3xl bg-gray-50/60 p-2">
+          <div className="space-y-5 rounded-[32px] bg-gradient-to-b from-gray-50/90 to-white p-2">
             {nearbyRiders.map((rider) => (
               <Card
                 key={rider.id}
                 className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]"
               >
                 <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-400 to-green-500" />
+
                 <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
                   <div className="relative">
                     <div className="absolute right-0 top-0">
