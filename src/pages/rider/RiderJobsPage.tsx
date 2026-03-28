@@ -100,6 +100,11 @@ export function RiderJobsPage() {
     { value: 'cancelled', label: 'Cancelled', count: cancelledJobs.length },
   ];
 
+  const filterSummaryLabel =
+    filter === 'all'
+      ? `${filteredJobs.length} total job${filteredJobs.length !== 1 ? 's' : ''}`
+      : `${filteredJobs.length} ${filter} job${filteredJobs.length !== 1 ? 's' : ''}`;
+
   return (
     <div className="space-y-6">
       <div>
@@ -117,8 +122,7 @@ export function RiderJobsPage() {
                 key={item.value}
                 onClick={() => setFilter(item.value)}
                 className={cn(
-                  'group shrink-0 snap-start rounded-2xl border px-4 py-2.5 whitespace-nowrap transition-all duration-200',
-                  'flex items-center gap-2',
+                  'group flex shrink-0 snap-start items-center gap-2 whitespace-nowrap rounded-2xl border px-4 py-2.5 transition-all duration-200',
                   isActive
                     ? 'border-violet-200 bg-white text-violet-700 shadow-sm shadow-violet-100'
                     : 'border-transparent bg-transparent text-gray-600 hover:border-white/70 hover:bg-white/70 hover:text-gray-900'
@@ -142,21 +146,21 @@ export function RiderJobsPage() {
       </div>
 
       <button type="button" onClick={() => setShowJobsList((prev) => !prev)} className="w-full">
-        <Card className="border-violet-100 bg-violet-50/50 transition-colors hover:bg-violet-50">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between gap-3">
-              <div className="text-left">
-                <h2 className="text-lg font-semibold text-gray-900">Jobs</h2>
-                <p className="text-sm text-gray-500">
-                  {filteredJobs.length} {filter} job{filteredJobs.length !== 1 ? 's' : ''}
-                </p>
+        <Card className="overflow-hidden border-violet-100 bg-gradient-to-br from-violet-50/70 via-white to-fuchsia-50/50 shadow-sm transition-all duration-200 hover:shadow-md">
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between gap-4">
+              <div className="min-w-0 text-left">
+                <h2 className="text-xl font-semibold text-gray-900">Jobs</h2>
+                <p className="mt-1 text-sm text-gray-500">{filterSummaryLabel}</p>
               </div>
 
-              {showJobsList ? (
-                <ChevronUp className="h-5 w-5 text-violet-600" />
-              ) : (
-                <ChevronDown className="h-5 w-5 text-violet-600" />
-              )}
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-violet-600 shadow-sm ring-1 ring-violet-100">
+                {showJobsList ? (
+                  <ChevronUp className="h-5 w-5" />
+                ) : (
+                  <ChevronDown className="h-5 w-5" />
+                )}
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -165,7 +169,7 @@ export function RiderJobsPage() {
       {showJobsList && (
         <>
           {isLoading ? (
-            <div className="space-y-3">
+            <div className="space-y-4 pt-1">
               {[1, 2, 3].map((i) => (
                 <Card key={i} className="animate-pulse">
                   <CardContent className="h-24 p-4" />
@@ -186,18 +190,18 @@ export function RiderJobsPage() {
               </CardContent>
             </Card>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-5 pt-1">
               {filteredJobs.map((job) => (
                 <Link key={job.id} to={`/rider/jobs/${job.id}`}>
                   <Card className="cursor-pointer border-gray-100 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-                    <CardContent className="p-4 sm:p-5">
-                      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                    <CardContent className="p-5 sm:p-6">
+                      <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
                         <div className="min-w-0 flex-1">
-                          <div className="mb-2 flex flex-wrap items-center gap-2">
+                          <div className="mb-4 flex flex-wrap items-center gap-2">
                             <span className="text-sm font-medium text-gray-500">{job.job_number}</span>
                             <span
                               className={cn(
-                                'rounded-full px-2 py-0.5 text-xs font-medium',
+                                'rounded-full px-2.5 py-0.5 text-xs font-medium',
                                 getStatusColorClass(job.status)
                               )}
                             >
@@ -205,13 +209,13 @@ export function RiderJobsPage() {
                             </span>
                           </div>
 
-                          <div className="space-y-2">
-                            <div className="flex items-start gap-2 text-sm">
+                          <div className="space-y-3">
+                            <div className="flex items-start gap-2.5 text-sm">
                               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-violet-500" />
                               <span className="break-words text-gray-600">{job.pickup_address}</span>
                             </div>
 
-                            <div className="flex items-start gap-2 text-sm">
+                            <div className="flex items-start gap-2.5 text-sm">
                               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-green-500" />
                               <span className="break-words text-gray-600">
                                 {job.delivery_address}
@@ -222,14 +226,14 @@ export function RiderJobsPage() {
 
                         <div className="flex shrink-0 items-center justify-between sm:block sm:text-right">
                           <div>
-                            <p className="font-semibold text-violet-700">
+                            <p className="text-lg font-semibold text-violet-700">
                               {formatCurrency(job.rider_earnings)}
                             </p>
                             <p className="text-xs text-gray-400">
                               {formatDistanceToNow(job.created_at)}
                             </p>
                           </div>
-                          <ChevronRight className="mt-1 h-5 w-5 text-gray-400 sm:ml-auto" />
+                          <ChevronRight className="mt-2 h-5 w-5 text-gray-400 sm:ml-auto" />
                         </div>
                       </div>
                     </CardContent>

@@ -125,9 +125,8 @@ export function AdminDisputesPage() {
     return styles[status] || 'bg-gray-100 text-gray-700';
   };
 
-  const formatDisputeType = (value: string) => {
-    return value.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
-  };
+  const formatDisputeType = (value: string) =>
+    value.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
 
   const openDisputeModal = (dispute: DisputeWithDetails) => {
     setSelectedDispute(dispute);
@@ -185,21 +184,21 @@ export function AdminDisputesPage() {
   const statusTabs: DisputeStatusFilter[] = ['all', 'open', 'under_review', 'resolved', 'closed'];
 
   return (
-    <div className="space-y-6 pb-6">
-      <div>
+    <div className="w-full max-w-full overflow-x-hidden space-y-5 pb-24">
+      <div className="min-w-0">
         <h1 className="text-2xl font-bold text-gray-900">Disputes</h1>
-        <p className="text-gray-500">
+        <p className="text-gray-500 leading-7">
           Track support cases, review complaints, and close dispute tickets
         </p>
       </div>
 
-      <Card className="border-violet-100 bg-violet-50/60">
-        <CardContent className="p-4">
+      <Card className="w-full max-w-full border-violet-100 bg-violet-50/70 shadow-sm">
+        <CardContent className="p-4 sm:p-5">
           <div className="flex items-start gap-3">
-            <MessageSquare className="w-5 h-5 text-violet-600 mt-0.5 shrink-0" />
-            <div>
+            <MessageSquare className="mt-0.5 h-5 w-5 shrink-0 text-violet-600" />
+            <div className="min-w-0">
               <p className="font-medium text-violet-900">Manual support workflow</p>
-              <p className="text-sm text-violet-700 mt-1 leading-6">
+              <p className="mt-1 text-sm leading-7 text-violet-700 break-words">
                 Disputes are handled as support cases. Refunds and rider settlement decisions are
                 reviewed manually by admin rather than being auto-processed in-app.
               </p>
@@ -208,34 +207,36 @@ export function AdminDisputesPage() {
         </CardContent>
       </Card>
 
-      <div className="flex flex-col gap-4">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+      <div className="w-full max-w-full space-y-3">
+        <div className="relative w-full">
+          <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
           <Input
             placeholder="Search by job number, user, issue type, or description..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
+            className="w-full pl-10"
           />
         </div>
 
-        <div className="flex gap-2 overflow-x-auto pb-2">
-          {statusTabs.map((status) => (
-            <button
-              key={status}
-              onClick={() => setStatusFilter(status)}
-              className={cn(
-                'px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors shrink-0',
-                statusFilter === status
-                  ? 'bg-violet-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              )}
-            >
-              {status === 'all'
-                ? 'All'
-                : status.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())}
-            </button>
-          ))}
+        <div className="-mx-1 overflow-x-auto pb-1">
+          <div className="flex min-w-max gap-2 px-1">
+            {statusTabs.map((status) => (
+              <button
+                key={status}
+                onClick={() => setStatusFilter(status)}
+                className={cn(
+                  'shrink-0 rounded-full px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors',
+                  statusFilter === status
+                    ? 'bg-violet-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                )}
+              >
+                {status === 'all'
+                  ? 'All'
+                  : status.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -244,7 +245,7 @@ export function AdminDisputesPage() {
           {[1, 2, 3].map((i) => (
             <Card key={i} className="animate-pulse">
               <CardContent className="p-4">
-                <div className="h-16 bg-gray-100 rounded-lg" />
+                <div className="h-24 rounded-xl bg-gray-100" />
               </CardContent>
             </Card>
           ))}
@@ -252,7 +253,7 @@ export function AdminDisputesPage() {
       ) : filteredDisputes.length === 0 ? (
         <Card className="border-dashed border-2">
           <CardContent className="p-8 text-center">
-            <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
+            <CheckCircle className="mx-auto mb-4 h-12 w-12 text-green-500" />
             <h3 className="text-lg font-medium text-gray-900">No disputes found</h3>
             <p className="text-gray-500">There are no dispute cases matching this view</p>
           </CardContent>
@@ -262,46 +263,52 @@ export function AdminDisputesPage() {
           {filteredDisputes.map((dispute) => (
             <Card
               key={dispute.id}
-              className="cursor-pointer hover:shadow-md transition-shadow"
+              className="w-full max-w-full cursor-pointer transition-shadow hover:shadow-md"
               onClick={() => openDisputeModal(dispute)}
             >
               <CardContent className="p-4">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                  <div className="flex items-start gap-4 min-w-0">
-                    <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
-                      <AlertTriangle className="w-5 h-5 text-red-600" />
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-start gap-3 min-w-0">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-red-100">
+                      <AlertTriangle className="h-5 w-5 text-red-600" />
                     </div>
 
-                    <div className="min-w-0">
-                      <p className="font-semibold text-gray-900 break-words">{dispute.job_number}</p>
-                      <p className="text-sm text-gray-500 capitalize">
-                        {formatDisputeType(dispute.dispute_type)}
-                      </p>
-                      <p className="text-sm text-gray-500 break-words">
-                        Raised by {dispute.raised_by_name}
-                      </p>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                        <div className="min-w-0">
+                          <p className="font-semibold text-gray-900 break-words">
+                            {dispute.job_number}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            {formatDisputeType(dispute.dispute_type)}
+                          </p>
+                          <p className="text-sm text-gray-500 break-words">
+                            Raised by {dispute.raised_by_name}
+                          </p>
+                        </div>
+
+                        <div className="flex flex-col items-start gap-2 sm:items-end">
+                          <span
+                            className={cn(
+                              'inline-flex rounded-full px-2.5 py-1 text-xs font-medium',
+                              getStatusBadge(dispute.status)
+                            )}
+                          >
+                            {formatDisputeType(dispute.status)}
+                          </span>
+                          <p className="text-xs text-gray-400">
+                            {formatDateTime(dispute.created_at)}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="mt-3 rounded-xl bg-gray-50 p-3">
+                        <p className="text-sm leading-6 text-gray-700 break-words">
+                          {dispute.description}
+                        </p>
+                      </div>
                     </div>
                   </div>
-
-                  <div className="sm:text-right shrink-0">
-                    <span
-                      className={cn(
-                        'inline-flex px-2 py-1 rounded-full text-xs font-medium',
-                        getStatusBadge(dispute.status)
-                      )}
-                    >
-                      {formatDisputeType(dispute.status)}
-                    </span>
-                    <p className="text-xs text-gray-400 mt-1">
-                      {formatDateTime(dispute.created_at)}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-3">
-                  <p className="text-sm text-gray-600 line-clamp-3 break-words">
-                    {dispute.description}
-                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -310,132 +317,134 @@ export function AdminDisputesPage() {
       )}
 
       <Dialog open={!!selectedDispute} onOpenChange={closeDisputeModal}>
-        <DialogContent className="w-[95vw] max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Dispute Details</DialogTitle>
-          </DialogHeader>
-
+        <DialogContent className="w-[calc(100vw-1.25rem)] max-w-lg rounded-2xl p-0 sm:max-w-2xl">
           {selectedDispute && (
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <p className="text-sm text-gray-500">Job</p>
-                  <p className="font-medium text-gray-900 break-words">
-                    {selectedDispute.job_number}
-                  </p>
-                </div>
+            <div className="max-h-[88vh] overflow-y-auto">
+              <DialogHeader className="border-b px-4 py-4 sm:px-6">
+                <DialogTitle>Dispute Details</DialogTitle>
+              </DialogHeader>
 
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <p className="text-sm text-gray-500">Raised By</p>
-                  <p className="font-medium text-gray-900 break-words">
-                    {selectedDispute.raised_by_name}
-                  </p>
-                </div>
+              <div className="space-y-4 px-4 py-4 sm:px-6 sm:py-5">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div className="rounded-xl bg-gray-50 p-4">
+                    <p className="text-sm text-gray-500">Job</p>
+                    <p className="font-medium text-gray-900 break-words">
+                      {selectedDispute.job_number}
+                    </p>
+                  </div>
 
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <p className="text-sm text-gray-500">Issue Type</p>
-                  <p className="font-medium text-gray-900">
-                    {formatDisputeType(selectedDispute.dispute_type)}
-                  </p>
-                </div>
+                  <div className="rounded-xl bg-gray-50 p-4">
+                    <p className="text-sm text-gray-500">Raised By</p>
+                    <p className="font-medium text-gray-900 break-words">
+                      {selectedDispute.raised_by_name}
+                    </p>
+                  </div>
 
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <p className="text-sm text-gray-500">Status</p>
-                  <span
-                    className={cn(
-                      'inline-flex mt-1 px-2 py-1 rounded-full text-xs font-medium',
-                      getStatusBadge(selectedDispute.status)
-                    )}
-                  >
-                    {formatDisputeType(selectedDispute.status)}
-                  </span>
-                </div>
+                  <div className="rounded-xl bg-gray-50 p-4">
+                    <p className="text-sm text-gray-500">Issue Type</p>
+                    <p className="font-medium text-gray-900">
+                      {formatDisputeType(selectedDispute.dispute_type)}
+                    </p>
+                  </div>
 
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <p className="text-sm text-gray-500">Opened</p>
-                  <p className="font-medium text-gray-900">
-                    {formatDateTime(selectedDispute.created_at)}
-                  </p>
-                </div>
+                  <div className="rounded-xl bg-gray-50 p-4">
+                    <p className="text-sm text-gray-500">Status</p>
+                    <span
+                      className={cn(
+                        'mt-1 inline-flex rounded-full px-2.5 py-1 text-xs font-medium',
+                        getStatusBadge(selectedDispute.status)
+                      )}
+                    >
+                      {formatDisputeType(selectedDispute.status)}
+                    </span>
+                  </div>
 
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <p className="text-sm text-gray-500">Last Updated</p>
-                  <p className="font-medium text-gray-900">
-                    {formatDateTime(selectedDispute.updated_at || selectedDispute.created_at)}
-                  </p>
-                </div>
-              </div>
+                  <div className="rounded-xl bg-gray-50 p-4">
+                    <p className="text-sm text-gray-500">Opened</p>
+                    <p className="font-medium text-gray-900">
+                      {formatDateTime(selectedDispute.created_at)}
+                    </p>
+                  </div>
 
-              <div>
-                <p className="text-sm text-gray-500 mb-2">Customer / Rider Message</p>
-                <div className="rounded-lg bg-gray-50 p-4">
-                  <p className="text-sm text-gray-700 whitespace-pre-wrap break-words">
-                    {selectedDispute.description}
-                  </p>
-                </div>
-              </div>
-
-              <div>
-                <p className="text-sm text-gray-500 mb-2">Admin Notes / Resolution</p>
-                <Textarea
-                  placeholder="Add internal notes, support summary, refund decision, or next steps..."
-                  value={resolution}
-                  onChange={(e) => setResolution(e.target.value)}
-                  rows={5}
-                />
-              </div>
-
-              {(selectedDispute.status === 'resolved' || selectedDispute.status === 'closed') && (
-                <div className="rounded-lg border border-green-200 bg-green-50 p-4">
-                  <div className="flex items-start gap-2">
-                    <FileText className="w-4 h-4 text-green-700 mt-0.5 shrink-0" />
-                    <div>
-                      <p className="text-sm font-medium text-green-800">Case summary</p>
-                      <p className="text-sm text-green-700 mt-1 break-words whitespace-pre-wrap">
-                        {selectedDispute.resolution_notes || 'No resolution notes were added.'}
-                      </p>
-                    </div>
+                  <div className="rounded-xl bg-gray-50 p-4">
+                    <p className="text-sm text-gray-500">Last Updated</p>
+                    <p className="font-medium text-gray-900">
+                      {formatDateTime(selectedDispute.updated_at || selectedDispute.created_at)}
+                    </p>
                   </div>
                 </div>
-              )}
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:flex xl:flex-wrap gap-3">
-                {selectedDispute.status === 'open' && (
-                  <Button
-                    onClick={() => handleUpdateStatus('under_review')}
-                    disabled={isUpdating}
-                    className="w-full sm:w-auto bg-amber-600 hover:bg-amber-700 text-white"
-                  >
-                    <Clock3 className="w-4 h-4 mr-2" />
-                    Mark Under Review
-                  </Button>
+                <div>
+                  <p className="mb-2 text-sm text-gray-500">Customer / Rider Message</p>
+                  <div className="rounded-xl bg-gray-50 p-4">
+                    <p className="text-sm leading-6 text-gray-700 whitespace-pre-wrap break-words">
+                      {selectedDispute.description}
+                    </p>
+                  </div>
+                </div>
+
+                <div>
+                  <p className="mb-2 text-sm text-gray-500">Admin Notes / Resolution</p>
+                  <Textarea
+                    placeholder="Add internal notes, support summary, refund decision, or next steps..."
+                    value={resolution}
+                    onChange={(e) => setResolution(e.target.value)}
+                    rows={5}
+                  />
+                </div>
+
+                {(selectedDispute.status === 'resolved' || selectedDispute.status === 'closed') && (
+                  <div className="rounded-xl border border-green-200 bg-green-50 p-4">
+                    <div className="flex items-start gap-2">
+                      <FileText className="mt-0.5 h-4 w-4 shrink-0 text-green-700" />
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-green-800">Case summary</p>
+                        <p className="mt-1 text-sm text-green-700 whitespace-pre-wrap break-words">
+                          {selectedDispute.resolution_notes || 'No resolution notes were added.'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 )}
 
-                {(selectedDispute.status === 'open' ||
-                  selectedDispute.status === 'under_review') && (
-                  <Button
-                    onClick={() => handleUpdateStatus('resolved')}
-                    disabled={isUpdating}
-                    className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white"
-                  >
-                    <CheckCircle className="w-4 h-4 mr-2" />
-                    Resolve Case
-                  </Button>
-                )}
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {selectedDispute.status === 'open' && (
+                    <Button
+                      onClick={() => handleUpdateStatus('under_review')}
+                      disabled={isUpdating}
+                      className="w-full bg-amber-600 text-white hover:bg-amber-700"
+                    >
+                      <Clock3 className="mr-2 h-4 w-4" />
+                      Mark Under Review
+                    </Button>
+                  )}
 
-                {(selectedDispute.status === 'open' ||
-                  selectedDispute.status === 'under_review' ||
-                  selectedDispute.status === 'resolved') && (
-                  <Button
-                    onClick={() => handleUpdateStatus('closed')}
-                    disabled={isUpdating}
-                    variant="outline"
-                    className="w-full sm:w-auto text-gray-700"
-                  >
-                    <XCircle className="w-4 h-4 mr-2" />
-                    Close Case
-                  </Button>
-                )}
+                  {(selectedDispute.status === 'open' ||
+                    selectedDispute.status === 'under_review') && (
+                    <Button
+                      onClick={() => handleUpdateStatus('resolved')}
+                      disabled={isUpdating}
+                      className="w-full bg-green-600 text-white hover:bg-green-700"
+                    >
+                      <CheckCircle className="mr-2 h-4 w-4" />
+                      Resolve Case
+                    </Button>
+                  )}
+
+                  {(selectedDispute.status === 'open' ||
+                    selectedDispute.status === 'under_review' ||
+                    selectedDispute.status === 'resolved') && (
+                    <Button
+                      onClick={() => handleUpdateStatus('closed')}
+                      disabled={isUpdating}
+                      variant="outline"
+                      className="w-full text-gray-700"
+                    >
+                      <XCircle className="mr-2 h-4 w-4" />
+                      Close Case
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           )}

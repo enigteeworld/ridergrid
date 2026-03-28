@@ -103,6 +103,11 @@ export function MyJobsPage() {
     { value: 'cancelled', label: 'Cancelled', count: cancelledJobs.length },
   ];
 
+  const filterSummaryLabel =
+    filter === 'all'
+      ? `${filteredJobs.length} total deliver${filteredJobs.length !== 1 ? 'ies' : 'y'}`
+      : `${filteredJobs.length} ${filter} deliver${filteredJobs.length !== 1 ? 'ies' : 'y'}`;
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -153,21 +158,21 @@ export function MyJobsPage() {
       </div>
 
       <button type="button" onClick={() => setShowJobsList((prev) => !prev)} className="w-full">
-        <Card className="border-violet-100 bg-violet-50/50 transition-colors hover:bg-violet-50">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between gap-3">
-              <div className="text-left">
-                <h2 className="text-lg font-semibold text-gray-900">Deliveries</h2>
-                <p className="text-sm text-gray-500">
-                  {filteredJobs.length} {filter} deliver{filteredJobs.length !== 1 ? 'ies' : 'y'}
-                </p>
+        <Card className="overflow-hidden border-violet-100 bg-gradient-to-br from-violet-50/70 via-white to-fuchsia-50/50 shadow-sm transition-all duration-200 hover:shadow-md">
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between gap-4">
+              <div className="min-w-0 text-left">
+                <h2 className="text-xl font-semibold text-gray-900">Deliveries</h2>
+                <p className="mt-1 text-sm text-gray-500">{filterSummaryLabel}</p>
               </div>
 
-              {showJobsList ? (
-                <ChevronUp className="h-5 w-5 text-violet-600" />
-              ) : (
-                <ChevronDown className="h-5 w-5 text-violet-600" />
-              )}
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-violet-600 shadow-sm ring-1 ring-violet-100">
+                {showJobsList ? (
+                  <ChevronUp className="h-5 w-5" />
+                ) : (
+                  <ChevronDown className="h-5 w-5" />
+                )}
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -176,7 +181,7 @@ export function MyJobsPage() {
       {showJobsList && (
         <>
           {isLoading ? (
-            <div className="space-y-3">
+            <div className="space-y-4 pt-1">
               {[1, 2, 3].map((i) => (
                 <Card key={i} className="animate-pulse">
                   <CardContent className="p-4">
@@ -212,18 +217,18 @@ export function MyJobsPage() {
               </CardContent>
             </Card>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-5 pt-1">
               {filteredJobs.map((job) => (
                 <Link key={job.id} to={`/jobs/${job.id}`}>
                   <Card className="cursor-pointer border-gray-100 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-                    <CardContent className="p-4 sm:p-5">
-                      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                    <CardContent className="p-5 sm:p-6">
+                      <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
                         <div className="min-w-0 flex-1">
-                          <div className="mb-3 flex flex-wrap items-center gap-2">
+                          <div className="mb-4 flex flex-wrap items-center gap-2">
                             <span className="text-sm font-medium text-gray-500">{job.job_number}</span>
                             <span
                               className={cn(
-                                'rounded-full px-2 py-0.5 text-xs font-medium',
+                                'rounded-full px-2.5 py-0.5 text-xs font-medium',
                                 getStatusColorClass(job.status)
                               )}
                             >
@@ -234,8 +239,8 @@ export function MyJobsPage() {
                             </span>
                           </div>
 
-                          <div className="mb-3 space-y-2">
-                            <div className="flex items-start gap-2">
+                          <div className="mb-4 space-y-3">
+                            <div className="flex items-start gap-2.5">
                               <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-violet-500" />
                               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
                               <span className="break-words text-sm text-gray-600">
@@ -243,7 +248,7 @@ export function MyJobsPage() {
                               </span>
                             </div>
 
-                            <div className="flex items-start gap-2">
+                            <div className="flex items-start gap-2.5">
                               <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-green-500" />
                               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
                               <span className="break-words text-sm text-gray-600">
@@ -253,8 +258,8 @@ export function MyJobsPage() {
                           </div>
 
                           {job.rider_name && (
-                            <div className="flex min-w-0 items-center gap-2 text-sm">
-                              <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-violet-100 text-xs font-medium text-violet-700">
+                            <div className="flex min-w-0 items-center gap-2.5 text-sm">
+                              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-violet-100 text-xs font-medium text-violet-700">
                                 {job.rider_name.charAt(0)}
                               </div>
                               <span className="break-words text-gray-600">{job.rider_name}</span>
@@ -263,7 +268,7 @@ export function MyJobsPage() {
                         </div>
 
                         <div className="flex shrink-0 items-center justify-between sm:block sm:text-right">
-                          <p className="font-semibold text-gray-900">
+                          <p className="text-lg font-semibold text-gray-900">
                             {formatCurrency(job.agreed_amount)}
                           </p>
                           <ChevronRight className="mt-2 h-5 w-5 text-gray-400 sm:ml-auto" />
