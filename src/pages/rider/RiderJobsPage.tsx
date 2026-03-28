@@ -9,6 +9,7 @@ import {
   ChevronRight,
   ChevronDown,
   ChevronUp,
+  Clock3,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -70,10 +71,7 @@ export function RiderJobsPage() {
     [jobs]
   );
 
-  const completedJobs = useMemo(
-    () => jobs.filter((job) => job.status === 'completed'),
-    [jobs]
-  );
+  const completedJobs = useMemo(() => jobs.filter((job) => job.status === 'completed'), [jobs]);
 
   const cancelledJobs = useMemo(
     () => jobs.filter((job) => ['cancelled', 'refunded'].includes(job.status)),
@@ -104,6 +102,27 @@ export function RiderJobsPage() {
     filter === 'all'
       ? `${filteredJobs.length} total job${filteredJobs.length !== 1 ? 's' : ''}`
       : `${filteredJobs.length} ${filter} job${filteredJobs.length !== 1 ? 's' : ''}`;
+
+  const getCardAccent = (status: string) => {
+    switch (status) {
+      case 'completed':
+        return 'from-emerald-400 to-green-500';
+      case 'in_progress':
+      case 'rider_marked_complete':
+      case 'customer_marked_complete':
+        return 'from-blue-400 to-cyan-500';
+      case 'awaiting_rider':
+      case 'awaiting_funding':
+      case 'funded':
+        return 'from-violet-500 to-fuchsia-500';
+      case 'cancelled':
+      case 'refunded':
+      case 'disputed':
+        return 'from-rose-400 to-red-500';
+      default:
+        return 'from-gray-300 to-gray-400';
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -169,10 +188,12 @@ export function RiderJobsPage() {
       {showJobsList && (
         <>
           {isLoading ? (
-            <div className="space-y-4 pt-1">
+            <div className="space-y-4 pt-2">
               {[1, 2, 3].map((i) => (
                 <Card key={i} className="animate-pulse">
-                  <CardContent className="h-24 p-4" />
+                  <CardContent className="p-5">
+                    <div className="h-28 rounded-2xl bg-gray-200" />
+                  </CardContent>
                 </Card>
               ))}
             </div>
@@ -190,15 +211,23 @@ export function RiderJobsPage() {
               </CardContent>
             </Card>
           ) : (
-            <div className="space-y-5 pt-1">
+            <div className="space-y-6 rounded-3xl bg-gray-50/60 p-2">
               {filteredJobs.map((job) => (
-                <Link key={job.id} to={`/rider/jobs/${job.id}`}>
-                  <Card className="cursor-pointer border-gray-100 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-                    <CardContent className="p-5 sm:p-6">
+                <Link key={job.id} to={`/rider/jobs/${job.id}`} className="block">
+                  <Card className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 active:scale-[0.985] hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+                    <div
+                      className={cn(
+                        'absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b',
+                        getCardAccent(job.status)
+                      )}
+                    />
+                    <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
                       <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
                         <div className="min-w-0 flex-1">
                           <div className="mb-4 flex flex-wrap items-center gap-2">
-                            <span className="text-sm font-medium text-gray-500">{job.job_number}</span>
+                            <span className="text-sm font-semibold tracking-tight text-gray-600">
+                              {job.job_number}
+                            </span>
                             <span
                               className={cn(
                                 'rounded-full px-2.5 py-0.5 text-xs font-medium',
@@ -207,6 +236,11 @@ export function RiderJobsPage() {
                             >
                               {formatJobStatus(job.status)}
                             </span>
+                          </div>
+
+                          <div className="mb-4 flex items-center gap-2 text-sm text-gray-400">
+                            <Clock3 className="h-4 w-4" />
+                            <span>{formatDistanceToNow(job.created_at)}</span>
                           </div>
 
                           <div className="space-y-3">
@@ -233,7 +267,10 @@ export function RiderJobsPage() {
                               {formatDistanceToNow(job.created_at)}
                             </p>
                           </div>
-                          <ChevronRight className="mt-2 h-5 w-5 text-gray-400 sm:ml-auto" />
+
+                          <div className="mt-3 flex h-11 w-11 items-center justify-center rounded-full bg-violet-50 text-gray-400 transition-colors duration-200 group-hover:bg-violet-100 group-hover:text-violet-600 sm:ml-auto">
+                            <ChevronRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
+                          </div>
                         </div>
                       </div>
                     </CardContent>
