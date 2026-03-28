@@ -242,17 +242,17 @@ export function WalletPage() {
   const getTransactionIcon = (type: string) => {
     switch (type) {
       case 'deposit':
-        return <ArrowDownLeft className="w-5 h-5 text-green-500" />;
+        return <ArrowDownLeft className="h-5 w-5 text-green-500" />;
       case 'withdrawal':
-        return <ArrowUpRight className="w-5 h-5 text-red-500" />;
+        return <ArrowUpRight className="h-5 w-5 text-red-500" />;
       case 'escrow_lock':
-        return <Lock className="w-5 h-5 text-amber-500" />;
+        return <Lock className="h-5 w-5 text-amber-500" />;
       case 'escrow_release':
-        return <ArrowUpRight className="w-5 h-5 text-blue-500" />;
+        return <ArrowUpRight className="h-5 w-5 text-blue-500" />;
       case 'escrow_refund':
-        return <ArrowDownLeft className="w-5 h-5 text-green-500" />;
+        return <ArrowDownLeft className="h-5 w-5 text-green-500" />;
       default:
-        return <History className="w-5 h-5 text-gray-500" />;
+        return <History className="h-5 w-5 text-gray-500" />;
     }
   };
 
@@ -288,6 +288,19 @@ export function WalletPage() {
     }
   };
 
+  const getMetricAccent = (kind: 'wallet' | 'held' | 'deposited' | 'spent') => {
+    switch (kind) {
+      case 'wallet':
+        return 'from-violet-500 to-fuchsia-500';
+      case 'held':
+        return 'from-amber-400 to-orange-500';
+      case 'deposited':
+        return 'from-emerald-400 to-green-500';
+      case 'spent':
+        return 'from-rose-400 to-red-500';
+    }
+  };
+
   const totalSpent = Math.max(
     0,
     Number(wallet?.total_deposited || 0) -
@@ -309,87 +322,139 @@ export function WalletPage() {
     <button
       type="button"
       onClick={onToggle}
-      className="w-full rounded-2xl border border-gray-100 bg-white px-4 py-3 shadow-sm hover:border-violet-200 hover:shadow transition-all"
+      className="w-full"
     >
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <p className="text-base font-semibold text-gray-900">{title}</p>
-          <span className="inline-flex items-center rounded-full bg-violet-100 px-2.5 py-1 text-xs font-semibold text-violet-700">
-            {count}
-          </span>
-        </div>
+      <Card className="overflow-hidden border-violet-100 bg-gradient-to-br from-violet-50/70 via-white to-fuchsia-50/50 shadow-sm transition-all duration-200 hover:shadow-md">
+        <CardContent className="p-5">
+          <div className="flex items-center justify-between gap-4">
+            <div className="min-w-0 flex-1">
+              <div className="grid grid-cols-[1fr_auto] items-center gap-3">
+                <p className="truncate text-left text-xl font-semibold text-gray-900">{title}</p>
+                <span className="inline-flex min-w-[2.25rem] items-center justify-center rounded-full bg-violet-100 px-2.5 py-1 text-xs font-semibold text-violet-700">
+                  {count}
+                </span>
+              </div>
+            </div>
 
-        <div className="flex items-center justify-center rounded-full bg-gray-100 p-2 text-gray-600">
-          {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-        </div>
-      </div>
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-violet-600 shadow-sm ring-1 ring-violet-100">
+              {isOpen ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </button>
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-7">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">My Wallet</h1>
         <p className="text-gray-500">Manage your funds and transactions</p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-4">
-        <Card className="bg-gradient-to-br from-violet-500 to-purple-600 text-white border-0">
+      <div className="space-y-4 rounded-3xl bg-gray-50/60 p-2">
+        <Card className="overflow-hidden border-0 bg-gradient-to-br from-violet-500 to-purple-600 text-white shadow-[0_10px_30px_rgba(124,58,237,0.25)]">
           <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Wallet className="w-6 h-6 text-violet-200" />
-                <span className="text-violet-100">Available Balance</span>
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm text-violet-100">Available Balance</p>
+                <p className="mt-2 text-4xl font-bold tracking-tight">
+                  {formatCurrency(Number(wallet?.available_balance || 0))}
+                </p>
+              </div>
+
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm">
+                <Wallet className="h-8 w-8 text-violet-100" />
               </div>
             </div>
 
-            <p className="text-4xl font-bold">
-              {formatCurrency(Number(wallet?.available_balance || 0))}
-            </p>
-
             <Button
               onClick={() => setShowFundDialog(true)}
-              className="mt-4 bg-white text-violet-600 hover:bg-violet-50"
+              className="mt-5 bg-white text-violet-600 hover:bg-violet-50"
             >
-              <Plus className="w-4 h-4 mr-2" />
+              <Plus className="mr-2 h-4 w-4" />
               Fund Wallet
             </Button>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Lock className="w-6 h-6 text-amber-500" />
-                <span className="text-gray-600">Held in Escrow</span>
+        <Card className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+          <div
+            className={cn(
+              'absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b',
+              getMetricAccent('held')
+            )}
+          />
+          <CardContent className="p-6 pl-7">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-medium uppercase tracking-[0.14em] text-gray-400">
+                  Held in Escrow
+                </p>
+                <p className="mt-3 text-4xl font-bold tracking-tight text-gray-900">
+                  {formatCurrency(Number(wallet?.held_balance || 0))}
+                </p>
+                <p className="mt-2 text-sm text-gray-500">Funds locked for active deliveries</p>
+              </div>
+
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-50 text-amber-500 transition-colors duration-200 group-hover:bg-amber-100">
+                <Lock className="h-8 w-8" />
               </div>
             </div>
-
-            <p className="text-4xl font-bold text-gray-900">
-              {formatCurrency(Number(wallet?.held_balance || 0))}
-            </p>
-            <p className="text-sm text-gray-500 mt-2">Funds locked for active deliveries</p>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <p className="text-sm text-gray-500">Total Deposited</p>
-            <p className="text-xl font-semibold text-gray-900">
-              {formatCurrency(Number(wallet?.total_deposited || 0))}
-            </p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-4">
-            <p className="text-sm text-gray-500">Total Spent</p>
-            <p className="text-xl font-semibold text-gray-900">{formatCurrency(totalSpent)}</p>
-          </CardContent>
-        </Card>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <Card className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+            <div
+              className={cn(
+                'absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b',
+                getMetricAccent('deposited')
+              )}
+            />
+            <CardContent className="p-5 pl-6">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-sm font-medium uppercase tracking-[0.14em] text-gray-400">
+                    Total Deposited
+                  </p>
+                  <p className="mt-3 text-2xl font-bold tracking-tight text-gray-900">
+                    {formatCurrency(Number(wallet?.total_deposited || 0))}
+                  </p>
+                </div>
+
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-500 transition-colors duration-200 group-hover:bg-emerald-100">
+                  <ArrowDownLeft className="h-6 w-6" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+            <div
+              className={cn(
+                'absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b',
+                getMetricAccent('spent')
+              )}
+            />
+            <CardContent className="p-5 pl-6">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-sm font-medium uppercase tracking-[0.14em] text-gray-400">
+                    Total Spent
+                  </p>
+                  <p className="mt-3 text-2xl font-bold tracking-tight text-gray-900">
+                    {formatCurrency(totalSpent)}
+                  </p>
+                </div>
+
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-50 text-rose-500 transition-colors duration-200 group-hover:bg-rose-100">
+                  <ArrowUpRight className="h-6 w-6" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       <div className="space-y-3">
@@ -403,31 +468,44 @@ export function WalletPage() {
         {showTransactions && (
           <>
             {isLoading ? (
-              <div className="space-y-3">
+              <div className="space-y-4 pt-2">
                 {[1, 2, 3].map((i) => (
                   <Card key={i} className="animate-pulse">
-                    <CardContent className="p-4">
-                      <div className="h-12 bg-gray-200 rounded" />
+                    <CardContent className="p-5">
+                      <div className="h-16 rounded-2xl bg-gray-200" />
                     </CardContent>
                   </Card>
                 ))}
               </div>
             ) : transactions.length === 0 ? (
-              <Card className="border-dashed border-2">
+              <Card className="border-2 border-dashed">
                 <CardContent className="p-8 text-center">
-                  <History className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No transactions yet</h3>
+                  <History className="mx-auto mb-4 h-12 w-12 text-gray-300" />
+                  <h3 className="mb-2 text-lg font-medium text-gray-900">No transactions yet</h3>
                   <p className="text-gray-500">Fund your wallet to get started</p>
                 </CardContent>
               </Card>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-6 rounded-3xl bg-gray-50/60 p-2">
                 {transactions.map((tx) => (
-                  <Card key={tx.id}>
-                    <CardContent className="p-4">
+                  <Card
+                    key={tx.id}
+                    className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]"
+                  >
+                    <div
+                      className={cn(
+                        'absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b',
+                        tx.transaction_type === 'deposit' || tx.transaction_type === 'escrow_refund'
+                          ? 'from-emerald-400 to-green-500'
+                          : tx.transaction_type === 'escrow_lock'
+                          ? 'from-amber-400 to-orange-500'
+                          : 'from-rose-400 to-red-500'
+                      )}
+                    />
+                    <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
                       <div className="flex items-center justify-between gap-4">
-                        <div className="flex items-center gap-3 min-w-0">
-                          <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
+                        <div className="min-w-0 flex items-center gap-3">
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gray-100">
                             {getTransactionIcon(tx.transaction_type)}
                           </div>
 
@@ -441,7 +519,7 @@ export function WalletPage() {
                           </div>
                         </div>
 
-                        <div className="text-right shrink-0">
+                        <div className="shrink-0 text-right">
                           <p className={cn('font-semibold', getTransactionColor(tx.transaction_type))}>
                             {getTransactionPrefix(tx.transaction_type)}
                             {formatCurrency(Number(tx.amount || 0))}
@@ -453,7 +531,7 @@ export function WalletPage() {
                       </div>
 
                       {tx.description && (
-                        <p className="mt-2 text-sm text-gray-500">{tx.description}</p>
+                        <p className="mt-3 text-sm text-gray-500">{tx.description}</p>
                       )}
                     </CardContent>
                   </Card>
@@ -465,16 +543,23 @@ export function WalletPage() {
       </div>
 
       <Dialog open={showFundDialog} onOpenChange={setShowFundDialog}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Fund Your Wallet</DialogTitle>
           </DialogHeader>
 
           <div className="space-y-4">
+            <div className="rounded-2xl border border-violet-200 bg-violet-50 p-4">
+              <p className="text-sm text-violet-800">
+                Add money to your wallet securely with Paystack and use it to fund deliveries
+                inside Dispatch NG.
+              </p>
+            </div>
+
             <div>
               <label className="text-sm font-medium text-gray-700">Amount (₦)</label>
               <div className="relative mt-1">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 font-medium text-gray-500">
                   ₦
                 </span>
                 <Input
@@ -485,14 +570,14 @@ export function WalletPage() {
                   className="pl-8"
                 />
               </div>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="mt-1 text-sm text-gray-500">
                 Minimum funding: {formatCurrency(MIN_FUNDING)}
               </p>
             </div>
 
-            <div className="bg-gray-50 rounded-lg p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <CreditCard className="w-5 h-5 text-gray-400" />
+            <div className="rounded-2xl bg-gray-50 p-4">
+              <div className="mb-2 flex items-center gap-2">
+                <CreditCard className="h-5 w-5 text-gray-400" />
                 <span className="font-medium text-gray-700">Payment Method</span>
               </div>
               <p className="text-sm text-gray-500">Card payment via Paystack</p>
@@ -501,11 +586,11 @@ export function WalletPage() {
             <Button
               onClick={handleFundWallet}
               disabled={isFunding || !fundAmount || parseFloat(fundAmount) < MIN_FUNDING}
-              className="w-full bg-violet-600 hover:bg-violet-700 text-white"
+              className="w-full bg-violet-600 text-white hover:bg-violet-700"
             >
               {isFunding ? (
                 <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                   Processing...
                 </div>
               ) : (
