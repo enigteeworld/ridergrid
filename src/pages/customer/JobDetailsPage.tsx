@@ -17,8 +17,9 @@ import {
   Camera,
   ArrowLeft,
   XCircle,
-  HelpCircle,
   Wallet,
+  ShieldAlert,
+  FileText,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -277,13 +278,19 @@ export function JobDetailsPage() {
 
       if (jobError) throw jobError;
 
-      showToast('success', 'Dispute filed', 'We will review your case');
+      showToast(
+        'success',
+        'Support case opened',
+        'Your issue has been submitted for admin review. Refunds, if approved, are handled manually.'
+      );
+
       setShowDisputeDialog(false);
       setDisputeReason('');
       setDisputeDescription('');
       await fetchJobDetails();
     } catch (error: any) {
-      showToast('error', 'Error', error.message || 'Failed to open dispute');
+      console.error('Dispute error:', error);
+      showToast('error', 'Error', error.message || 'Failed to open support case');
     }
   };
 
@@ -377,120 +384,136 @@ export function JobDetailsPage() {
       </div>
 
       {[
-  'awaiting_rider',
-  'awaiting_funding',
-  'funded',
-  'in_progress',
-  'rider_marked_complete',
-  'customer_marked_complete',
-  'completed',
-].includes(job.status) && (
-  <Card>
-    <CardContent className="p-4">
-      {/* Mobile: vertical timeline */}
-      <div className="sm:hidden">
-        <div className="space-y-4">
-          {steps.map((step, index) => {
-            const Icon = step.icon;
-            const isActive = index <= currentIndex;
-            const isCurrent = index === currentIndex;
-            const isLast = index === steps.length - 1;
+        'awaiting_rider',
+        'awaiting_funding',
+        'funded',
+        'in_progress',
+        'rider_marked_complete',
+        'customer_marked_complete',
+        'completed',
+      ].includes(job.status) && (
+        <Card>
+          <CardContent className="p-4">
+            <div className="sm:hidden">
+              <div className="space-y-4">
+                {steps.map((step, index) => {
+                  const Icon = step.icon;
+                  const isActive = index <= currentIndex;
+                  const isCurrent = index === currentIndex;
+                  const isLast = index === steps.length - 1;
 
-            return (
-              <div key={step.status} className="flex items-start gap-3">
-                <div className="flex flex-col items-center">
-                  <div
-                    className={cn(
-                      'w-10 h-10 rounded-full flex items-center justify-center transition-colors shrink-0',
-                      isActive ? 'bg-violet-600 text-white' : 'bg-gray-100 text-gray-400',
-                      isCurrent && 'ring-4 ring-violet-100'
-                    )}
-                  >
-                    <Icon className="w-5 h-5" />
-                  </div>
+                  return (
+                    <div key={step.status} className="flex items-start gap-3">
+                      <div className="flex flex-col items-center">
+                        <div
+                          className={cn(
+                            'w-10 h-10 rounded-full flex items-center justify-center transition-colors shrink-0',
+                            isActive ? 'bg-violet-600 text-white' : 'bg-gray-100 text-gray-400',
+                            isCurrent && 'ring-4 ring-violet-100'
+                          )}
+                        >
+                          <Icon className="w-5 h-5" />
+                        </div>
 
-                  {!isLast && (
-                    <div
-                      className={cn(
-                        'mt-2 w-0.5 h-8 rounded-full',
-                        index < currentIndex ? 'bg-violet-600' : 'bg-gray-200'
-                      )}
-                    />
-                  )}
-                </div>
+                        {!isLast && (
+                          <div
+                            className={cn(
+                              'mt-2 w-0.5 h-8 rounded-full',
+                              index < currentIndex ? 'bg-violet-600' : 'bg-gray-200'
+                            )}
+                          />
+                        )}
+                      </div>
 
-                <div className="pt-1">
-                  <p
-                    className={cn(
-                      'text-sm',
-                      isActive ? 'text-gray-900 font-semibold' : 'text-gray-400'
-                    )}
-                  >
-                    {step.label}
-                  </p>
+                      <div className="pt-1">
+                        <p
+                          className={cn(
+                            'text-sm',
+                            isActive ? 'text-gray-900 font-semibold' : 'text-gray-400'
+                          )}
+                        >
+                          {step.label}
+                        </p>
 
-                  <p className="mt-1 text-xs text-gray-500">
-                    {isCurrent
-                      ? 'Current step'
-                      : index < currentIndex
-                      ? 'Completed'
-                      : 'Pending'}
-                  </p>
+                        <p className="mt-1 text-xs text-gray-500">
+                          {isCurrent
+                            ? 'Current step'
+                            : index < currentIndex
+                            ? 'Completed'
+                            : 'Pending'}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="hidden sm:block">
+              <div className="relative">
+                <div className="absolute top-5 left-0 right-0 h-1 bg-gray-200 rounded-full" />
+                <div
+                  className="absolute top-5 left-0 h-1 bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-full transition-all"
+                  style={{
+                    width: `${steps.length > 1 ? (currentIndex / (steps.length - 1)) * 100 : 0}%`,
+                  }}
+                />
+
+                <div className="relative flex items-start justify-between gap-3">
+                  {steps.map((step, index) => {
+                    const Icon = step.icon;
+                    const isActive = index <= currentIndex;
+                    const isCurrent = index === currentIndex;
+
+                    return (
+                      <div key={step.status} className="flex min-w-[92px] flex-col items-center text-center">
+                        <div
+                          className={cn(
+                            'w-10 h-10 rounded-full flex items-center justify-center transition-colors bg-white border-4',
+                            isActive
+                              ? 'border-violet-600 text-violet-600'
+                              : 'border-gray-200 text-gray-400',
+                            isCurrent && 'ring-4 ring-violet-100'
+                          )}
+                        >
+                          <Icon className="w-5 h-5" />
+                        </div>
+
+                        <span
+                          className={cn(
+                            'text-xs mt-3',
+                            isActive ? 'text-gray-900 font-medium' : 'text-gray-400'
+                          )}
+                        >
+                          {step.label}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
-            );
-          })}
-        </div>
-      </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
-      {/* Desktop: horizontal tracker */}
-      <div className="hidden sm:block">
-        <div className="relative">
-          <div className="absolute top-5 left-0 right-0 h-1 bg-gray-200 rounded-full" />
-          <div
-            className="absolute top-5 left-0 h-1 bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-full transition-all"
-            style={{
-              width: `${steps.length > 1 ? (currentIndex / (steps.length - 1)) * 100 : 0}%`,
-            }}
-          />
-
-          <div className="relative flex items-start justify-between gap-3">
-            {steps.map((step, index) => {
-              const Icon = step.icon;
-              const isActive = index <= currentIndex;
-              const isCurrent = index === currentIndex;
-
-              return (
-                <div key={step.status} className="flex min-w-[92px] flex-col items-center text-center">
-                  <div
-                    className={cn(
-                      'w-10 h-10 rounded-full flex items-center justify-center transition-colors bg-white border-4',
-                      isActive
-                        ? 'border-violet-600 text-violet-600'
-                        : 'border-gray-200 text-gray-400',
-                      isCurrent && 'ring-4 ring-violet-100'
-                    )}
-                  >
-                    <Icon className="w-5 h-5" />
-                  </div>
-
-                  <span
-                    className={cn(
-                      'text-xs mt-3',
-                      isActive ? 'text-gray-900 font-medium' : 'text-gray-400'
-                    )}
-                  >
-                    {step.label}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    </CardContent>
-  </Card>
-)}
+      {['in_progress', 'rider_marked_complete', 'disputed'].includes(job.status) && (
+        <Card className="border-amber-200 bg-amber-50/80">
+          <CardContent className="p-4 sm:p-5">
+            <div className="flex items-start gap-3">
+              <ShieldAlert className="w-5 h-5 text-amber-700 mt-0.5 shrink-0" />
+              <div className="space-y-1">
+                <p className="font-medium text-amber-900">Support and refund review</p>
+                <p className="text-sm text-amber-800 leading-6">
+                  If you report an issue, your case will be reviewed manually by admin. Refunds are
+                  not processed automatically in-app. If a refund is approved, it will be handled
+                  manually after review and rider settlement checks.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card>
@@ -729,10 +752,10 @@ export function JobDetailsPage() {
           <Button
             onClick={() => setShowDisputeDialog(true)}
             variant="outline"
-            className="w-full sm:w-auto text-amber-600 border-amber-200 hover:bg-amber-50"
+            className="w-full sm:w-auto text-amber-700 border-amber-200 hover:bg-amber-50"
           >
-            <HelpCircle className="w-4 h-4 mr-2" />
-            Report Issue
+            <FileText className="w-4 h-4 mr-2" />
+            Open Support Case
           </Button>
         )}
       </div>
@@ -777,10 +800,17 @@ export function JobDetailsPage() {
       <Dialog open={showDisputeDialog} onOpenChange={setShowDisputeDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Report an Issue</DialogTitle>
+            <DialogTitle>Open Support Case</DialogTitle>
           </DialogHeader>
 
           <div className="space-y-4">
+            <div className="rounded-lg border border-amber-200 bg-amber-50 p-3">
+              <p className="text-sm text-amber-800 leading-6">
+                This will open a manual support case for admin review. Refunds are not automatic.
+                If a refund is approved, it will be handled manually after the case is reviewed.
+              </p>
+            </div>
+
             <div>
               <label className="text-sm font-medium text-gray-700">Issue Type</label>
               <select
@@ -793,15 +823,16 @@ export function JobDetailsPage() {
                 <option value="damaged">Package damaged</option>
                 <option value="wrong_item">Wrong item delivered</option>
                 <option value="rider_no_show">Rider didn&apos;t show up</option>
+                <option value="refund_request">Refund request</option>
                 <option value="other">Other</option>
               </select>
             </div>
 
             <Textarea
-              placeholder="Describe the issue..."
+              placeholder="Describe the issue clearly. Include what happened, what you expected, and whether you are requesting a refund..."
               value={disputeDescription}
               onChange={(e) => setDisputeDescription(e.target.value)}
-              rows={4}
+              rows={5}
             />
 
             <Button
@@ -809,7 +840,7 @@ export function JobDetailsPage() {
               disabled={!disputeDescription.trim()}
               className="w-full bg-amber-600 hover:bg-amber-700 text-white"
             >
-              Submit Report
+              Submit Support Case
             </Button>
           </div>
         </DialogContent>
