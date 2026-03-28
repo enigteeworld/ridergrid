@@ -18,7 +18,6 @@ import {
   ArrowLeft,
   XCircle,
   Wallet,
-  ShieldAlert,
   FileText,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -409,16 +408,16 @@ export function JobDetailsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-violet-600" />
+      <div className="flex h-64 items-center justify-center">
+        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-violet-600" />
       </div>
     );
   }
 
   if (!job) {
     return (
-      <div className="text-center py-12">
-        <AlertCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+      <div className="py-12 text-center">
+        <AlertCircle className="mx-auto mb-4 h-16 w-16 text-gray-300" />
         <h2 className="text-xl font-semibold text-gray-900">Delivery not found</h2>
         <Button onClick={() => navigate('/jobs')} className="mt-4">
           Back to My Deliveries
@@ -435,19 +434,19 @@ export function JobDetailsPage() {
         onClick={() => navigate('/jobs')}
         className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-700"
       >
-        <ArrowLeft className="w-5 h-5" />
+        <ArrowLeft className="h-5 w-5" />
         Back to My Deliveries
       </button>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <h1 className="text-2xl font-bold text-gray-900 break-words">{job.job_number}</h1>
+          <h1 className="break-words text-2xl font-bold text-gray-900">{job.job_number}</h1>
           <p className="text-gray-500">Created {formatDateTime(job.created_at)}</p>
         </div>
 
         <span
           className={cn(
-            'inline-flex self-start px-3 py-1 rounded-full text-sm font-medium',
+            'inline-flex self-start rounded-full px-3 py-1 text-sm font-medium',
             getStatusColorClass(job.status)
           )}
         >
@@ -479,18 +478,18 @@ export function JobDetailsPage() {
                       <div className="flex flex-col items-center">
                         <div
                           className={cn(
-                            'w-10 h-10 rounded-full flex items-center justify-center transition-colors shrink-0',
+                            'h-10 w-10 shrink-0 rounded-full transition-colors flex items-center justify-center',
                             isActive ? 'bg-violet-600 text-white' : 'bg-gray-100 text-gray-400',
                             isCurrent && 'ring-4 ring-violet-100'
                           )}
                         >
-                          <Icon className="w-5 h-5" />
+                          <Icon className="h-5 w-5" />
                         </div>
 
                         {!isLast && (
                           <div
                             className={cn(
-                              'mt-2 w-0.5 h-8 rounded-full',
+                              'mt-2 h-8 w-0.5 rounded-full',
                               index < currentIndex ? 'bg-violet-600' : 'bg-gray-200'
                             )}
                           />
@@ -501,7 +500,7 @@ export function JobDetailsPage() {
                         <p
                           className={cn(
                             'text-sm',
-                            isActive ? 'text-gray-900 font-semibold' : 'text-gray-400'
+                            isActive ? 'font-semibold text-gray-900' : 'text-gray-400'
                           )}
                         >
                           {step.label}
@@ -523,9 +522,9 @@ export function JobDetailsPage() {
 
             <div className="hidden sm:block">
               <div className="relative">
-                <div className="absolute top-5 left-0 right-0 h-1 bg-gray-200 rounded-full" />
+                <div className="absolute left-0 right-0 top-5 h-1 rounded-full bg-gray-200" />
                 <div
-                  className="absolute top-5 left-0 h-1 bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-full transition-all"
+                  className="absolute left-0 top-5 h-1 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 transition-all"
                   style={{
                     width: `${steps.length > 1 ? (currentIndex / (steps.length - 1)) * 100 : 0}%`,
                   }}
@@ -538,23 +537,26 @@ export function JobDetailsPage() {
                     const isCurrent = index === currentIndex;
 
                     return (
-                      <div key={step.status} className="flex min-w-[92px] flex-col items-center text-center">
+                      <div
+                        key={step.status}
+                        className="flex min-w-[92px] flex-col items-center text-center"
+                      >
                         <div
                           className={cn(
-                            'w-10 h-10 rounded-full flex items-center justify-center transition-colors bg-white border-4',
+                            'h-10 w-10 rounded-full border-4 bg-white transition-colors flex items-center justify-center',
                             isActive
                               ? 'border-violet-600 text-violet-600'
                               : 'border-gray-200 text-gray-400',
                             isCurrent && 'ring-4 ring-violet-100'
                           )}
                         >
-                          <Icon className="w-5 h-5" />
+                          <Icon className="h-5 w-5" />
                         </div>
 
                         <span
                           className={cn(
-                            'text-xs mt-3',
-                            isActive ? 'text-gray-900 font-medium' : 'text-gray-400'
+                            'mt-3 text-xs',
+                            isActive ? 'font-medium text-gray-900' : 'text-gray-400'
                           )}
                         >
                           {step.label}
@@ -569,62 +571,46 @@ export function JobDetailsPage() {
         </Card>
       )}
 
-      {(['in_progress', 'rider_marked_complete', 'disputed'].includes(job.status) || existingDispute) && (
-        <Card className="border-amber-200 bg-amber-50/80">
-          <CardContent className="p-4 sm:p-5 space-y-4">
-            <div className="flex items-start gap-3">
-              <ShieldAlert className="w-5 h-5 text-amber-700 mt-0.5 shrink-0" />
-              <div className="space-y-1">
-                <p className="font-medium text-amber-900">Support and refund review</p>
-                <p className="text-sm text-amber-800 leading-6">
-                  If you report an issue, your case will be reviewed manually by admin. Refunds are
-                  not processed automatically in-app. If a refund is approved, it will be handled
-                  manually after review and rider settlement checks.
+      {existingDispute && (
+        <Card className="border-amber-200 bg-amber-50/50">
+          <CardContent className="space-y-3 p-4 sm:p-5">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-sm text-gray-500">Current support case</p>
+                <p className="font-medium text-gray-900">
+                  {formatDisputeText(existingDispute.dispute_type)}
                 </p>
               </div>
+
+              <span
+                className={cn(
+                  'inline-flex self-start rounded-full px-2.5 py-1 text-xs font-medium',
+                  getDisputeBadgeClass(existingDispute.status)
+                )}
+              >
+                {formatDisputeText(existingDispute.status)}
+              </span>
             </div>
 
-            {existingDispute && (
-              <div className="rounded-lg bg-white/80 border border-amber-200 p-4 space-y-3">
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <p className="text-sm text-gray-500">Current support case</p>
-                    <p className="font-medium text-gray-900">
-                      {formatDisputeText(existingDispute.dispute_type)}
-                    </p>
-                  </div>
+            <div>
+              <p className="mb-1 text-sm text-gray-500">Your message</p>
+              <p className="whitespace-pre-wrap text-sm text-gray-700">
+                {existingDispute.description}
+              </p>
+            </div>
 
-                  <span
-                    className={cn(
-                      'inline-flex self-start px-2.5 py-1 rounded-full text-xs font-medium',
-                      getDisputeBadgeClass(existingDispute.status)
-                    )}
-                  >
-                    {formatDisputeText(existingDispute.status)}
-                  </span>
-                </div>
-
-                <div>
-                  <p className="text-sm text-gray-500 mb-1">Your message</p>
-                  <p className="text-sm text-gray-700 whitespace-pre-wrap">
-                    {existingDispute.description}
-                  </p>
-                </div>
-
-                {existingDispute.resolution_notes && (
-                  <div>
-                    <p className="text-sm text-gray-500 mb-1">Admin update</p>
-                    <p className="text-sm text-gray-700 whitespace-pre-wrap">
-                      {existingDispute.resolution_notes}
-                    </p>
-                  </div>
-                )}
-
-                <div className="text-xs text-gray-500">
-                  Opened {formatDateTime(existingDispute.created_at)}
-                </div>
+            {existingDispute.resolution_notes && (
+              <div>
+                <p className="mb-1 text-sm text-gray-500">Admin update</p>
+                <p className="whitespace-pre-wrap text-sm text-gray-700">
+                  {existingDispute.resolution_notes}
+                </p>
               </div>
             )}
+
+            <div className="text-xs text-gray-500">
+              Opened {formatDateTime(existingDispute.created_at)}
+            </div>
           </CardContent>
         </Card>
       )}
@@ -632,26 +618,26 @@ export function JobDetailsPage() {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card>
           <CardContent className="p-4 sm:p-5">
-            <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-violet-600" />
+            <h3 className="mb-4 flex items-center gap-2 font-semibold text-gray-900">
+              <MapPin className="h-5 w-5 text-violet-600" />
               Pickup
             </h3>
 
-            <p className="text-gray-700 break-words">{job.pickup_address}</p>
+            <p className="break-words text-gray-700">{job.pickup_address}</p>
 
             <div className="mt-3 space-y-2 text-sm text-gray-500">
               <p className="flex items-start gap-2">
-                <User className="w-4 h-4 mt-0.5 shrink-0" />
+                <User className="mt-0.5 h-4 w-4 shrink-0" />
                 <span className="break-words">{job.pickup_contact_name}</span>
               </p>
               <p className="flex items-start gap-2">
-                <Phone className="w-4 h-4 mt-0.5 shrink-0" />
+                <Phone className="mt-0.5 h-4 w-4 shrink-0" />
                 <span className="break-words">{job.pickup_contact_phone}</span>
               </p>
             </div>
 
             {job.pickup_notes && (
-              <p className="mt-3 text-sm text-gray-500 bg-gray-50 p-3 rounded-lg break-words">
+              <p className="mt-3 break-words rounded-lg bg-gray-50 p-3 text-sm text-gray-500">
                 Note: {job.pickup_notes}
               </p>
             )}
@@ -660,26 +646,26 @@ export function JobDetailsPage() {
 
         <Card>
           <CardContent className="p-4 sm:p-5">
-            <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-green-600" />
+            <h3 className="mb-4 flex items-center gap-2 font-semibold text-gray-900">
+              <MapPin className="h-5 w-5 text-green-600" />
               Delivery
             </h3>
 
-            <p className="text-gray-700 break-words">{job.delivery_address}</p>
+            <p className="break-words text-gray-700">{job.delivery_address}</p>
 
             <div className="mt-3 space-y-2 text-sm text-gray-500">
               <p className="flex items-start gap-2">
-                <User className="w-4 h-4 mt-0.5 shrink-0" />
+                <User className="mt-0.5 h-4 w-4 shrink-0" />
                 <span className="break-words">{job.delivery_contact_name}</span>
               </p>
               <p className="flex items-start gap-2">
-                <Phone className="w-4 h-4 mt-0.5 shrink-0" />
+                <Phone className="mt-0.5 h-4 w-4 shrink-0" />
                 <span className="break-words">{job.delivery_contact_phone}</span>
               </p>
             </div>
 
             {job.delivery_notes && (
-              <p className="mt-3 text-sm text-gray-500 bg-gray-50 p-3 rounded-lg break-words">
+              <p className="mt-3 break-words rounded-lg bg-gray-50 p-3 text-sm text-gray-500">
                 Note: {job.delivery_notes}
               </p>
             )}
@@ -690,12 +676,12 @@ export function JobDetailsPage() {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card>
           <CardContent className="p-4 sm:p-5">
-            <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <Package className="w-5 h-5 text-amber-600" />
+            <h3 className="mb-4 flex items-center gap-2 font-semibold text-gray-900">
+              <Package className="h-5 w-5 text-amber-600" />
               Package Details
             </h3>
 
-            <p className="text-gray-700 break-words">{job.package_description}</p>
+            <p className="break-words text-gray-700">{job.package_description}</p>
 
             {job.package_weight_kg && (
               <p className="mt-2 text-sm text-gray-500">Weight: {job.package_weight_kg} kg</p>
@@ -705,24 +691,24 @@ export function JobDetailsPage() {
 
         <Card>
           <CardContent className="p-4 sm:p-5">
-            <h3 className="font-semibold text-gray-900 mb-4">Payment</h3>
+            <h3 className="mb-4 font-semibold text-gray-900">Payment</h3>
 
             <div className="space-y-3">
               <div className="flex items-start justify-between gap-3">
                 <span className="text-gray-600">Delivery Fee</span>
-                <span className="font-medium text-right">{formatCurrency(job.agreed_amount)}</span>
+                <span className="text-right font-medium">{formatCurrency(job.agreed_amount)}</span>
               </div>
 
               <div className="flex items-start justify-between gap-3">
                 <span className="text-gray-600">Platform Fee</span>
-                <span className="font-medium text-red-600 text-right">
+                <span className="text-right font-medium text-red-600">
                   -{formatCurrency(job.platform_fee)}
                 </span>
               </div>
 
-              <div className="border-t pt-3 flex items-start justify-between gap-3">
+              <div className="flex items-start justify-between gap-3 border-t pt-3">
                 <span className="font-medium text-gray-900">Rider Receives</span>
-                <span className="font-bold text-violet-700 text-right">
+                <span className="text-right font-bold text-violet-700">
                   {formatCurrency(job.rider_earnings)}
                 </span>
               </div>
@@ -734,24 +720,24 @@ export function JobDetailsPage() {
       {job.rider_name && (
         <Card>
           <CardContent className="p-4 sm:p-5">
-            <h3 className="font-semibold text-gray-900 mb-4">Rider</h3>
+            <h3 className="mb-4 font-semibold text-gray-900">Rider</h3>
 
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-              <div className="flex items-center gap-4 min-w-0">
-                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 flex items-center justify-center text-white text-xl font-medium shrink-0">
+              <div className="min-w-0 flex items-center gap-4">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 text-xl font-medium text-white">
                   {job.rider_name.charAt(0)}
                 </div>
 
                 <div className="min-w-0">
-                  <p className="font-medium text-gray-900 break-words">{job.rider_name}</p>
-                  <p className="text-sm text-gray-500 break-words">{job.rider_phone}</p>
+                  <p className="break-words font-medium text-gray-900">{job.rider_name}</p>
+                  <p className="break-words text-sm text-gray-500">{job.rider_phone}</p>
                 </div>
               </div>
 
               <div className="flex gap-2 sm:ml-auto">
                 <a href={`tel:${job.rider_phone}`} className="flex-1 sm:flex-none">
                   <Button variant="outline" className="w-full sm:w-auto" size="icon">
-                    <Phone className="w-4 h-4" />
+                    <Phone className="h-4 w-4" />
                   </Button>
                 </a>
 
@@ -762,7 +748,7 @@ export function JobDetailsPage() {
                   className="flex-1 sm:flex-none"
                 >
                   <Button variant="outline" className="w-full sm:w-auto" size="icon">
-                    <MessageCircle className="w-4 h-4" />
+                    <MessageCircle className="h-4 w-4" />
                   </Button>
                 </a>
               </div>
@@ -774,23 +760,23 @@ export function JobDetailsPage() {
       {deliveryProofs.length > 0 && (
         <Card>
           <CardContent className="p-4 sm:p-5">
-            <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <Camera className="w-5 h-5" />
+            <h3 className="mb-4 flex items-center gap-2 font-semibold text-gray-900">
+              <Camera className="h-5 w-5" />
               Delivery Proof
             </h3>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
               {deliveryProofs.map((proof, index) => (
-                <div key={proof.id} className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                <div key={proof.id} className="aspect-square overflow-hidden rounded-lg bg-gray-100">
                   {proof.image_url ? (
                     <img
                       src={proof.image_url}
                       alt={`Proof ${index + 1}`}
-                      className="w-full h-full object-cover"
+                      className="h-full w-full object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <CheckCircle className="w-8 h-8 text-green-500" />
+                    <div className="flex h-full w-full items-center justify-center">
+                      <CheckCircle className="h-8 w-8 text-green-500" />
                     </div>
                   )}
                 </div>
@@ -800,21 +786,21 @@ export function JobDetailsPage() {
         </Card>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:flex xl:flex-wrap gap-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:flex xl:flex-wrap">
         {job.status === 'awaiting_funding' && (
           <Button
             onClick={handleFundDelivery}
             disabled={isFunding}
-            className="w-full sm:w-auto bg-violet-600 hover:bg-violet-700 text-white"
+            className="w-full bg-violet-600 text-white hover:bg-violet-700 sm:w-auto"
           >
             {isFunding ? (
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                 Funding...
               </div>
             ) : (
               <>
-                <Wallet className="w-4 h-4 mr-2" />
+                <Wallet className="mr-2 h-4 w-4" />
                 Fund Delivery
               </>
             )}
@@ -825,16 +811,16 @@ export function JobDetailsPage() {
           <Button
             onClick={handleMarkComplete}
             disabled={isConfirmingCompletion}
-            className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white"
+            className="w-full bg-green-600 text-white hover:bg-green-700 sm:w-auto"
           >
             {isConfirmingCompletion ? (
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                 Confirming...
               </div>
             ) : (
               <>
-                <CheckCircle className="w-4 h-4 mr-2" />
+                <CheckCircle className="mr-2 h-4 w-4" />
                 Confirm Delivery
               </>
             )}
@@ -845,9 +831,9 @@ export function JobDetailsPage() {
           <Button
             onClick={handleCancelJob}
             variant="outline"
-            className="w-full sm:w-auto text-red-600 border-red-200 hover:bg-red-50"
+            className="w-full border-red-200 text-red-600 hover:bg-red-50 sm:w-auto"
           >
-            <XCircle className="w-4 h-4 mr-2" />
+            <XCircle className="mr-2 h-4 w-4" />
             Cancel Delivery
           </Button>
         )}
@@ -855,9 +841,9 @@ export function JobDetailsPage() {
         {job.status === 'completed' && !existingRating && (
           <Button
             onClick={() => setShowRatingDialog(true)}
-            className="w-full sm:w-auto bg-violet-600 hover:bg-violet-700 text-white"
+            className="w-full bg-violet-600 text-white hover:bg-violet-700 sm:w-auto"
           >
-            <Star className="w-4 h-4 mr-2" />
+            <Star className="mr-2 h-4 w-4" />
             Rate Rider
           </Button>
         )}
@@ -866,9 +852,9 @@ export function JobDetailsPage() {
           <Button
             onClick={() => setShowDisputeDialog(true)}
             variant="outline"
-            className="w-full sm:w-auto text-amber-700 border-amber-200 hover:bg-amber-50"
+            className="w-full border-amber-200 text-amber-700 hover:bg-amber-50 sm:w-auto"
           >
-            <FileText className="w-4 h-4 mr-2" />
+            <FileText className="mr-2 h-4 w-4" />
             Open Support Case
           </Button>
         )}
@@ -881,13 +867,13 @@ export function JobDetailsPage() {
           </DialogHeader>
 
           <div className="space-y-4">
-            <div className="flex justify-center gap-2 flex-wrap">
+            <div className="flex flex-wrap justify-center gap-2">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button key={star} onClick={() => setRating(star)} className="p-1">
                   <Star
                     className={cn(
-                      'w-8 h-8 transition-colors',
-                      star <= rating ? 'text-amber-400 fill-amber-400' : 'text-gray-300'
+                      'h-8 w-8 transition-colors',
+                      star <= rating ? 'fill-amber-400 text-amber-400' : 'text-gray-300'
                     )}
                   />
                 </button>
@@ -903,7 +889,7 @@ export function JobDetailsPage() {
 
             <Button
               onClick={handleSubmitRating}
-              className="w-full bg-violet-600 hover:bg-violet-700 text-white"
+              className="w-full bg-violet-600 text-white hover:bg-violet-700"
             >
               Submit Rating
             </Button>
@@ -919,7 +905,7 @@ export function JobDetailsPage() {
 
           <div className="space-y-4">
             <div className="rounded-lg border border-amber-200 bg-amber-50 p-3">
-              <p className="text-sm text-amber-800 leading-6">
+              <p className="text-sm leading-6 text-amber-800">
                 This will open a manual support case for admin review. Refunds are not automatic.
                 If a refund is approved, it will be handled manually after the case is reviewed.
               </p>
@@ -930,7 +916,7 @@ export function JobDetailsPage() {
               <select
                 value={disputeReason}
                 onChange={(e) => setDisputeReason(e.target.value)}
-                className="w-full mt-1 p-2 border rounded-lg bg-white"
+                className="mt-1 w-full rounded-lg border bg-white p-2"
               >
                 <option value="">Select an issue</option>
                 <option value="not_delivered">Package not delivered</option>
@@ -952,7 +938,7 @@ export function JobDetailsPage() {
             <Button
               onClick={handleOpenDispute}
               disabled={!disputeDescription.trim()}
-              className="w-full bg-amber-600 hover:bg-amber-700 text-white"
+              className="w-full bg-amber-600 text-white hover:bg-amber-700"
             >
               Submit Support Case
             </Button>
