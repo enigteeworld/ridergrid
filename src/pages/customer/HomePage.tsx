@@ -10,6 +10,7 @@ import {
   Star,
   Wallet,
   ChevronRight,
+  ChevronDown,
   Bike,
   CheckCircle,
   Clock3,
@@ -55,6 +56,7 @@ export function HomePage() {
   const [nearbyRiders, setNearbyRiders] = useState<HomeRider[]>([]);
   const [totalDeliveries, setTotalDeliveries] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [expandedJobs, setExpandedJobs] = useState<string[]>([]);
 
   const fetchData = useCallback(async () => {
     if (!user?.id) {
@@ -158,6 +160,20 @@ export function HomePage() {
     fetchData();
   }, [fetchData]);
 
+  useEffect(() => {
+    if (recentJobs.length > 0) {
+      setExpandedJobs((prev) => prev.filter((id) => recentJobs.some((job) => job.id === id)));
+    } else {
+      setExpandedJobs([]);
+    }
+  }, [recentJobs]);
+
+  const toggleJobExpanded = (jobId: string) => {
+    setExpandedJobs((prev) =>
+      prev.includes(jobId) ? prev.filter((id) => id !== jobId) : [...prev, jobId]
+    );
+  };
+
   const handleContactRider = (rider: HomeRider, type: 'call' | 'whatsapp') => {
     if (!rider.phone) {
       showToast('error', 'Unavailable', 'This rider has no phone number yet');
@@ -225,13 +241,13 @@ export function HomePage() {
       <Card className="border-violet-100 bg-gradient-to-r from-violet-50 via-white to-fuchsia-50 shadow-sm">
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
-            <div className="mt-0.5 w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center shrink-0">
-              <ShieldCheck className="w-5 h-5 text-violet-600" />
+            <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-100">
+              <ShieldCheck className="h-5 w-5 text-violet-600" />
             </div>
 
             <div className="min-w-0">
               <p className="font-semibold text-gray-900">Pay inside Dispatch NG</p>
-              <p className="text-sm text-gray-600 mt-1 leading-6">
+              <p className="mt-1 text-sm leading-6 text-gray-600">
                 For your protection, always fund deliveries inside the app. In-app payments are
                 covered by escrow, support review, and dispute handling if anything goes wrong.
               </p>
@@ -241,16 +257,16 @@ export function HomePage() {
       </Card>
 
       <div className="grid grid-cols-1 gap-4">
-        <Card className="bg-gradient-to-br from-violet-500 to-purple-600 text-white border-0">
+        <Card className="border-0 bg-gradient-to-br from-violet-500 to-purple-600 text-white">
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-violet-100 text-sm">Wallet Balance</p>
-                <p className="text-3xl font-bold mt-2">
+                <p className="text-sm text-violet-100">Wallet Balance</p>
+                <p className="mt-2 text-3xl font-bold">
                   {formatCurrency(wallet?.available_balance || 0)}
                 </p>
               </div>
-              <Wallet className="w-9 h-9 text-violet-200" />
+              <Wallet className="h-9 w-9 text-violet-200" />
             </div>
           </CardContent>
         </Card>
@@ -259,10 +275,10 @@ export function HomePage() {
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 text-sm">Total Deliveries</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{totalDeliveries}</p>
+                <p className="text-sm text-gray-500">Total Deliveries</p>
+                <p className="mt-2 text-3xl font-bold text-gray-900">{totalDeliveries}</p>
               </div>
-              <Package className="w-9 h-9 text-violet-500" />
+              <Package className="h-9 w-9 text-violet-500" />
             </div>
           </CardContent>
         </Card>
@@ -271,10 +287,10 @@ export function HomePage() {
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 text-sm">Active Jobs</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{activeJobCount}</p>
+                <p className="text-sm text-gray-500">Active Jobs</p>
+                <p className="mt-2 text-3xl font-bold text-gray-900">{activeJobCount}</p>
               </div>
-              <Clock className="w-9 h-9 text-amber-500" />
+              <Clock className="h-9 w-9 text-amber-500" />
             </div>
           </CardContent>
         </Card>
@@ -283,35 +299,35 @@ export function HomePage() {
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 text-sm">Riders Near You</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{nearbyRiders.length}</p>
+                <p className="text-sm text-gray-500">Riders Near You</p>
+                <p className="mt-2 text-3xl font-bold text-gray-900">{nearbyRiders.length}</p>
               </div>
-              <Bike className="w-9 h-9 text-green-500" />
+              <Bike className="h-9 w-9 text-green-500" />
             </div>
           </CardContent>
         </Card>
       </div>
 
       <div>
-        <div className="flex items-center justify-between mb-4">
+        <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-gray-900">Recent Deliveries</h2>
           <Link
             to="/jobs"
-            className="text-violet-600 hover:text-violet-700 text-sm font-medium flex items-center gap-1"
+            className="flex items-center gap-1 text-sm font-medium text-violet-600 hover:text-violet-700"
           >
             View All
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="h-4 w-4" />
           </Link>
         </div>
 
         {recentJobs.length === 0 ? (
-          <Card className="border-dashed border-2">
+          <Card className="border-2 border-dashed">
             <CardContent className="p-8 text-center">
-              <div className="w-16 h-16 mx-auto bg-violet-100 rounded-full flex items-center justify-center mb-4">
-                <Package className="w-8 h-8 text-violet-500" />
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-violet-100">
+                <Package className="h-8 w-8 text-violet-500" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No deliveries yet</h3>
-              <p className="text-gray-500 mb-4">
+              <h3 className="mb-2 text-lg font-medium text-gray-900">No deliveries yet</h3>
+              <p className="mb-4 text-gray-500">
                 Start by choosing a rider and creating your first delivery
               </p>
               <Link to="/find-riders">
@@ -323,101 +339,167 @@ export function HomePage() {
           </Card>
         ) : (
           <div className="space-y-3">
-            {recentJobs.map((job) => (
-              <Link key={job.id} to={`/jobs/${job.id}`}>
-                <Card className="hover:shadow-md transition-shadow cursor-pointer">
-                  <CardContent className="p-4">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-2 flex-wrap">
-                          <span className="text-sm font-medium text-gray-500">{job.job_number}</span>
-                          <span
-                            className={cn(
-                              'px-2 py-0.5 rounded-full text-xs font-medium',
-                              getStatusColor(job.status)
-                            )}
-                          >
-                            {getStatusLabel(job.status)}
-                          </span>
-                        </div>
+            {recentJobs.map((job) => {
+              const isExpanded = expandedJobs.includes(job.id);
 
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2 text-sm">
-                            <MapPin className="w-4 h-4 text-gray-400 shrink-0" />
-                            <span className="text-gray-600 truncate">{job.pickup_address}</span>
+              return (
+                <Card
+                  key={job.id}
+                  className="overflow-hidden border border-violet-100 bg-gradient-to-br from-white to-violet-50/40 shadow-sm transition-all hover:shadow-md"
+                >
+                  <button
+                    type="button"
+                    onClick={() => toggleJobExpanded(job.id)}
+                    className="w-full text-left"
+                  >
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="min-w-0 flex-1">
+                          <div className="mb-2 flex flex-wrap items-center gap-2">
+                            <span className="text-sm font-semibold text-gray-700">
+                              {job.job_number}
+                            </span>
+                            <span
+                              className={cn(
+                                'rounded-full px-2.5 py-0.5 text-xs font-medium',
+                                getStatusColor(job.status)
+                              )}
+                            >
+                              {getStatusLabel(job.status)}
+                            </span>
                           </div>
-                          <div className="flex items-center gap-2 text-sm">
-                            <MapPin className="w-4 h-4 text-violet-500 shrink-0" />
-                            <span className="text-gray-600 truncate">{job.delivery_address}</span>
-                          </div>
-                        </div>
 
-                        {job.rider_name && (
-                          <div className="flex items-center gap-2 mt-2 flex-wrap">
-                            <div className="w-6 h-6 rounded-full bg-violet-100 flex items-center justify-center text-xs font-medium text-violet-700">
-                              {job.rider_name.charAt(0)}
+                          <div className="flex items-center gap-2 text-sm text-gray-500">
+                            <Clock className="h-4 w-4 shrink-0" />
+                            <span>{formatDistanceToNow(job.created_at)}</span>
+                          </div>
+
+                          <div className="mt-3 flex items-center justify-between gap-3">
+                            <div className="min-w-0">
+                              <p className="text-xs uppercase tracking-wide text-gray-400">
+                                Delivery Fee
+                              </p>
+                              <p className="text-lg font-bold text-gray-900">
+                                {formatCurrency(job.agreed_amount)}
+                              </p>
                             </div>
-                            <span className="text-sm text-gray-600">{job.rider_name}</span>
-                            {job.rider_rating && (
-                              <div className="flex items-center gap-1">
-                                <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
-                                <span className="text-sm text-gray-500">{job.rider_rating}</span>
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
 
-                      <div className="text-right shrink-0">
-                        <p className="font-semibold text-gray-900">
-                          {formatCurrency(job.agreed_amount)}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {formatDistanceToNow(job.created_at)}
-                        </p>
+                            <div className="flex items-center gap-2 rounded-full bg-violet-100 px-3 py-1 text-sm font-medium text-violet-700">
+                              <span>{isExpanded ? 'Hide details' : 'View details'}</span>
+                              <ChevronDown
+                                className={cn(
+                                  'h-4 w-4 transition-transform duration-200',
+                                  isExpanded && 'rotate-180'
+                                )}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </button>
+
+                  <div
+                    className={cn(
+                      'grid transition-all duration-300 ease-out',
+                      isExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+                    )}
+                  >
+                    <div className="overflow-hidden">
+                      <div className="border-t border-violet-100/80 bg-white/70 px-4 pb-4 pt-1">
+                        <div className="space-y-3 pt-3">
+                          <div className="rounded-xl bg-gray-50 p-3">
+                            <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                              <MapPin className="h-3.5 w-3.5 text-gray-400" />
+                              Pickup
+                            </div>
+                            <p className="text-sm text-gray-700">{job.pickup_address}</p>
+                          </div>
+
+                          <div className="rounded-xl bg-violet-50 p-3">
+                            <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-violet-600">
+                              <MapPin className="h-3.5 w-3.5 text-violet-500" />
+                              Delivery
+                            </div>
+                            <p className="text-sm text-gray-700">{job.delivery_address}</p>
+                          </div>
+
+                          {job.rider_name && (
+                            <div className="flex items-center justify-between gap-3 rounded-xl border border-violet-100 bg-white p-3">
+                              <div className="flex min-w-0 items-center gap-3">
+                                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-violet-100 text-sm font-semibold text-violet-700">
+                                  {job.rider_name.charAt(0)}
+                                </div>
+                                <div className="min-w-0">
+                                  <p className="truncate text-sm font-medium text-gray-900">
+                                    {job.rider_name}
+                                  </p>
+                                  <div className="mt-0.5 flex items-center gap-2 text-xs text-gray-500">
+                                    <span>Assigned rider</span>
+                                    {job.rider_rating && (
+                                      <span className="flex items-center gap-1">
+                                        <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                                        {job.rider_rating}
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                          <div className="pt-1">
+                            <Link to={`/jobs/${job.id}`} className="block">
+                              <Button className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white">
+                                Open Delivery
+                                <ArrowRight className="ml-2 h-4 w-4" />
+                              </Button>
+                            </Link>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </CardContent>
+                  </div>
                 </Card>
-              </Link>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
 
       <div>
-        <div className="flex items-center justify-between mb-4">
+        <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-gray-900">Riders Near You</h2>
           <Link
             to="/find-riders"
-            className="text-violet-600 hover:text-violet-700 text-sm font-medium flex items-center gap-1"
+            className="flex items-center gap-1 text-sm font-medium text-violet-600 hover:text-violet-700"
           >
             Find More
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="h-4 w-4" />
           </Link>
         </div>
 
         {nearbyRiders.length === 0 ? (
-          <Card className="border-dashed border-2">
+          <Card className="border-2 border-dashed">
             <CardContent className="p-6 text-center">
               <p className="text-gray-500">No riders available at the moment</p>
             </CardContent>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {nearbyRiders.map((rider) => (
               <Card
                 key={rider.id}
-                className="w-full hover:shadow-lg transition-all border border-gray-100 overflow-hidden"
+                className="w-full overflow-hidden border border-gray-100 transition-all hover:shadow-lg"
               >
                 <CardContent className="p-5">
                   <div className="relative">
-                    <div className="absolute top-0 right-0">
+                    <div className="absolute right-0 top-0">
                       <div
-                        className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center"
+                        className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500"
                         title="Verified"
                       >
-                        <CheckCircle className="w-4 h-4 text-white" />
+                        <CheckCircle className="h-4 w-4 text-white" />
                       </div>
                     </div>
 
@@ -427,35 +509,35 @@ export function HomePage() {
                           <img
                             src={rider.avatar_url}
                             alt={rider.full_name}
-                            className="w-20 h-20 rounded-full object-cover mx-auto border-4 border-white shadow-lg"
+                            className="mx-auto h-20 w-20 rounded-full border-4 border-white object-cover shadow-lg"
                           />
                         ) : (
-                          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 flex items-center justify-center mx-auto border-4 border-white shadow-lg text-white text-2xl font-semibold">
+                          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-violet-400 to-fuchsia-400 text-2xl font-semibold text-white shadow-lg">
                             {rider.full_name.charAt(0).toUpperCase()}
                           </div>
                         )}
 
                         {rider.is_online && (
-                          <span className="absolute bottom-1 right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full" />
+                          <span className="absolute bottom-1 right-1 h-4 w-4 rounded-full border-2 border-white bg-green-500" />
                         )}
                       </div>
 
-                      <h3 className="font-semibold text-gray-900 mt-4">{rider.full_name}</h3>
+                      <h3 className="mt-4 font-semibold text-gray-900">{rider.full_name}</h3>
 
-                      <div className="flex items-center justify-center gap-1 text-sm text-gray-500 mt-1">
-                        <UserCircle className="w-4 h-4" />
+                      <div className="mt-1 flex items-center justify-center gap-1 text-sm text-gray-500">
+                        <UserCircle className="h-4 w-4" />
                         <span className="capitalize">{rider.vehicle_type}</span>
                       </div>
 
                       {rider.company_name && (
-                        <p className="text-sm text-gray-500 mt-1">{rider.company_name}</p>
+                        <p className="mt-1 text-sm text-gray-500">{rider.company_name}</p>
                       )}
                     </div>
 
-                    <div className="grid grid-cols-3 gap-4 my-5">
+                    <div className="my-5 grid grid-cols-3 gap-4">
                       <div className="text-center">
                         <div className="flex items-center justify-center gap-1">
-                          <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                          <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
                           <span className="font-semibold">
                             {Number(rider.rating_average || 0).toFixed(1).replace('.0', '')}
                           </span>
@@ -463,7 +545,7 @@ export function HomePage() {
                         <span className="text-xs text-gray-500">rating</span>
                       </div>
 
-                      <div className="text-center border-x border-gray-100">
+                      <div className="border-x border-gray-100 text-center">
                         <div className="font-semibold">{rider.completed_jobs_count || 0}</div>
                         <span className="text-xs text-gray-500">deliveries</span>
                       </div>
@@ -481,22 +563,22 @@ export function HomePage() {
                       </div>
                     </div>
 
-                    <div className="flex justify-center mb-4">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-600">
-                        <MapPin className="w-4 h-4" />
+                    <div className="mb-4 flex justify-center">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600">
+                        <MapPin className="h-4 w-4" />
                         {rider.service_radius_km || 0}km radius
                       </span>
                     </div>
 
-                    <div className="flex justify-center mb-4">
+                    <div className="mb-4 flex justify-center">
                       {rider.is_online ? (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-100 text-green-700 font-medium text-sm">
-                          <span className="w-2 h-2 rounded-full bg-green-500" />
+                        <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-1 text-sm font-medium text-green-700">
+                          <span className="h-2 w-2 rounded-full bg-green-500" />
                           Online now
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 font-medium text-sm">
-                          <Clock3 className="w-3.5 h-3.5" />
+                        <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-sm font-medium text-amber-700">
+                          <Clock3 className="h-3.5 w-3.5" />
                           Available on request
                         </span>
                       )}
@@ -508,23 +590,23 @@ export function HomePage() {
                         onClick={() => handleBookRider(rider)}
                       >
                         Book Rider
-                        <ArrowRight className="w-4 h-4 ml-2" />
+                        <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
 
                       <div className="flex gap-2">
                         <button
                           onClick={() => handleContactRider(rider, 'call')}
-                          className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-green-100 rounded-lg hover:bg-green-200 transition-colors"
+                          className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-green-100 py-2.5 transition-colors hover:bg-green-200"
                         >
-                          <Phone className="w-4 h-4 text-green-600" />
+                          <Phone className="h-4 w-4 text-green-600" />
                           <span className="text-sm font-medium text-green-700">Call</span>
                         </button>
 
                         <button
                           onClick={() => handleContactRider(rider, 'whatsapp')}
-                          className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-emerald-100 rounded-lg hover:bg-emerald-200 transition-colors"
+                          className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-emerald-100 py-2.5 transition-colors hover:bg-emerald-200"
                         >
-                          <MessageCircle className="w-4 h-4 text-emerald-600" />
+                          <MessageCircle className="h-4 w-4 text-emerald-600" />
                           <span className="text-sm font-medium text-emerald-700">WhatsApp</span>
                         </button>
                       </div>
