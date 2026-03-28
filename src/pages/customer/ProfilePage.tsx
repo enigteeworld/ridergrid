@@ -2,7 +2,17 @@
 // DISPATCH NG - Profile Page (Customer)
 // ============================================
 import { useState } from 'react';
-import { User, Mail, Phone, Camera, LogOut, Edit2, Check } from 'lucide-react';
+import {
+  User,
+  Mail,
+  Phone,
+  Camera,
+  LogOut,
+  Edit2,
+  Check,
+  ShieldCheck,
+  Sparkles,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -16,7 +26,6 @@ export function ProfilePage() {
   const { user, setUser, signOut } = useAuthStore();
   const [isEditing, setIsEditing] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-
   const [fullName, setFullName] = useState(user?.full_name || '');
   const [phone, setPhone] = useState(user?.phone || '');
   const [isSaving, setIsSaving] = useState(false);
@@ -67,7 +76,9 @@ export function ProfilePage() {
 
       if (uploadError) {
         if (uploadError.message?.toLowerCase().includes('bucket')) {
-          throw new Error('Storage bucket "avatars" was not found. Create it in Supabase Storage first.');
+          throw new Error(
+            'Storage bucket "avatars" was not found. Create it in Supabase Storage first.'
+          );
         }
         throw uploadError;
       }
@@ -105,12 +116,48 @@ export function ProfilePage() {
   const infoFieldClass =
     'h-12 rounded-2xl border-gray-200 bg-gray-50 text-base text-gray-900 placeholder:text-gray-400 focus:border-violet-300 focus:ring-violet-200';
 
+  const DetailBlock = ({
+    icon: Icon,
+    label,
+    children,
+  }: {
+    icon: React.ElementType;
+    label: string;
+    children: React.ReactNode;
+  }) => (
+    <div className="rounded-2xl border border-gray-100 bg-gray-50/70 p-4">
+      <Label className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-700">
+        <Icon className="h-4 w-4 text-gray-400" />
+        {label}
+      </Label>
+      {children}
+    </div>
+  );
+
   return (
     <div className="space-y-7">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">My Profile</h1>
         <p className="text-gray-500">Manage your account settings</p>
       </div>
+
+      <Card className="overflow-hidden rounded-[28px] border-violet-100 bg-gradient-to-r from-violet-50 via-white to-fuchsia-50 shadow-sm">
+        <CardContent className="p-4 sm:p-5">
+          <div className="flex items-start gap-3">
+            <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-100">
+              <ShieldCheck className="h-5 w-5 text-violet-600" />
+            </div>
+
+            <div className="min-w-0">
+              <p className="font-semibold text-gray-900">Your Dispatch NG identity</p>
+              <p className="mt-1 text-sm leading-6 text-gray-600">
+                Keep your profile details current so riders, deliveries, and support interactions
+                stay smooth across the app.
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="space-y-4 rounded-3xl bg-gray-50/60 p-2">
         <Card className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
@@ -146,6 +193,11 @@ export function ProfilePage() {
               </h2>
               <p className="mt-1 capitalize text-gray-500">{user?.user_type}</p>
 
+              <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-violet-50 px-4 py-2 text-sm font-medium text-violet-700">
+                <Sparkles className="h-4 w-4" />
+                Customer profile
+              </div>
+
               {isUploading && <p className="mt-3 text-sm text-gray-500">Uploading photo...</p>}
             </div>
           </CardContent>
@@ -179,12 +231,7 @@ export function ProfilePage() {
             </div>
 
             <div className="space-y-5">
-              <div className="rounded-2xl border border-gray-100 bg-gray-50/70 p-4">
-                <Label className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-700">
-                  <User className="h-4 w-4 text-gray-400" />
-                  Full Name
-                </Label>
-
+              <DetailBlock icon={User} label="Full Name">
                 {isEditing ? (
                   <Input
                     value={fullName}
@@ -196,25 +243,15 @@ export function ProfilePage() {
                     {user?.full_name}
                   </p>
                 )}
-              </div>
+              </DetailBlock>
 
-              <div className="rounded-2xl border border-gray-100 bg-gray-50/70 p-4">
-                <Label className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-700">
-                  <Mail className="h-4 w-4 text-gray-400" />
-                  Email
-                </Label>
-
+              <DetailBlock icon={Mail} label="Email">
                 <p className="rounded-2xl bg-white px-4 py-3 text-gray-700 shadow-sm">
                   {user?.email}
                 </p>
-              </div>
+              </DetailBlock>
 
-              <div className="rounded-2xl border border-gray-100 bg-gray-50/70 p-4">
-                <Label className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-700">
-                  <Phone className="h-4 w-4 text-gray-400" />
-                  Phone Number
-                </Label>
-
+              <DetailBlock icon={Phone} label="Phone Number">
                 {isEditing ? (
                   <Input
                     value={phone}
@@ -226,7 +263,7 @@ export function ProfilePage() {
                     {user?.phone || 'Not set'}
                   </p>
                 )}
-              </div>
+              </DetailBlock>
             </div>
           </CardContent>
         </Card>

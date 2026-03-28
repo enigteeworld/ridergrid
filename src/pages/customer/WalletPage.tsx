@@ -12,6 +12,8 @@ import {
   CreditCard,
   ChevronDown,
   ChevronUp,
+  ShieldCheck,
+  Sparkles,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -288,10 +290,8 @@ export function WalletPage() {
     }
   };
 
-  const getMetricAccent = (kind: 'wallet' | 'held' | 'deposited' | 'spent') => {
+  const getMetricAccent = (kind: 'held' | 'deposited' | 'spent') => {
     switch (kind) {
-      case 'wallet':
-        return 'from-violet-500 to-fuchsia-500';
       case 'held':
         return 'from-amber-400 to-orange-500';
       case 'deposited':
@@ -319,12 +319,8 @@ export function WalletPage() {
     isOpen: boolean;
     onToggle: () => void;
   }) => (
-    <button
-      type="button"
-      onClick={onToggle}
-      className="w-full"
-    >
-      <Card className="overflow-hidden border-violet-100 bg-gradient-to-br from-violet-50/70 via-white to-fuchsia-50/50 shadow-sm transition-all duration-200 hover:shadow-md">
+    <button type="button" onClick={onToggle} className="w-full">
+      <Card className="overflow-hidden rounded-[28px] border-violet-100 bg-gradient-to-br from-violet-50/70 via-white to-fuchsia-50/50 shadow-sm transition-all duration-200 hover:shadow-md">
         <CardContent className="p-5">
           <div className="flex items-center justify-between gap-4">
             <div className="min-w-0 flex-1">
@@ -352,6 +348,24 @@ export function WalletPage() {
         <p className="text-gray-500">Manage your funds and transactions</p>
       </div>
 
+      <Card className="overflow-hidden rounded-[28px] border-violet-100 bg-gradient-to-r from-violet-50 via-white to-fuchsia-50 shadow-sm">
+        <CardContent className="p-4 sm:p-5">
+          <div className="flex items-start gap-3">
+            <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-100">
+              <ShieldCheck className="h-5 w-5 text-violet-600" />
+            </div>
+
+            <div className="min-w-0">
+              <p className="font-semibold text-gray-900">Fund inside Dispatch NG</p>
+              <p className="mt-1 text-sm leading-6 text-gray-600">
+                Your wallet powers delivery funding, escrow protection, refunds where applicable,
+                and a cleaner in-app payment flow.
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       <div className="space-y-4 rounded-3xl bg-gray-50/60 p-2">
         <Card className="overflow-hidden border-0 bg-gradient-to-br from-violet-500 to-purple-600 text-white shadow-[0_10px_30px_rgba(124,58,237,0.25)]">
           <CardContent className="p-6">
@@ -370,7 +384,7 @@ export function WalletPage() {
 
             <Button
               onClick={() => setShowFundDialog(true)}
-              className="mt-5 bg-white text-violet-600 hover:bg-violet-50"
+              className="mt-5 h-11 rounded-2xl bg-white text-violet-600 hover:bg-violet-50"
             >
               <Plus className="mr-2 h-4 w-4" />
               Fund Wallet
@@ -478,7 +492,7 @@ export function WalletPage() {
                 ))}
               </div>
             ) : transactions.length === 0 ? (
-              <Card className="border-2 border-dashed">
+              <Card className="rounded-[28px] border-2 border-dashed">
                 <CardContent className="p-8 text-center">
                   <History className="mx-auto mb-4 h-12 w-12 text-gray-300" />
                   <h3 className="mb-2 text-lg font-medium text-gray-900">No transactions yet</h3>
@@ -543,15 +557,17 @@ export function WalletPage() {
       </div>
 
       <Dialog open={showFundDialog} onOpenChange={setShowFundDialog}>
-        <DialogContent className="max-h-[88vh] overflow-y-auto border-0 rounded-[28px] bg-white p-0 shadow-[0_24px_80px_rgba(15,23,42,0.20)] sm:max-w-md">
+        <DialogContent className="max-h-[88vh] overflow-y-auto rounded-[28px] border-0 bg-white p-0 shadow-[0_24px_80px_rgba(15,23,42,0.20)] sm:max-w-md">
           <div className="bg-gradient-to-br from-violet-50 via-white to-fuchsia-50">
             <DialogHeader className="border-b border-violet-100/70 px-6 pb-4 pt-4 text-left sm:pt-6">
               <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 shadow-[0_10px_30px_rgba(124,58,237,0.25)]">
                 <Wallet className="h-7 w-7 text-white" />
               </div>
+
               <DialogTitle className="text-2xl font-semibold tracking-tight text-gray-900">
                 Fund Your Wallet
               </DialogTitle>
+
               <p className="mt-2 text-sm leading-6 text-gray-500">
                 Add money securely with Paystack and use it to fund deliveries inside Dispatch NG.
               </p>
@@ -561,7 +577,7 @@ export function WalletPage() {
               <div className="rounded-2xl border border-violet-200 bg-violet-50/80 p-4">
                 <div className="flex items-start gap-3">
                   <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-violet-600">
-                    <CreditCard className="h-5 w-5" />
+                    <ShieldCheck className="h-5 w-5" />
                   </div>
                   <div className="min-w-0">
                     <p className="font-medium text-violet-900">Secure checkout</p>
@@ -593,7 +609,10 @@ export function WalletPage() {
 
                 <div className="mt-3 flex items-center justify-between gap-3 text-sm">
                   <p className="text-gray-500">
-                    Minimum funding: <span className="font-medium text-gray-700">{formatCurrency(MIN_FUNDING)}</span>
+                    Minimum funding:{' '}
+                    <span className="font-medium text-gray-700">
+                      {formatCurrency(MIN_FUNDING)}
+                    </span>
                   </p>
 
                   {fundAmount && !Number.isNaN(parseFloat(fundAmount)) && (
@@ -629,8 +648,10 @@ export function WalletPage() {
                     </div>
                   ) : (
                     <>
-                      <Plus className="mr-2 h-4 w-4" />
-                      {fundAmount ? `Fund ${formatCurrency(parseFloat(fundAmount))}` : 'Fund Wallet'}
+                      <Sparkles className="mr-2 h-4 w-4" />
+                      {fundAmount
+                        ? `Fund ${formatCurrency(parseFloat(fundAmount))}`
+                        : 'Fund Wallet'}
                     </>
                   )}
                 </Button>

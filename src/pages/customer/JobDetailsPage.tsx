@@ -19,6 +19,9 @@ import {
   XCircle,
   Wallet,
   FileText,
+  Sparkles,
+  ShieldCheck,
+  ChevronRight,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -212,7 +215,8 @@ export function JobDetailsPage() {
       showToast(
         'success',
         'Delivery funded',
-        response.message || 'Funds have been locked in escrow. The rider can now begin the delivery.'
+        response.message ||
+          'Funds have been locked in escrow. The rider can now begin the delivery.'
       );
     } catch (error: any) {
       console.error('Funding error:', error);
@@ -349,6 +353,8 @@ export function JobDetailsPage() {
     } catch (error: any) {
       console.error('Dispute error:', error);
       showToast('error', 'Error', error.message || 'Failed to open support case');
+    } finally {
+      setShowDisputeDialog(false);
     }
   };
 
@@ -379,7 +385,7 @@ export function JobDetailsPage() {
     const steps = [
       { status: 'awaiting_rider', label: 'Posted', icon: Package },
       { status: 'awaiting_funding', label: 'Assigned', icon: User },
-      { status: 'funded', label: 'Funded', icon: CheckCircle },
+      { status: 'funded', label: 'Funded', icon: Wallet },
       { status: 'in_progress', label: 'In Progress', icon: Clock },
       { status: 'completed', label: 'Completed', icon: CheckCircle },
     ];
@@ -406,6 +412,53 @@ export function JobDetailsPage() {
   const formatDisputeText = (value: string) =>
     value.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
 
+  const getAccentGradient = (status: string) => {
+    switch (status) {
+      case 'completed':
+        return 'from-emerald-400 to-green-500';
+      case 'in_progress':
+      case 'rider_marked_complete':
+        return 'from-blue-400 to-cyan-500';
+      case 'awaiting_rider':
+      case 'awaiting_funding':
+      case 'funded':
+        return 'from-violet-500 to-fuchsia-500';
+      case 'cancelled':
+      case 'refunded':
+      case 'disputed':
+        return 'from-rose-400 to-red-500';
+      default:
+        return 'from-gray-300 to-gray-400';
+    }
+  };
+
+  const InfoCard = ({
+    title,
+    icon: Icon,
+    iconClassName,
+    accent,
+    children,
+  }: {
+    title: string;
+    icon: React.ElementType;
+    iconClassName: string;
+    accent: string;
+    children: React.ReactNode;
+  }) => (
+    <Card className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+      <div className={cn('absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b', accent)} />
+      <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
+        <div className="mb-4 flex items-center gap-3">
+          <div className={cn('flex h-11 w-11 items-center justify-center rounded-2xl', iconClassName)}>
+            <Icon className="h-5 w-5" />
+          </div>
+          <h3 className="text-lg font-semibold tracking-tight text-gray-900">{title}</h3>
+        </div>
+        {children}
+      </CardContent>
+    </Card>
+  );
+
   if (isLoading) {
     return (
       <div className="flex h-64 items-center justify-center">
@@ -429,29 +482,41 @@ export function JobDetailsPage() {
   const { steps, currentIndex } = getStatusStep(job.status);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-7">
       <button
         onClick={() => navigate('/jobs')}
-        className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-700"
+        className="inline-flex items-center gap-2 text-gray-500 transition-colors hover:text-gray-700"
       >
         <ArrowLeft className="h-5 w-5" />
         Back to My Deliveries
       </button>
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div className="min-w-0">
-          <h1 className="break-words text-2xl font-bold text-gray-900">{job.job_number}</h1>
-          <p className="text-gray-500">Created {formatDateTime(job.created_at)}</p>
-        </div>
+      <div className="relative overflow-hidden rounded-[32px] border border-violet-100 bg-gradient-to-br from-violet-50 via-white to-fuchsia-50/70 p-5 shadow-sm sm:p-6">
+        <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-violet-200/25 blur-3xl" />
+        <div className="absolute -bottom-14 left-8 h-32 w-32 rounded-full bg-fuchsia-200/20 blur-3xl" />
 
-        <span
-          className={cn(
-            'inline-flex self-start rounded-full px-3 py-1 text-sm font-medium',
-            getStatusColorClass(job.status)
-          )}
-        >
-          {formatJobStatus(job.status)}
-        </span>
+        <div className="relative flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div className="min-w-0">
+            <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-violet-700 ring-1 ring-violet-100 backdrop-blur-sm">
+              <Sparkles className="h-3.5 w-3.5" />
+              Delivery Details
+            </div>
+
+            <h1 className="break-words text-3xl font-bold tracking-tight text-gray-950">
+              {job.job_number}
+            </h1>
+            <p className="mt-2 text-sm text-gray-600">Created {formatDateTime(job.created_at)}</p>
+          </div>
+
+          <span
+            className={cn(
+              'inline-flex self-start rounded-full px-3 py-1 text-sm font-medium shadow-sm',
+              getStatusColorClass(job.status)
+            )}
+          >
+            {formatJobStatus(job.status)}
+          </span>
+        </div>
       </div>
 
       {[
@@ -463,8 +528,18 @@ export function JobDetailsPage() {
         'customer_marked_complete',
         'completed',
       ].includes(job.status) && (
-        <Card>
-          <CardContent className="p-4">
+        <Card className="overflow-hidden rounded-[28px] border-violet-100 bg-gradient-to-br from-violet-50/80 via-white to-fuchsia-50/50 shadow-sm">
+          <CardContent className="p-5 sm:p-6">
+            <div className="mb-5 flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-100 text-violet-600">
+                <ShieldCheck className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Delivery Progress</h3>
+                <p className="text-sm text-gray-500">Track where this delivery currently stands</p>
+              </div>
+            </div>
+
             <div className="sm:hidden">
               <div className="space-y-4">
                 {steps.map((step, index) => {
@@ -478,8 +553,8 @@ export function JobDetailsPage() {
                       <div className="flex flex-col items-center">
                         <div
                           className={cn(
-                            'h-10 w-10 shrink-0 rounded-full transition-colors flex items-center justify-center',
-                            isActive ? 'bg-violet-600 text-white' : 'bg-gray-100 text-gray-400',
+                            'flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors',
+                            isActive ? 'bg-violet-600 text-white' : 'bg-white text-gray-400 ring-1 ring-gray-200',
                             isCurrent && 'ring-4 ring-violet-100'
                           )}
                         >
@@ -489,7 +564,7 @@ export function JobDetailsPage() {
                         {!isLast && (
                           <div
                             className={cn(
-                              'mt-2 h-8 w-0.5 rounded-full',
+                              'mt-2 h-9 w-0.5 rounded-full',
                               index < currentIndex ? 'bg-violet-600' : 'bg-gray-200'
                             )}
                           />
@@ -543,7 +618,7 @@ export function JobDetailsPage() {
                       >
                         <div
                           className={cn(
-                            'h-10 w-10 rounded-full border-4 bg-white transition-colors flex items-center justify-center',
+                            'flex h-11 w-11 items-center justify-center rounded-full border-4 bg-white transition-colors',
                             isActive
                               ? 'border-violet-600 text-violet-600'
                               : 'border-gray-200 text-gray-400',
@@ -572,12 +647,12 @@ export function JobDetailsPage() {
       )}
 
       {existingDispute && (
-        <Card className="border-amber-200 bg-amber-50/50">
-          <CardContent className="space-y-3 p-4 sm:p-5">
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <Card className="overflow-hidden rounded-[28px] border-amber-200 bg-gradient-to-br from-amber-50/80 via-white to-orange-50/50 shadow-sm">
+          <CardContent className="space-y-4 p-5 sm:p-6">
+            <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-sm text-gray-500">Current support case</p>
-                <p className="font-medium text-gray-900">
+                <p className="mt-1 text-lg font-semibold text-gray-900">
                   {formatDisputeText(existingDispute.dispute_type)}
                 </p>
               </div>
@@ -592,17 +667,17 @@ export function JobDetailsPage() {
               </span>
             </div>
 
-            <div>
-              <p className="mb-1 text-sm text-gray-500">Your message</p>
-              <p className="whitespace-pre-wrap text-sm text-gray-700">
+            <div className="rounded-2xl bg-white/80 p-4 ring-1 ring-amber-100">
+              <p className="mb-2 text-sm font-medium text-gray-500">Your message</p>
+              <p className="whitespace-pre-wrap text-sm leading-6 text-gray-700">
                 {existingDispute.description}
               </p>
             </div>
 
             {existingDispute.resolution_notes && (
-              <div>
-                <p className="mb-1 text-sm text-gray-500">Admin update</p>
-                <p className="whitespace-pre-wrap text-sm text-gray-700">
+              <div className="rounded-2xl bg-white/80 p-4 ring-1 ring-amber-100">
+                <p className="mb-2 text-sm font-medium text-gray-500">Admin update</p>
+                <p className="whitespace-pre-wrap text-sm leading-6 text-gray-700">
                   {existingDispute.resolution_notes}
                 </p>
               </div>
@@ -616,115 +691,129 @@ export function JobDetailsPage() {
       )}
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <Card>
-          <CardContent className="p-4 sm:p-5">
-            <h3 className="mb-4 flex items-center gap-2 font-semibold text-gray-900">
-              <MapPin className="h-5 w-5 text-violet-600" />
-              Pickup
-            </h3>
+        <InfoCard
+          title="Pickup"
+          icon={MapPin}
+          iconClassName="bg-violet-50 text-violet-600"
+          accent="from-violet-500 to-fuchsia-500"
+        >
+          <p className="break-words text-gray-700">{job.pickup_address}</p>
 
-            <p className="break-words text-gray-700">{job.pickup_address}</p>
+          <div className="mt-4 space-y-2 text-sm text-gray-500">
+            <p className="flex items-start gap-2">
+              <User className="mt-0.5 h-4 w-4 shrink-0" />
+              <span className="break-words">{job.pickup_contact_name}</span>
+            </p>
+            <p className="flex items-start gap-2">
+              <Phone className="mt-0.5 h-4 w-4 shrink-0" />
+              <span className="break-words">{job.pickup_contact_phone}</span>
+            </p>
+          </div>
 
-            <div className="mt-3 space-y-2 text-sm text-gray-500">
-              <p className="flex items-start gap-2">
-                <User className="mt-0.5 h-4 w-4 shrink-0" />
-                <span className="break-words">{job.pickup_contact_name}</span>
+          {job.pickup_notes && (
+            <div className="mt-4 rounded-2xl bg-gray-50 p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-gray-400">
+                Notes
               </p>
-              <p className="flex items-start gap-2">
-                <Phone className="mt-0.5 h-4 w-4 shrink-0" />
-                <span className="break-words">{job.pickup_contact_phone}</span>
+              <p className="mt-2 break-words text-sm leading-6 text-gray-600">{job.pickup_notes}</p>
+            </div>
+          )}
+        </InfoCard>
+
+        <InfoCard
+          title="Delivery"
+          icon={MapPin}
+          iconClassName="bg-emerald-50 text-green-600"
+          accent="from-emerald-400 to-green-500"
+        >
+          <p className="break-words text-gray-700">{job.delivery_address}</p>
+
+          <div className="mt-4 space-y-2 text-sm text-gray-500">
+            <p className="flex items-start gap-2">
+              <User className="mt-0.5 h-4 w-4 shrink-0" />
+              <span className="break-words">{job.delivery_contact_name}</span>
+            </p>
+            <p className="flex items-start gap-2">
+              <Phone className="mt-0.5 h-4 w-4 shrink-0" />
+              <span className="break-words">{job.delivery_contact_phone}</span>
+            </p>
+          </div>
+
+          {job.delivery_notes && (
+            <div className="mt-4 rounded-2xl bg-gray-50 p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-gray-400">
+                Notes
+              </p>
+              <p className="mt-2 break-words text-sm leading-6 text-gray-600">
+                {job.delivery_notes}
               </p>
             </div>
-
-            {job.pickup_notes && (
-              <p className="mt-3 break-words rounded-lg bg-gray-50 p-3 text-sm text-gray-500">
-                Note: {job.pickup_notes}
-              </p>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4 sm:p-5">
-            <h3 className="mb-4 flex items-center gap-2 font-semibold text-gray-900">
-              <MapPin className="h-5 w-5 text-green-600" />
-              Delivery
-            </h3>
-
-            <p className="break-words text-gray-700">{job.delivery_address}</p>
-
-            <div className="mt-3 space-y-2 text-sm text-gray-500">
-              <p className="flex items-start gap-2">
-                <User className="mt-0.5 h-4 w-4 shrink-0" />
-                <span className="break-words">{job.delivery_contact_name}</span>
-              </p>
-              <p className="flex items-start gap-2">
-                <Phone className="mt-0.5 h-4 w-4 shrink-0" />
-                <span className="break-words">{job.delivery_contact_phone}</span>
-              </p>
-            </div>
-
-            {job.delivery_notes && (
-              <p className="mt-3 break-words rounded-lg bg-gray-50 p-3 text-sm text-gray-500">
-                Note: {job.delivery_notes}
-              </p>
-            )}
-          </CardContent>
-        </Card>
+          )}
+        </InfoCard>
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <Card>
-          <CardContent className="p-4 sm:p-5">
-            <h3 className="mb-4 flex items-center gap-2 font-semibold text-gray-900">
-              <Package className="h-5 w-5 text-amber-600" />
-              Package Details
-            </h3>
+        <InfoCard
+          title="Package Details"
+          icon={Package}
+          iconClassName="bg-amber-50 text-amber-600"
+          accent="from-amber-400 to-orange-500"
+        >
+          <p className="break-words text-gray-700">{job.package_description}</p>
 
-            <p className="break-words text-gray-700">{job.package_description}</p>
-
-            {job.package_weight_kg && (
-              <p className="mt-2 text-sm text-gray-500">Weight: {job.package_weight_kg} kg</p>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4 sm:p-5">
-            <h3 className="mb-4 font-semibold text-gray-900">Payment</h3>
-
-            <div className="space-y-3">
-              <div className="flex items-start justify-between gap-3">
-                <span className="text-gray-600">Delivery Fee</span>
-                <span className="text-right font-medium">{formatCurrency(job.agreed_amount)}</span>
-              </div>
-
-              <div className="flex items-start justify-between gap-3">
-                <span className="text-gray-600">Platform Fee</span>
-                <span className="text-right font-medium text-red-600">
-                  -{formatCurrency(job.platform_fee)}
-                </span>
-              </div>
-
-              <div className="flex items-start justify-between gap-3 border-t pt-3">
-                <span className="font-medium text-gray-900">Rider Receives</span>
-                <span className="text-right font-bold text-violet-700">
-                  {formatCurrency(job.rider_earnings)}
-                </span>
-              </div>
+          {job.package_weight_kg && (
+            <div className="mt-4 rounded-2xl bg-gray-50 p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-gray-400">
+                Weight
+              </p>
+              <p className="mt-2 text-sm text-gray-700">{job.package_weight_kg} kg</p>
             </div>
-          </CardContent>
-        </Card>
+          )}
+        </InfoCard>
+
+        <InfoCard
+          title="Payment"
+          icon={Wallet}
+          iconClassName="bg-violet-50 text-violet-600"
+          accent="from-violet-500 to-fuchsia-500"
+        >
+          <div className="space-y-4">
+            <div className="flex items-start justify-between gap-3">
+              <span className="text-gray-600">Delivery Fee</span>
+              <span className="text-right font-medium">{formatCurrency(job.agreed_amount)}</span>
+            </div>
+
+            <div className="flex items-start justify-between gap-3">
+              <span className="text-gray-600">Platform Fee</span>
+              <span className="text-right font-medium text-red-600">
+                -{formatCurrency(job.platform_fee)}
+              </span>
+            </div>
+
+            <div className="flex items-start justify-between gap-3 rounded-2xl bg-violet-50 p-4">
+              <span className="font-medium text-gray-900">Rider Receives</span>
+              <span className="text-right text-lg font-bold text-violet-700">
+                {formatCurrency(job.rider_earnings)}
+              </span>
+            </div>
+          </div>
+        </InfoCard>
       </div>
 
       {job.rider_name && (
-        <Card>
-          <CardContent className="p-4 sm:p-5">
-            <h3 className="mb-4 font-semibold text-gray-900">Rider</h3>
+        <Card className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+          <div className={cn('absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b', getAccentGradient(job.status))} />
+          <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
+            <div className="mb-4 flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-50 text-violet-600">
+                <User className="h-5 w-5" />
+              </div>
+              <h3 className="text-lg font-semibold tracking-tight text-gray-900">Rider</h3>
+            </div>
 
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <div className="min-w-0 flex items-center gap-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 text-xl font-medium text-white">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 text-xl font-medium text-white shadow-md">
                   {job.rider_name.charAt(0)}
                 </div>
 
@@ -736,7 +825,11 @@ export function JobDetailsPage() {
 
               <div className="flex gap-2 sm:ml-auto">
                 <a href={`tel:${job.rider_phone}`} className="flex-1 sm:flex-none">
-                  <Button variant="outline" className="w-full sm:w-auto" size="icon">
+                  <Button
+                    variant="outline"
+                    className="w-full rounded-xl border-green-200 bg-green-50 text-green-700 hover:bg-green-100 sm:w-auto"
+                    size="icon"
+                  >
                     <Phone className="h-4 w-4" />
                   </Button>
                 </a>
@@ -747,7 +840,11 @@ export function JobDetailsPage() {
                   rel="noopener noreferrer"
                   className="flex-1 sm:flex-none"
                 >
-                  <Button variant="outline" className="w-full sm:w-auto" size="icon">
+                  <Button
+                    variant="outline"
+                    className="w-full rounded-xl border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 sm:w-auto"
+                    size="icon"
+                  >
                     <MessageCircle className="h-4 w-4" />
                   </Button>
                 </a>
@@ -758,16 +855,21 @@ export function JobDetailsPage() {
       )}
 
       {deliveryProofs.length > 0 && (
-        <Card>
-          <CardContent className="p-4 sm:p-5">
-            <h3 className="mb-4 flex items-center gap-2 font-semibold text-gray-900">
-              <Camera className="h-5 w-5" />
-              Delivery Proof
-            </h3>
+        <Card className="overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)]">
+          <CardContent className="p-5 sm:p-6">
+            <div className="mb-4 flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+                <Camera className="h-5 w-5" />
+              </div>
+              <h3 className="text-lg font-semibold tracking-tight text-gray-900">Delivery Proof</h3>
+            </div>
 
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               {deliveryProofs.map((proof, index) => (
-                <div key={proof.id} className="aspect-square overflow-hidden rounded-lg bg-gray-100">
+                <div
+                  key={proof.id}
+                  className="aspect-square overflow-hidden rounded-2xl bg-gray-100 ring-1 ring-gray-100"
+                >
                   {proof.image_url ? (
                     <img
                       src={proof.image_url}
@@ -786,162 +888,191 @@ export function JobDetailsPage() {
         </Card>
       )}
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:flex xl:flex-wrap">
-        {job.status === 'awaiting_funding' && (
-          <Button
-            onClick={handleFundDelivery}
-            disabled={isFunding}
-            className="w-full bg-violet-600 text-white hover:bg-violet-700 sm:w-auto"
-          >
-            {isFunding ? (
-              <div className="flex items-center gap-2">
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                Funding...
-              </div>
-            ) : (
-              <>
-                <Wallet className="mr-2 h-4 w-4" />
-                Fund Delivery
-              </>
+      <Card className="overflow-hidden rounded-[28px] border-violet-100 bg-gradient-to-br from-violet-50/80 via-white to-fuchsia-50/50 shadow-sm">
+        <CardContent className="p-5 sm:p-6">
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold text-gray-900">Actions</h3>
+            <p className="mt-1 text-sm text-gray-500">Manage this delivery based on its current status</p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:flex xl:flex-wrap">
+            {job.status === 'awaiting_funding' && (
+              <Button
+                onClick={handleFundDelivery}
+                disabled={isFunding}
+                className="h-12 w-full rounded-2xl bg-violet-600 text-white hover:bg-violet-700 sm:w-auto"
+              >
+                {isFunding ? (
+                  <div className="flex items-center gap-2">
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                    Funding...
+                  </div>
+                ) : (
+                  <>
+                    <Wallet className="mr-2 h-4 w-4" />
+                    Fund Delivery
+                  </>
+                )}
+              </Button>
             )}
-          </Button>
-        )}
 
-        {job.status === 'rider_marked_complete' && (
-          <Button
-            onClick={handleMarkComplete}
-            disabled={isConfirmingCompletion}
-            className="w-full bg-green-600 text-white hover:bg-green-700 sm:w-auto"
-          >
-            {isConfirmingCompletion ? (
-              <div className="flex items-center gap-2">
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                Confirming...
-              </div>
-            ) : (
-              <>
-                <CheckCircle className="mr-2 h-4 w-4" />
-                Confirm Delivery
-              </>
+            {job.status === 'rider_marked_complete' && (
+              <Button
+                onClick={handleMarkComplete}
+                disabled={isConfirmingCompletion}
+                className="h-12 w-full rounded-2xl bg-green-600 text-white hover:bg-green-700 sm:w-auto"
+              >
+                {isConfirmingCompletion ? (
+                  <div className="flex items-center gap-2">
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                    Confirming...
+                  </div>
+                ) : (
+                  <>
+                    <CheckCircle className="mr-2 h-4 w-4" />
+                    Confirm Delivery
+                  </>
+                )}
+              </Button>
             )}
-          </Button>
-        )}
 
-        {['awaiting_rider', 'awaiting_funding'].includes(job.status) && (
-          <Button
-            onClick={handleCancelJob}
-            variant="outline"
-            className="w-full border-red-200 text-red-600 hover:bg-red-50 sm:w-auto"
-          >
-            <XCircle className="mr-2 h-4 w-4" />
-            Cancel Delivery
-          </Button>
-        )}
+            {['awaiting_rider', 'awaiting_funding'].includes(job.status) && (
+              <Button
+                onClick={handleCancelJob}
+                variant="outline"
+                className="h-12 w-full rounded-2xl border-red-200 text-red-600 hover:bg-red-50 sm:w-auto"
+              >
+                <XCircle className="mr-2 h-4 w-4" />
+                Cancel Delivery
+              </Button>
+            )}
 
-        {job.status === 'completed' && !existingRating && (
-          <Button
-            onClick={() => setShowRatingDialog(true)}
-            className="w-full bg-violet-600 text-white hover:bg-violet-700 sm:w-auto"
-          >
-            <Star className="mr-2 h-4 w-4" />
-            Rate Rider
-          </Button>
-        )}
+            {job.status === 'completed' && !existingRating && (
+              <Button
+                onClick={() => setShowRatingDialog(true)}
+                className="h-12 w-full rounded-2xl bg-violet-600 text-white hover:bg-violet-700 sm:w-auto"
+              >
+                <Star className="mr-2 h-4 w-4" />
+                Rate Rider
+              </Button>
+            )}
 
-        {['in_progress', 'rider_marked_complete'].includes(job.status) && !existingDispute && (
-          <Button
-            onClick={() => setShowDisputeDialog(true)}
-            variant="outline"
-            className="w-full border-amber-200 text-amber-700 hover:bg-amber-50 sm:w-auto"
-          >
-            <FileText className="mr-2 h-4 w-4" />
-            Open Support Case
-          </Button>
-        )}
-      </div>
+            {['in_progress', 'rider_marked_complete'].includes(job.status) && !existingDispute && (
+              <Button
+                onClick={() => setShowDisputeDialog(true)}
+                variant="outline"
+                className="h-12 w-full rounded-2xl border-amber-200 text-amber-700 hover:bg-amber-50 sm:w-auto"
+              >
+                <FileText className="mr-2 h-4 w-4" />
+                Open Support Case
+              </Button>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
       <Dialog open={showRatingDialog} onOpenChange={setShowRatingDialog}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Rate Your Delivery</DialogTitle>
-          </DialogHeader>
+        <DialogContent className="overflow-hidden rounded-[28px] border-0 p-0 shadow-2xl sm:max-w-md">
+          <div className="bg-gradient-to-br from-violet-50 via-white to-fuchsia-50/70 p-6">
+            <DialogHeader className="space-y-1">
+              <DialogTitle className="text-2xl font-bold tracking-tight text-gray-950">
+                Rate Your Delivery
+              </DialogTitle>
+            </DialogHeader>
 
-          <div className="space-y-4">
-            <div className="flex flex-wrap justify-center gap-2">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <button key={star} onClick={() => setRating(star)} className="p-1">
-                  <Star
-                    className={cn(
-                      'h-8 w-8 transition-colors',
-                      star <= rating ? 'fill-amber-400 text-amber-400' : 'text-gray-300'
-                    )}
-                  />
-                </button>
-              ))}
+            <p className="mt-2 text-sm text-gray-500">
+              Share how the rider handled your delivery experience.
+            </p>
+
+            <div className="mt-6 space-y-5">
+              <div className="flex flex-wrap justify-center gap-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    onClick={() => setRating(star)}
+                    className="rounded-xl p-1 transition-transform hover:scale-105"
+                  >
+                    <Star
+                      className={cn(
+                        'h-9 w-9 transition-colors',
+                        star <= rating ? 'fill-amber-400 text-amber-400' : 'text-gray-300'
+                      )}
+                    />
+                  </button>
+                ))}
+              </div>
+
+              <Textarea
+                placeholder="Share your experience (optional)..."
+                value={review}
+                onChange={(e) => setReview(e.target.value)}
+                rows={4}
+                className="rounded-2xl border-violet-100 bg-white"
+              />
+
+              <Button
+                onClick={handleSubmitRating}
+                className="h-12 w-full rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white"
+              >
+                Submit Rating
+                <ChevronRight className="ml-2 h-4 w-4" />
+              </Button>
             </div>
-
-            <Textarea
-              placeholder="Share your experience (optional)..."
-              value={review}
-              onChange={(e) => setReview(e.target.value)}
-              rows={4}
-            />
-
-            <Button
-              onClick={handleSubmitRating}
-              className="w-full bg-violet-600 text-white hover:bg-violet-700"
-            >
-              Submit Rating
-            </Button>
           </div>
         </DialogContent>
       </Dialog>
 
       <Dialog open={showDisputeDialog} onOpenChange={setShowDisputeDialog}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Open Support Case</DialogTitle>
-          </DialogHeader>
+        <DialogContent className="overflow-hidden rounded-[28px] border-0 p-0 shadow-2xl sm:max-w-md">
+          <div className="bg-gradient-to-br from-amber-50 via-white to-orange-50/70 p-6">
+            <DialogHeader className="space-y-1">
+              <DialogTitle className="text-2xl font-bold tracking-tight text-gray-950">
+                Open Support Case
+              </DialogTitle>
+            </DialogHeader>
 
-          <div className="space-y-4">
-            <div className="rounded-lg border border-amber-200 bg-amber-50 p-3">
-              <p className="text-sm leading-6 text-amber-800">
-                This will open a manual support case for admin review. Refunds are not automatic.
-                If a refund is approved, it will be handled manually after the case is reviewed.
+            <div className="mt-5 rounded-2xl border border-amber-200 bg-white/80 p-4">
+              <p className="text-sm leading-6 text-amber-900">
+                This opens a manual review by admin. Refunds are not automatic and are handled only
+                if approved after case review.
               </p>
             </div>
 
-            <div>
-              <label className="text-sm font-medium text-gray-700">Issue Type</label>
-              <select
-                value={disputeReason}
-                onChange={(e) => setDisputeReason(e.target.value)}
-                className="mt-1 w-full rounded-lg border bg-white p-2"
+            <div className="mt-5 space-y-4">
+              <div>
+                <label className="text-sm font-medium text-gray-700">Issue Type</label>
+                <select
+                  value={disputeReason}
+                  onChange={(e) => setDisputeReason(e.target.value)}
+                  className="mt-1 h-12 w-full rounded-2xl border border-amber-200 bg-white px-3 text-sm outline-none transition focus:border-amber-400"
+                >
+                  <option value="">Select an issue</option>
+                  <option value="not_delivered">Package not delivered</option>
+                  <option value="damaged">Package damaged</option>
+                  <option value="wrong_item">Wrong item delivered</option>
+                  <option value="rider_no_show">Rider didn&apos;t show up</option>
+                  <option value="refund_request">Refund request</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <Textarea
+                placeholder="Describe the issue clearly. Include what happened, what you expected, and whether you are requesting a refund..."
+                value={disputeDescription}
+                onChange={(e) => setDisputeDescription(e.target.value)}
+                rows={5}
+                className="rounded-2xl border-amber-200 bg-white"
+              />
+
+              <Button
+                onClick={handleOpenDispute}
+                disabled={!disputeDescription.trim()}
+                className="h-12 w-full rounded-2xl bg-amber-600 text-white hover:bg-amber-700"
               >
-                <option value="">Select an issue</option>
-                <option value="not_delivered">Package not delivered</option>
-                <option value="damaged">Package damaged</option>
-                <option value="wrong_item">Wrong item delivered</option>
-                <option value="rider_no_show">Rider didn&apos;t show up</option>
-                <option value="refund_request">Refund request</option>
-                <option value="other">Other</option>
-              </select>
+                Submit Support Case
+                <ChevronRight className="ml-2 h-4 w-4" />
+              </Button>
             </div>
-
-            <Textarea
-              placeholder="Describe the issue clearly. Include what happened, what you expected, and whether you are requesting a refund..."
-              value={disputeDescription}
-              onChange={(e) => setDisputeDescription(e.target.value)}
-              rows={5}
-            />
-
-            <Button
-              onClick={handleOpenDispute}
-              disabled={!disputeDescription.trim()}
-              className="w-full bg-amber-600 text-white hover:bg-amber-700"
-            >
-              Submit Support Case
-            </Button>
           </div>
         </DialogContent>
       </Dialog>
