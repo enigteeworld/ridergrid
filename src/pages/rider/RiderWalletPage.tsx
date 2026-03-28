@@ -316,20 +316,21 @@ export function RiderWalletPage() {
     <button
       type="button"
       onClick={onToggle}
-      className="w-full rounded-2xl border border-gray-100 bg-white px-4 py-3 shadow-sm hover:border-violet-200 hover:shadow transition-all"
+      className="w-full rounded-2xl border border-gray-100 bg-white px-4 py-3 shadow-sm transition-all hover:border-violet-200 hover:shadow"
     >
       <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div>
-            <p className="text-base font-semibold text-gray-900">{title}</p>
+        <div className="min-w-0 flex-1">
+          <div className="grid grid-cols-[1fr_auto] items-center gap-3">
+            <p className="truncate text-left text-base font-semibold text-gray-900">{title}</p>
+
+            <span className="inline-flex min-w-[2.25rem] items-center justify-center rounded-full bg-violet-100 px-2.5 py-1 text-xs font-semibold text-violet-700">
+              {count}
+            </span>
           </div>
-          <span className="inline-flex items-center rounded-full bg-violet-100 px-2.5 py-1 text-xs font-semibold text-violet-700">
-            {count}
-          </span>
         </div>
 
-        <div className="flex items-center justify-center rounded-full bg-gray-100 p-2 text-gray-600">
-          {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-600">
+          {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
         </div>
       </div>
     </button>
@@ -350,7 +351,7 @@ export function RiderWalletPage() {
             </div>
             <div>
               <p className="font-medium text-violet-900">Weekly payouts every Friday</p>
-              <p className="text-sm text-violet-700 mt-1">
+              <p className="mt-1 text-sm text-violet-700">
                 Withdrawal requests are reviewed and paid out every Friday. Submit your request
                 before Friday to be included in the next payout cycle. Only one active withdrawal
                 request can be open at a time.
@@ -360,12 +361,12 @@ export function RiderWalletPage() {
         </CardContent>
       </Card>
 
-      <div className="grid md:grid-cols-2 gap-4">
-        <Card className="bg-gradient-to-br from-violet-500 to-purple-600 text-white border-0">
+      <div className="grid gap-4 md:grid-cols-2">
+        <Card className="border-0 bg-gradient-to-br from-violet-500 to-purple-600 text-white">
           <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
+            <div className="mb-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Wallet className="w-6 h-6 text-violet-200" />
+                <Wallet className="h-6 w-6 text-violet-200" />
                 <span className="text-violet-100">Available to Withdraw</span>
               </div>
             </div>
@@ -381,7 +382,7 @@ export function RiderWalletPage() {
             </Button>
 
             {hasActiveWithdrawalRequest && (
-              <p className="text-xs text-violet-100 mt-3">
+              <p className="mt-3 text-xs text-violet-100">
                 You already have a withdrawal request in progress.
               </p>
             )}
@@ -390,15 +391,15 @@ export function RiderWalletPage() {
 
         <Card>
           <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
+            <div className="mb-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Lock className="w-6 h-6 text-amber-500" />
+                <Lock className="h-6 w-6 text-amber-500" />
                 <span className="text-gray-600">Pending</span>
               </div>
             </div>
 
             <p className="text-4xl font-bold text-gray-900">{formatCurrency(pendingEarnings)}</p>
-            <p className="text-sm text-gray-500 mt-2">From active funded deliveries</p>
+            <p className="mt-2 text-sm text-gray-500">From active funded deliveries</p>
           </CardContent>
         </Card>
       </div>
@@ -414,7 +415,7 @@ export function RiderWalletPage() {
         {showActiveWithdrawals && (
           <>
             {activeWithdrawals.length === 0 ? (
-              <Card className="border-dashed border-2">
+              <Card className="border-2 border-dashed">
                 <CardContent className="p-6 text-center">
                   <p className="text-gray-500">No withdrawal request in progress</p>
                 </CardContent>
@@ -425,9 +426,9 @@ export function RiderWalletPage() {
                   <Card key={request.id}>
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between gap-3">
-                        <div className="flex items-center gap-3 min-w-0">
-                          <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
-                            <Banknote className="w-5 h-5 text-amber-600" />
+                        <div className="min-w-0 flex items-center gap-3">
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-100">
+                            <Banknote className="h-5 w-5 text-amber-600" />
                           </div>
 
                           <div className="min-w-0">
@@ -438,13 +439,13 @@ export function RiderWalletPage() {
                           </div>
                         </div>
 
-                        <div className="text-right shrink-0">
+                        <div className="shrink-0 text-right">
                           <p className="font-semibold text-gray-900">
                             {formatCurrency(request.amount)}
                           </p>
                           <span
                             className={cn(
-                              'inline-flex mt-1 px-2 py-0.5 rounded-full text-xs font-medium capitalize',
+                              'mt-1 inline-flex rounded-full px-2 py-0.5 text-xs font-medium capitalize',
                               getWithdrawalStatusBadge(request.status)
                             )}
                           >
@@ -472,7 +473,7 @@ export function RiderWalletPage() {
         {showCompletedWithdrawals && (
           <>
             {completedWithdrawals.length === 0 ? (
-              <Card className="border-dashed border-2">
+              <Card className="border-2 border-dashed">
                 <CardContent className="p-6 text-center">
                   <p className="text-gray-500">No processed withdrawals yet</p>
                 </CardContent>
@@ -483,19 +484,19 @@ export function RiderWalletPage() {
                   <Card key={request.id}>
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between gap-3">
-                        <div className="flex items-center gap-3 min-w-0">
+                        <div className="min-w-0 flex items-center gap-3">
                           <div
                             className={cn(
-                              'w-10 h-10 rounded-full flex items-center justify-center shrink-0',
+                              'flex h-10 w-10 shrink-0 items-center justify-center rounded-full',
                               (request.status || '').toLowerCase() === 'completed'
                                 ? 'bg-green-100'
                                 : 'bg-red-100'
                             )}
                           >
                             {(request.status || '').toLowerCase() === 'completed' ? (
-                              <CheckCircle2 className="w-5 h-5 text-green-600" />
+                              <CheckCircle2 className="h-5 w-5 text-green-600" />
                             ) : (
-                              <XCircle className="w-5 h-5 text-red-600" />
+                              <XCircle className="h-5 w-5 text-red-600" />
                             )}
                           </div>
 
@@ -507,13 +508,13 @@ export function RiderWalletPage() {
                           </div>
                         </div>
 
-                        <div className="text-right shrink-0">
+                        <div className="shrink-0 text-right">
                           <p className="font-semibold text-gray-900">
                             {formatCurrency(request.amount)}
                           </p>
                           <span
                             className={cn(
-                              'inline-flex mt-1 px-2 py-0.5 rounded-full text-xs font-medium capitalize',
+                              'mt-1 inline-flex rounded-full px-2 py-0.5 text-xs font-medium capitalize',
                               getWithdrawalStatusBadge(request.status)
                             )}
                           >
@@ -545,13 +546,13 @@ export function RiderWalletPage() {
         {showTransactions && (
           <>
             {isLoading ? (
-              <Card className="border-dashed border-2">
+              <Card className="border-2 border-dashed">
                 <CardContent className="p-6 text-center">
                   <p className="text-gray-500">Loading transactions...</p>
                 </CardContent>
               </Card>
             ) : transactions.length === 0 ? (
-              <Card className="border-dashed border-2">
+              <Card className="border-2 border-dashed">
                 <CardContent className="p-6 text-center">
                   <p className="text-gray-500">No transactions yet</p>
                 </CardContent>
@@ -563,7 +564,7 @@ export function RiderWalletPage() {
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
                             {getTransactionIcon(tx.transaction_type)}
                           </div>
 
@@ -605,7 +606,7 @@ export function RiderWalletPage() {
 
           <div className="space-y-4">
             {hasActiveWithdrawalRequest ? (
-              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+              <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
                 <p className="text-sm text-amber-800">
                   You already have a pending withdrawal request. Wait for it to be processed before
                   creating another one.
@@ -613,7 +614,7 @@ export function RiderWalletPage() {
               </div>
             ) : (
               <>
-                <div className="bg-violet-50 border border-violet-200 rounded-lg p-4">
+                <div className="rounded-lg border border-violet-200 bg-violet-50 p-4">
                   <p className="text-sm text-violet-800">
                     Withdrawal requests are paid out every Friday. Once submitted, your request will
                     be reviewed by admin and processed in the next payout cycle.
@@ -632,7 +633,7 @@ export function RiderWalletPage() {
                 </div>
 
                 {bankAccounts.length === 0 ? (
-                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                  <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
                     <p className="text-sm text-amber-800">
                       Please add a bank account in your profile first.
                     </p>
@@ -643,7 +644,7 @@ export function RiderWalletPage() {
                     <select
                       value={selectedBankId}
                       onChange={(e) => setSelectedBankId(e.target.value)}
-                      className="w-full mt-1 p-2 border rounded-lg"
+                      className="mt-1 w-full rounded-lg border p-2"
                     >
                       {bankAccounts.map((account) => (
                         <option key={account.id} value={account.id}>
@@ -657,7 +658,7 @@ export function RiderWalletPage() {
                 <Button
                   onClick={handleWithdraw}
                   disabled={isWithdrawing || bankAccounts.length === 0}
-                  className="w-full bg-violet-600 hover:bg-violet-700 text-white"
+                  className="w-full bg-violet-600 text-white hover:bg-violet-700"
                 >
                   {isWithdrawing ? 'Processing...' : 'Request Withdrawal'}
                 </Button>

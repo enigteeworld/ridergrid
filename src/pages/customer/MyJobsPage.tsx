@@ -59,39 +59,48 @@ export function MyJobsPage() {
     }
   };
 
-  const filteredJobs = useMemo(() => {
-    let filtered = [...jobs];
+  const activeJobs = useMemo(
+    () =>
+      jobs.filter((j) =>
+        [
+          'awaiting_rider',
+          'awaiting_funding',
+          'funded',
+          'in_progress',
+          'rider_marked_complete',
+        ].includes(j.status)
+      ),
+    [jobs]
+  );
 
+  const completedJobs = useMemo(
+    () => jobs.filter((j) => j.status === 'completed'),
+    [jobs]
+  );
+
+  const cancelledJobs = useMemo(
+    () => jobs.filter((j) => ['cancelled', 'refunded'].includes(j.status)),
+    [jobs]
+  );
+
+  const filteredJobs = useMemo(() => {
     switch (filter) {
       case 'active':
-        filtered = filtered.filter((j) =>
-          [
-            'awaiting_rider',
-            'awaiting_funding',
-            'funded',
-            'in_progress',
-            'rider_marked_complete',
-          ].includes(j.status)
-        );
-        break;
+        return activeJobs;
       case 'completed':
-        filtered = filtered.filter((j) => j.status === 'completed');
-        break;
+        return completedJobs;
       case 'cancelled':
-        filtered = filtered.filter((j) => ['cancelled', 'refunded'].includes(j.status));
-        break;
+        return cancelledJobs;
       default:
-        break;
+        return jobs;
     }
+  }, [jobs, filter, activeJobs, completedJobs, cancelledJobs]);
 
-    return filtered;
-  }, [jobs, filter]);
-
-  const filters: { value: JobFilter; label: string }[] = [
-    { value: 'all', label: 'All' },
-    { value: 'active', label: 'Active' },
-    { value: 'completed', label: 'Completed' },
-    { value: 'cancelled', label: 'Cancelled' },
+  const filters: { value: JobFilter; label: string; count: number }[] = [
+    { value: 'all', label: 'All', count: jobs.length },
+    { value: 'active', label: 'Active', count: activeJobs.length },
+    { value: 'completed', label: 'Completed', count: completedJobs.length },
+    { value: 'cancelled', label: 'Cancelled', count: cancelledJobs.length },
   ];
 
   return (
@@ -103,31 +112,47 @@ export function MyJobsPage() {
         </div>
 
         <Link to="/create-job">
-          <Button className="w-full sm:w-auto bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white">
+          <Button className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white sm:w-auto">
             New Delivery
           </Button>
         </Link>
       </div>
 
-      <div className="flex gap-2 overflow-x-auto pb-2">
-        {filters.map((f) => (
-          <button
-            key={f.value}
-            onClick={() => setFilter(f.value)}
-            className={cn(
-              'px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors',
-              filter === f.value
-                ? 'bg-violet-600 text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            )}
-          >
-            {f.label}
-          </button>
-        ))}
+      <div className="rounded-2xl border border-violet-100 bg-gradient-to-r from-violet-50/80 via-white to-fuchsia-50/70 p-2 shadow-sm">
+        <div className="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          {filters.map((f) => {
+            const isActive = filter === f.value;
+
+            return (
+              <button
+                key={f.value}
+                onClick={() => setFilter(f.value)}
+                className={cn(
+                  'group flex shrink-0 snap-start items-center gap-2 whitespace-nowrap rounded-2xl border px-4 py-2.5 transition-all duration-200',
+                  isActive
+                    ? 'border-violet-200 bg-white text-violet-700 shadow-sm shadow-violet-100'
+                    : 'border-transparent bg-transparent text-gray-600 hover:border-white/70 hover:bg-white/70 hover:text-gray-900'
+                )}
+              >
+                <span className="text-sm font-semibold">{f.label}</span>
+                <span
+                  className={cn(
+                    'inline-flex min-w-[1.6rem] items-center justify-center rounded-full px-1.5 py-0.5 text-[11px] font-semibold transition-colors',
+                    isActive
+                      ? 'bg-violet-100 text-violet-700'
+                      : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200'
+                  )}
+                >
+                  {f.count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       <button type="button" onClick={() => setShowJobsList((prev) => !prev)} className="w-full">
-        <Card className="border-violet-100 bg-violet-50/50 hover:bg-violet-50 transition-colors">
+        <Card className="border-violet-100 bg-violet-50/50 transition-colors hover:bg-violet-50">
           <CardContent className="p-4">
             <div className="flex items-center justify-between gap-3">
               <div className="text-left">
@@ -138,9 +163,9 @@ export function MyJobsPage() {
               </div>
 
               {showJobsList ? (
-                <ChevronUp className="w-5 h-5 text-violet-600" />
+                <ChevronUp className="h-5 w-5 text-violet-600" />
               ) : (
-                <ChevronDown className="w-5 h-5 text-violet-600" />
+                <ChevronDown className="h-5 w-5 text-violet-600" />
               )}
             </div>
           </CardContent>
@@ -154,23 +179,23 @@ export function MyJobsPage() {
               {[1, 2, 3].map((i) => (
                 <Card key={i} className="animate-pulse">
                   <CardContent className="p-4">
-                    <div className="h-20 bg-gray-200 rounded" />
+                    <div className="h-20 rounded bg-gray-200" />
                   </CardContent>
                 </Card>
               ))}
             </div>
           ) : filteredJobs.length === 0 ? (
-            <Card className="border-dashed border-2">
+            <Card className="border-2 border-dashed">
               <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                  <Package className="w-8 h-8 text-gray-400" />
+                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
+                  <Package className="h-8 w-8 text-gray-400" />
                 </div>
 
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                <h3 className="mb-2 text-lg font-medium text-gray-900">
                   {filter === 'all' ? 'No deliveries yet' : `No ${filter} deliveries`}
                 </h3>
 
-                <p className="text-gray-500 mb-4">
+                <p className="mb-4 text-gray-500">
                   {filter === 'all'
                     ? 'Create your first delivery to get started'
                     : 'Try a different filter'}
@@ -189,15 +214,15 @@ export function MyJobsPage() {
             <div className="space-y-3">
               {filteredJobs.map((job) => (
                 <Link key={job.id} to={`/jobs/${job.id}`}>
-                  <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                  <Card className="cursor-pointer border-gray-100 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
                     <CardContent className="p-4 sm:p-5">
                       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div className="min-w-0 flex-1">
-                          <div className="flex flex-wrap items-center gap-2 mb-3">
+                          <div className="mb-3 flex flex-wrap items-center gap-2">
                             <span className="text-sm font-medium text-gray-500">{job.job_number}</span>
                             <span
                               className={cn(
-                                'px-2 py-0.5 rounded-full text-xs font-medium',
+                                'rounded-full px-2 py-0.5 text-xs font-medium',
                                 getStatusColorClass(job.status)
                               )}
                             >
@@ -208,39 +233,39 @@ export function MyJobsPage() {
                             </span>
                           </div>
 
-                          <div className="space-y-2 mb-3">
+                          <div className="mb-3 space-y-2">
                             <div className="flex items-start gap-2">
-                              <div className="w-2 h-2 rounded-full bg-violet-500 mt-1.5 shrink-0" />
-                              <MapPin className="w-4 h-4 text-gray-400 mt-0.5 shrink-0" />
-                              <span className="text-sm text-gray-600 break-words">
+                              <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-violet-500" />
+                              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
+                              <span className="break-words text-sm text-gray-600">
                                 {job.pickup_address}
                               </span>
                             </div>
 
                             <div className="flex items-start gap-2">
-                              <div className="w-2 h-2 rounded-full bg-green-500 mt-1.5 shrink-0" />
-                              <MapPin className="w-4 h-4 text-gray-400 mt-0.5 shrink-0" />
-                              <span className="text-sm text-gray-600 break-words">
+                              <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-green-500" />
+                              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
+                              <span className="break-words text-sm text-gray-600">
                                 {job.delivery_address}
                               </span>
                             </div>
                           </div>
 
                           {job.rider_name && (
-                            <div className="flex items-center gap-2 text-sm min-w-0">
-                              <div className="w-6 h-6 rounded-full bg-violet-100 flex items-center justify-center text-xs font-medium text-violet-700 shrink-0">
+                            <div className="flex min-w-0 items-center gap-2 text-sm">
+                              <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-violet-100 text-xs font-medium text-violet-700">
                                 {job.rider_name.charAt(0)}
                               </div>
-                              <span className="text-gray-600 break-words">{job.rider_name}</span>
+                              <span className="break-words text-gray-600">{job.rider_name}</span>
                             </div>
                           )}
                         </div>
 
-                        <div className="flex items-center justify-between sm:block sm:text-right shrink-0">
+                        <div className="flex shrink-0 items-center justify-between sm:block sm:text-right">
                           <p className="font-semibold text-gray-900">
                             {formatCurrency(job.agreed_amount)}
                           </p>
-                          <ChevronRight className="w-5 h-5 text-gray-400 sm:ml-auto mt-2" />
+                          <ChevronRight className="mt-2 h-5 w-5 text-gray-400 sm:ml-auto" />
                         </div>
                       </div>
                     </CardContent>
