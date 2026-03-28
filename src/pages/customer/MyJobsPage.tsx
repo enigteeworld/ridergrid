@@ -118,8 +118,8 @@ export function MyJobsPage() {
         </Link>
       </div>
 
-      <div className="rounded-2xl border border-violet-100 bg-gradient-to-r from-violet-50/80 via-white to-fuchsia-50/70 p-2 shadow-sm">
-        <div className="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+      <div className="rounded-2xl border border-violet-100 bg-gradient-to-r from-violet-50/80 via-white to-fuchsia-50/70 p-3 shadow-sm">
+        <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {filters.map((f) => {
             const isActive = filter === f.value;
 
@@ -128,19 +128,20 @@ export function MyJobsPage() {
                 key={f.value}
                 onClick={() => setFilter(f.value)}
                 className={cn(
-                  'group flex shrink-0 snap-start items-center gap-2 whitespace-nowrap rounded-2xl border px-4 py-2.5 transition-all duration-200',
+                  'group flex shrink-0 snap-start items-center gap-2 whitespace-nowrap rounded-2xl border px-5 py-2.5 transition-all duration-200',
                   isActive
                     ? 'border-violet-200 bg-white text-violet-700 shadow-sm shadow-violet-100'
-                    : 'border-transparent bg-transparent text-gray-600 hover:border-white/70 hover:bg-white/70 hover:text-gray-900'
+                    : 'border-gray-200 bg-white/70 text-gray-600 hover:bg-white hover:text-gray-900'
                 )}
               >
                 <span className="text-sm font-semibold">{f.label}</span>
+
                 <span
                   className={cn(
-                    'inline-flex min-w-[1.6rem] items-center justify-center rounded-full px-1.5 py-0.5 text-[11px] font-semibold transition-colors',
+                    'inline-flex min-w-[1.6rem] items-center justify-center rounded-full px-1.5 py-0.5 text-[11px] font-semibold',
                     isActive
                       ? 'bg-violet-100 text-violet-700'
-                      : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200'
+                      : 'bg-gray-100 text-gray-500'
                   )}
                 >
                   {f.count}
