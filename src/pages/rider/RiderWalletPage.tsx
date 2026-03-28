@@ -13,6 +13,7 @@ import {
   Info,
   ChevronDown,
   ChevronUp,
+  CreditCard,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -267,11 +268,11 @@ export function RiderWalletPage() {
   const getTransactionIcon = (type: string) => {
     switch (type) {
       case 'escrow_release':
-        return <ArrowDownLeft className="w-5 h-5 text-green-500" />;
+        return <ArrowDownLeft className="h-5 w-5 text-green-500" />;
       case 'withdrawal':
-        return <ArrowUpRight className="w-5 h-5 text-red-500" />;
+        return <ArrowUpRight className="h-5 w-5 text-red-500" />;
       default:
-        return <Lock className="w-5 h-5 text-gray-500" />;
+        return <Lock className="h-5 w-5 text-gray-500" />;
     }
   };
 
@@ -313,45 +314,44 @@ export function RiderWalletPage() {
     isOpen: boolean;
     onToggle: () => void;
   }) => (
-    <button
-      type="button"
-      onClick={onToggle}
-      className="w-full rounded-2xl border border-gray-100 bg-white px-4 py-3 shadow-sm transition-all hover:border-violet-200 hover:shadow"
-    >
-      <div className="flex items-center justify-between gap-4">
-        <div className="min-w-0 flex-1">
-          <div className="grid grid-cols-[1fr_auto] items-center gap-3">
-            <p className="truncate text-left text-base font-semibold text-gray-900">{title}</p>
+    <button type="button" onClick={onToggle} className="w-full">
+      <Card className="overflow-hidden border-violet-100 bg-gradient-to-br from-violet-50/70 via-white to-fuchsia-50/50 shadow-sm transition-all duration-200 hover:shadow-md">
+        <CardContent className="p-5">
+          <div className="flex items-center justify-between gap-4">
+            <div className="min-w-0 flex-1">
+              <div className="grid grid-cols-[1fr_auto] items-center gap-3">
+                <p className="truncate text-left text-xl font-semibold text-gray-900">{title}</p>
+                <span className="inline-flex min-w-[2.25rem] items-center justify-center rounded-full bg-violet-100 px-2.5 py-1 text-xs font-semibold text-violet-700">
+                  {count}
+                </span>
+              </div>
+            </div>
 
-            <span className="inline-flex min-w-[2.25rem] items-center justify-center rounded-full bg-violet-100 px-2.5 py-1 text-xs font-semibold text-violet-700">
-              {count}
-            </span>
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-violet-600 shadow-sm ring-1 ring-violet-100">
+              {isOpen ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+            </div>
           </div>
-        </div>
-
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-600">
-          {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </button>
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-7">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">My Wallet</h1>
         <p className="text-gray-500">Manage your earnings</p>
       </div>
 
-      <Card className="border-violet-100 bg-violet-50/60">
-        <CardContent className="p-4">
+      <Card className="overflow-hidden border-violet-100 bg-gradient-to-r from-violet-50/80 via-white to-fuchsia-50/70 shadow-sm">
+        <CardContent className="p-4 sm:p-5">
           <div className="flex items-start gap-3">
-            <div className="mt-0.5">
-              <Info className="w-5 h-5 text-violet-600" />
+            <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-100">
+              <Info className="h-5 w-5 text-violet-600" />
             </div>
-            <div>
-              <p className="font-medium text-violet-900">Weekly payouts every Friday</p>
-              <p className="mt-1 text-sm text-violet-700">
+            <div className="min-w-0">
+              <p className="font-semibold text-violet-900">Weekly payouts every Friday</p>
+              <p className="mt-1 text-sm leading-6 text-violet-700">
                 Withdrawal requests are reviewed and paid out every Friday. Submit your request
                 before Friday to be included in the next payout cycle. Only one active withdrawal
                 request can be open at a time.
@@ -361,22 +361,26 @@ export function RiderWalletPage() {
         </CardContent>
       </Card>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card className="border-0 bg-gradient-to-br from-violet-500 to-purple-600 text-white">
+      <div className="space-y-4 rounded-3xl bg-gray-50/60 p-2">
+        <Card className="overflow-hidden border-0 bg-gradient-to-br from-violet-500 to-purple-600 text-white shadow-[0_10px_30px_rgba(124,58,237,0.25)]">
           <CardContent className="p-6">
-            <div className="mb-4 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Wallet className="h-6 w-6 text-violet-200" />
-                <span className="text-violet-100">Available to Withdraw</span>
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm text-violet-100">Available to Withdraw</p>
+                <p className="mt-2 text-4xl font-bold tracking-tight">
+                  {formatCurrency(liveAvailableBalance)}
+                </p>
+              </div>
+
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm">
+                <Wallet className="h-8 w-8 text-violet-100" />
               </div>
             </div>
-
-            <p className="text-4xl font-bold">{formatCurrency(liveAvailableBalance)}</p>
 
             <Button
               onClick={() => setShowWithdrawDialog(true)}
               disabled={hasActiveWithdrawalRequest}
-              className="mt-4 bg-white text-violet-600 hover:bg-violet-50 disabled:bg-white/70 disabled:text-violet-400"
+              className="mt-5 bg-white text-violet-600 hover:bg-violet-50 disabled:bg-white/70 disabled:text-violet-400"
             >
               {hasActiveWithdrawalRequest ? 'Withdrawal In Progress' : 'Withdraw'}
             </Button>
@@ -389,17 +393,24 @@ export function RiderWalletPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-6">
-            <div className="mb-4 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Lock className="h-6 w-6 text-amber-500" />
-                <span className="text-gray-600">Pending</span>
+        <Card className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+          <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-amber-400 to-orange-500" />
+          <CardContent className="p-6 pl-7">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-medium uppercase tracking-[0.14em] text-gray-400">
+                  Pending
+                </p>
+                <p className="mt-3 text-4xl font-bold tracking-tight text-gray-900">
+                  {formatCurrency(pendingEarnings)}
+                </p>
+                <p className="mt-2 text-sm text-gray-500">From active funded deliveries</p>
+              </div>
+
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-50 text-amber-500 transition-colors duration-200 group-hover:bg-amber-100">
+                <Lock className="h-8 w-8" />
               </div>
             </div>
-
-            <p className="text-4xl font-bold text-gray-900">{formatCurrency(pendingEarnings)}</p>
-            <p className="mt-2 text-sm text-gray-500">From active funded deliveries</p>
           </CardContent>
         </Card>
       </div>
@@ -421,13 +432,17 @@ export function RiderWalletPage() {
                 </CardContent>
               </Card>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-6 rounded-3xl bg-gray-50/60 p-2">
                 {activeWithdrawals.map((request: any) => (
-                  <Card key={request.id}>
-                    <CardContent className="p-4">
+                  <Card
+                    key={request.id}
+                    className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]"
+                  >
+                    <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-amber-400 to-orange-500" />
+                    <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
                       <div className="flex items-center justify-between gap-3">
                         <div className="min-w-0 flex items-center gap-3">
-                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-100">
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-amber-100">
                             <Banknote className="h-5 w-5 text-amber-600" />
                           </div>
 
@@ -479,15 +494,26 @@ export function RiderWalletPage() {
                 </CardContent>
               </Card>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-6 rounded-3xl bg-gray-50/60 p-2">
                 {completedWithdrawals.slice(0, 10).map((request: any) => (
-                  <Card key={request.id}>
-                    <CardContent className="p-4">
+                  <Card
+                    key={request.id}
+                    className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]"
+                  >
+                    <div
+                      className={cn(
+                        'absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b',
+                        (request.status || '').toLowerCase() === 'completed'
+                          ? 'from-emerald-400 to-green-500'
+                          : 'from-rose-400 to-red-500'
+                      )}
+                    />
+                    <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
                       <div className="flex items-center justify-between gap-3">
                         <div className="min-w-0 flex items-center gap-3">
                           <div
                             className={cn(
-                              'flex h-10 w-10 shrink-0 items-center justify-center rounded-full',
+                              'flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl',
                               (request.status || '').toLowerCase() === 'completed'
                                 ? 'bg-green-100'
                                 : 'bg-red-100'
@@ -558,17 +584,31 @@ export function RiderWalletPage() {
                 </CardContent>
               </Card>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-6 rounded-3xl bg-gray-50/60 p-2">
                 {transactions.map((tx) => (
-                  <Card key={tx.id}>
-                    <CardContent className="p-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
+                  <Card
+                    key={tx.id}
+                    className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]"
+                  >
+                    <div
+                      className={cn(
+                        'absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b',
+                        tx.transaction_type === 'escrow_release'
+                          ? 'from-emerald-400 to-green-500'
+                          : tx.transaction_type === 'withdrawal'
+                          ? 'from-rose-400 to-red-500'
+                          : 'from-gray-400 to-gray-500'
+                      )}
+                    />
+
+                    <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
+                      <div className="flex items-center justify-between gap-4">
+                        <div className="min-w-0 flex items-center gap-3">
+                          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gray-100">
                             {getTransactionIcon(tx.transaction_type)}
                           </div>
 
-                          <div>
+                          <div className="min-w-0">
                             <p className="font-medium text-gray-900">
                               {formatTransactionType(tx.transaction_type)}
                             </p>
@@ -579,7 +619,10 @@ export function RiderWalletPage() {
                         </div>
 
                         <p
-                          className={cn('font-semibold', getTransactionAmountClass(tx.transaction_type))}
+                          className={cn(
+                            'shrink-0 font-semibold',
+                            getTransactionAmountClass(tx.transaction_type)
+                          )}
                         >
                           {tx.transaction_type === 'escrow_release' ? '+' : '-'}
                           {formatCurrency(tx.amount)}
@@ -587,7 +630,7 @@ export function RiderWalletPage() {
                       </div>
 
                       {tx.description && (
-                        <p className="mt-2 text-sm text-gray-500">{tx.description}</p>
+                        <p className="mt-3 text-sm text-gray-500">{tx.description}</p>
                       )}
                     </CardContent>
                   </Card>
@@ -599,71 +642,97 @@ export function RiderWalletPage() {
       </div>
 
       <Dialog open={showWithdrawDialog} onOpenChange={setShowWithdrawDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Withdraw Funds</DialogTitle>
-          </DialogHeader>
-
-          <div className="space-y-4">
-            {hasActiveWithdrawalRequest ? (
-              <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
-                <p className="text-sm text-amber-800">
-                  You already have a pending withdrawal request. Wait for it to be processed before
-                  creating another one.
-                </p>
+        <DialogContent className="overflow-hidden rounded-[28px] border-0 bg-white p-0 shadow-[0_24px_80px_rgba(15,23,42,0.20)] sm:max-w-md">
+          <div className="bg-gradient-to-br from-violet-50 via-white to-fuchsia-50">
+            <DialogHeader className="border-b border-violet-100/70 px-6 pb-4 pt-6 text-left">
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 shadow-[0_10px_30px_rgba(124,58,237,0.22)]">
+                <Wallet className="h-7 w-7 text-white" />
               </div>
-            ) : (
-              <>
-                <div className="rounded-lg border border-violet-200 bg-violet-50 p-4">
-                  <p className="text-sm text-violet-800">
-                    Withdrawal requests are paid out every Friday. Once submitted, your request will
-                    be reviewed by admin and processed in the next payout cycle.
+              <DialogTitle className="text-2xl font-semibold tracking-tight text-gray-900">
+                Withdraw Funds
+              </DialogTitle>
+              <p className="mt-2 text-sm leading-6 text-gray-500">
+                Request a payout from your available balance. Approved withdrawals are processed in
+                the next payout cycle.
+              </p>
+            </DialogHeader>
+
+            <div className="space-y-5 px-6 py-5">
+              {hasActiveWithdrawalRequest ? (
+                <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4">
+                  <p className="text-sm leading-6 text-amber-800">
+                    You already have a pending withdrawal request. Wait for it to be processed before
+                    creating another one.
                   </p>
                 </div>
+              ) : (
+                <>
+                  <div className="rounded-2xl border border-violet-200 bg-violet-50/80 p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-violet-600">
+                        <CreditCard className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-violet-900">Friday payout cycle</p>
+                        <p className="mt-1 text-sm leading-6 text-violet-800">
+                          Withdrawal requests are paid out every Friday after review. Submit early to
+                          be included in the next cycle.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
 
-                <div>
-                  <label className="text-sm font-medium text-gray-700">Amount (₦)</label>
-                  <Input
-                    type="number"
-                    placeholder={`Minimum ${formatCurrency(MIN_WITHDRAWAL)}`}
-                    value={withdrawAmount}
-                    onChange={(e) => setWithdrawAmount(e.target.value)}
-                    className="mt-1"
-                  />
-                </div>
-
-                {bankAccounts.length === 0 ? (
-                  <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
-                    <p className="text-sm text-amber-800">
-                      Please add a bank account in your profile first.
+                  <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+                    <label className="mb-3 block text-sm font-semibold text-gray-800">
+                      Amount (₦)
+                    </label>
+                    <Input
+                      type="number"
+                      placeholder={`Minimum ${formatCurrency(MIN_WITHDRAWAL)}`}
+                      value={withdrawAmount}
+                      onChange={(e) => setWithdrawAmount(e.target.value)}
+                      className="h-14 rounded-2xl border-gray-200 bg-gray-50 text-base font-medium text-gray-900 placeholder:text-gray-400 focus:border-violet-300 focus:ring-violet-200"
+                    />
+                    <p className="mt-3 text-sm text-gray-500">
+                      Minimum withdrawal: {formatCurrency(MIN_WITHDRAWAL)}
                     </p>
                   </div>
-                ) : (
-                  <div>
-                    <label className="text-sm font-medium text-gray-700">Bank Account</label>
-                    <select
-                      value={selectedBankId}
-                      onChange={(e) => setSelectedBankId(e.target.value)}
-                      className="mt-1 w-full rounded-lg border p-2"
-                    >
-                      {bankAccounts.map((account) => (
-                        <option key={account.id} value={account.id}>
-                          {account.bank_name} - {account.account_number}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
 
-                <Button
-                  onClick={handleWithdraw}
-                  disabled={isWithdrawing || bankAccounts.length === 0}
-                  className="w-full bg-violet-600 text-white hover:bg-violet-700"
-                >
-                  {isWithdrawing ? 'Processing...' : 'Request Withdrawal'}
-                </Button>
-              </>
-            )}
+                  {bankAccounts.length === 0 ? (
+                    <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4">
+                      <p className="text-sm leading-6 text-amber-800">
+                        Please add a bank account in your profile first.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+                      <label className="mb-3 block text-sm font-semibold text-gray-800">
+                        Bank Account
+                      </label>
+                      <select
+                        value={selectedBankId}
+                        onChange={(e) => setSelectedBankId(e.target.value)}
+                        className="h-14 w-full rounded-2xl border border-gray-200 bg-gray-50 px-4 text-base font-medium text-gray-900 outline-none transition-all focus:border-violet-300 focus:ring-4 focus:ring-violet-200/60"
+                      >
+                        {bankAccounts.map((account) => (
+                          <option key={account.id} value={account.id}>
+                            {account.bank_name} - {account.account_number}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  <Button
+                    onClick={handleWithdraw}
+                    disabled={isWithdrawing || bankAccounts.length === 0}
+                    className="h-12 w-full rounded-2xl bg-violet-600 text-white hover:bg-violet-700"
+                  >
+                    {isWithdrawing ? 'Processing...' : 'Request Withdrawal'}
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
         </DialogContent>
       </Dialog>
