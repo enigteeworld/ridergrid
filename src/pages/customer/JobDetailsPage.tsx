@@ -43,6 +43,17 @@ type RpcResponse = {
   message?: string;
 };
 
+type JobDispute = {
+  id: string;
+  status: 'open' | 'under_review' | 'resolved' | 'closed';
+  dispute_type: string;
+  description: string;
+  resolution_notes: string | null;
+  created_at: string;
+  updated_at?: string | null;
+  resolved_at?: string | null;
+};
+
 export function JobDetailsPage() {
   const { jobId } = useParams<{ jobId: string }>();
   const navigate = useNavigate();
@@ -51,6 +62,7 @@ export function JobDetailsPage() {
   const [job, setJob] = useState<JobDetails | null>(null);
   const [deliveryProofs, setDeliveryProofs] = useState<any[]>([]);
   const [existingRating, setExistingRating] = useState<Rating | null>(null);
+  const [existingDispute, setExistingDispute] = useState<JobDispute | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isFunding, setIsFunding] = useState(false);
   const [isConfirmingCompletion, setIsConfirmingCompletion] = useState(false);
@@ -130,6 +142,31 @@ export function JobDetailsPage() {
         setExistingRating(ratingData);
       } else {
         setExistingRating(null);
+      }
+
+      const { data: disputeData, error: disputeError } = await supabase
+        .from('disputes')
+        .select('*')
+        .eq('dispatch_job_id', jobId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (disputeError) {
+        console.error('Error fetching dispute:', disputeError);
+      } else if (disputeData) {
+        setExistingDispute({
+          id: disputeData.id,
+          status: (disputeData.status || 'open').toLowerCase(),
+          dispute_type: disputeData.dispute_type || 'other',
+          description: disputeData.description || '',
+          resolution_notes: disputeData.resolution_notes || null,
+          created_at: disputeData.created_at,
+          updated_at: disputeData.updated_at || null,
+          resolved_at: disputeData.resolved_at || null,
+        });
+      } else {
+        setExistingDispute(null);
       }
     } catch (error) {
       console.error('Error fetching job details:', error);
@@ -262,6 +299,28 @@ export function JobDetailsPage() {
     if (!job || !disputeDescription.trim() || !user?.id) return;
 
     try {
+      const { data: openCase, error: openCaseError } = await supabase
+        .from('disputes')
+        .select('id, status')
+        .eq('dispatch_job_id', job.id)
+        .in('status', ['open', 'under_review'])
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (openCaseError) throw openCaseError;
+
+      if (openCase) {
+        showToast(
+          'info',
+          'Support case already open',
+          'There is already an active support case for this delivery.'
+        );
+        await fetchJobDetails();
+        setShowDisputeDialog(false);
+        return;
+      }
+
       const { error } = await supabase.from('disputes').insert({
         dispatch_job_id: job.id,
         raised_by: user.id,
@@ -334,6 +393,19 @@ export function JobDetailsPage() {
     const currentIndex = steps.findIndex((s) => s.status === normalizedStatus);
     return { steps, currentIndex: currentIndex >= 0 ? currentIndex : 0 };
   };
+
+  const getDisputeBadgeClass = (status: string) => {
+    const styles: Record<string, string> = {
+      open: 'bg-red-100 text-red-700',
+      under_review: 'bg-amber-100 text-amber-700',
+      resolved: 'bg-green-100 text-green-700',
+      closed: 'bg-gray-100 text-gray-700',
+    };
+    return styles[status] || 'bg-gray-100 text-gray-700';
+  };
+
+  const formatDisputeText = (value: string) =>
+    value.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
 
   if (isLoading) {
     return (
@@ -497,9 +569,9 @@ export function JobDetailsPage() {
         </Card>
       )}
 
-      {['in_progress', 'rider_marked_complete', 'disputed'].includes(job.status) && (
+      {(['in_progress', 'rider_marked_complete', 'disputed'].includes(job.status) || existingDispute) && (
         <Card className="border-amber-200 bg-amber-50/80">
-          <CardContent className="p-4 sm:p-5">
+          <CardContent className="p-4 sm:p-5 space-y-4">
             <div className="flex items-start gap-3">
               <ShieldAlert className="w-5 h-5 text-amber-700 mt-0.5 shrink-0" />
               <div className="space-y-1">
@@ -511,6 +583,48 @@ export function JobDetailsPage() {
                 </p>
               </div>
             </div>
+
+            {existingDispute && (
+              <div className="rounded-lg bg-white/80 border border-amber-200 p-4 space-y-3">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-sm text-gray-500">Current support case</p>
+                    <p className="font-medium text-gray-900">
+                      {formatDisputeText(existingDispute.dispute_type)}
+                    </p>
+                  </div>
+
+                  <span
+                    className={cn(
+                      'inline-flex self-start px-2.5 py-1 rounded-full text-xs font-medium',
+                      getDisputeBadgeClass(existingDispute.status)
+                    )}
+                  >
+                    {formatDisputeText(existingDispute.status)}
+                  </span>
+                </div>
+
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">Your message</p>
+                  <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                    {existingDispute.description}
+                  </p>
+                </div>
+
+                {existingDispute.resolution_notes && (
+                  <div>
+                    <p className="text-sm text-gray-500 mb-1">Admin update</p>
+                    <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                      {existingDispute.resolution_notes}
+                    </p>
+                  </div>
+                )}
+
+                <div className="text-xs text-gray-500">
+                  Opened {formatDateTime(existingDispute.created_at)}
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
       )}
@@ -748,7 +862,7 @@ export function JobDetailsPage() {
           </Button>
         )}
 
-        {['in_progress', 'rider_marked_complete'].includes(job.status) && (
+        {['in_progress', 'rider_marked_complete'].includes(job.status) && !existingDispute && (
           <Button
             onClick={() => setShowDisputeDialog(true)}
             variant="outline"
