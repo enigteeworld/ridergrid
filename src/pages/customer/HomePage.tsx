@@ -618,7 +618,7 @@ export function HomePage() {
                             rider.is_online ? 'text-green-600' : 'text-amber-700'
                           )}
                         >
-                          {rider.is_online ? 'Online' : 'Available'}
+                          {rider.is_online ? 'Online' : 'Active'}
                         </div>
                         <span className="mt-1 block text-sm text-gray-500">status</span>
                       </div>

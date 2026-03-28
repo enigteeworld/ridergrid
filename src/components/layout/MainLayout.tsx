@@ -1,7 +1,6 @@
 // ============================================
 // DISPATCH NG - Main Layout (Customer)
 // ============================================
-
 import { Outlet, NavLink } from 'react-router-dom';
 import {
   Home,
@@ -13,6 +12,8 @@ import {
   X,
   Package,
   Bell,
+  LogOut,
+  ChevronRight,
 } from 'lucide-react';
 import { useState } from 'react';
 import { useAuthStore } from '@/stores/authStore';
@@ -28,11 +29,11 @@ const desktopNavItems = [
 ];
 
 const mobileNavItems = [
-  { path: '/dashboard', icon: Home, label: 'Home' },
-  { path: '/find-riders', icon: Search, label: 'Find Riders' },
-  { path: '/jobs', icon: ClipboardList, label: 'My Jobs' },
-  { path: '/wallet', icon: Wallet, label: 'Wallet' },
-  { path: '/profile', icon: User, label: 'Profile' },
+  { path: '/dashboard', icon: Home, label: 'Home', shortLabel: 'Home' },
+  { path: '/find-riders', icon: Search, label: 'Find Riders', shortLabel: 'Find' },
+  { path: '/jobs', icon: ClipboardList, label: 'My Jobs', shortLabel: 'My' },
+  { path: '/wallet', icon: Wallet, label: 'Wallet', shortLabel: 'Wallet' },
+  { path: '/profile', icon: User, label: 'Profile', shortLabel: 'Profile' },
 ];
 
 export function MainLayout() {
@@ -46,54 +47,56 @@ export function MainLayout() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
-        <div className="max-w-5xl mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <NavLink to="/dashboard" className="flex items-center gap-2">
-              <div className="bg-gradient-to-br from-violet-500 to-fuchsia-500 p-2 rounded-xl">
-                <Package className="w-6 h-6 text-white" />
+      <header className="sticky top-0 z-50 border-b border-gray-200/80 bg-white/95 backdrop-blur-xl">
+        <div className="mx-auto max-w-5xl px-4">
+          <div className="flex h-16 items-center justify-between">
+            <NavLink to="/dashboard" className="flex items-center gap-3">
+              <div className="rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 p-2.5 shadow-[0_10px_24px_rgba(124,58,237,0.22)]">
+                <Package className="h-6 w-6 text-white" />
               </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent hidden sm:block">
+
+              <span className="hidden bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-xl font-bold text-transparent sm:block">
                 Dispatch NG
               </span>
             </NavLink>
 
-            <nav className="hidden md:flex items-center gap-1">
+            <nav className="hidden items-center gap-2 md:flex">
               {desktopNavItems.map((item) => (
                 <NavLink
                   key={item.path}
                   to={item.path}
                   className={({ isActive }) =>
                     cn(
-                      'p-3 rounded-xl transition-all duration-200',
+                      'flex items-center gap-2 rounded-2xl px-4 py-2.5 text-sm font-medium transition-all duration-200',
                       isActive
-                        ? 'text-violet-600 bg-violet-50'
-                        : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                        ? 'bg-violet-50 text-violet-700 shadow-sm ring-1 ring-violet-100'
+                        : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
                     )
                   }
                 >
-                  <item.icon className="w-6 h-6" />
+                  <item.icon className="h-5 w-5" />
+                  <span>{item.label}</span>
                 </NavLink>
               ))}
             </nav>
 
-            <div className="flex items-center gap-3">
-              <button className="relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition-colors">
-                <Bell className="w-6 h-6" />
+            <div className="flex items-center gap-2 sm:gap-3">
+              <button className="relative rounded-2xl p-2.5 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700">
+                <Bell className="h-6 w-6" />
                 {unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-medium">
+                  <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-semibold text-white">
                     {unreadCount > 9 ? '9+' : unreadCount}
                   </span>
                 )}
               </button>
 
               <NavLink to="/profile" className="hidden sm:block">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 flex items-center justify-center text-white font-medium overflow-hidden">
+                <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 text-sm font-semibold text-white shadow-sm ring-2 ring-white">
                   {user?.avatar_url ? (
                     <img
                       src={user.avatar_url}
                       alt={user.full_name || 'Profile'}
-                      className="w-full h-full object-cover"
+                      className="h-full w-full object-cover"
                     />
                   ) : (
                     <span>{user?.full_name?.charAt(0).toUpperCase() || 'U'}</span>
@@ -102,19 +105,85 @@ export function MainLayout() {
               </NavLink>
 
               <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition-colors"
+                onClick={() => setMobileMenuOpen((prev) => !prev)}
+                className="rounded-2xl p-2.5 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 md:hidden"
+                aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
               >
-                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 z-40 bg-white">
-          <div className="pt-20 px-4 pb-4">
+      <div
+        className={cn(
+          'fixed inset-0 z-40 bg-black/30 backdrop-blur-[2px] transition-all duration-300 md:hidden',
+          mobileMenuOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+        )}
+        onClick={() => setMobileMenuOpen(false)}
+      />
+
+      <aside
+        className={cn(
+          'fixed right-0 top-0 z-50 h-full w-[88%] max-w-sm border-l border-gray-200/80 bg-white/95 shadow-[0_24px_80px_rgba(15,23,42,0.18)] backdrop-blur-xl transition-transform duration-300 md:hidden',
+          mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        )}
+      >
+        <div className="flex h-full flex-col">
+          <div className="border-b border-gray-100 px-5 pb-5 pt-5">
+            <div className="mb-5 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 p-2.5 shadow-[0_10px_24px_rgba(124,58,237,0.22)]">
+                  <Package className="h-5 w-5 text-white" />
+                </div>
+                <span className="bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-lg font-bold text-transparent">
+                  Dispatch NG
+                </span>
+              </div>
+
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-2xl bg-gray-100 p-2 text-gray-500 transition-colors hover:bg-gray-200 hover:text-gray-700"
+                aria-label="Close menu"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <NavLink
+              to="/profile"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block"
+            >
+              <div className="flex items-center gap-3 rounded-2xl border border-violet-100 bg-gradient-to-r from-violet-50/80 via-white to-fuchsia-50/70 p-3">
+                <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 text-base font-semibold text-white shadow-sm">
+                  {user?.avatar_url ? (
+                    <img
+                      src={user.avatar_url}
+                      alt={user.full_name || 'Profile'}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <span>{user?.full_name?.charAt(0).toUpperCase() || 'U'}</span>
+                  )}
+                </div>
+
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-semibold text-gray-900">
+                    {user?.full_name || 'User'}
+                  </p>
+                  <p className="truncate text-sm text-gray-500">
+                    {user?.email || 'View profile'}
+                  </p>
+                </div>
+
+                <ChevronRight className="h-5 w-5 text-violet-500" />
+              </div>
+            </NavLink>
+          </div>
+
+          <div className="flex-1 overflow-y-auto px-4 py-4">
             <nav className="space-y-2">
               {desktopNavItems.map((item) => (
                 <NavLink
@@ -123,56 +192,83 @@ export function MainLayout() {
                   onClick={() => setMobileMenuOpen(false)}
                   className={({ isActive }) =>
                     cn(
-                      'flex items-center gap-4 p-4 rounded-xl transition-all duration-200',
+                      'group flex items-center gap-4 rounded-2xl px-4 py-3.5 transition-all duration-200',
                       isActive
-                        ? 'text-violet-600 bg-violet-50 font-medium'
-                        : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                        ? 'bg-violet-50 text-violet-700 shadow-sm ring-1 ring-violet-100'
+                        : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
                     )
                   }
                 >
-                  <item.icon className="w-6 h-6" />
-                  <span className="text-lg">{item.label}</span>
+                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gray-100 text-gray-500 transition-colors group-hover:bg-gray-200">
+                    <item.icon className="h-5 w-5" />
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <span className="text-base font-medium">{item.label}</span>
+                  </div>
+
+                  <ChevronRight className="h-4 w-4 opacity-60" />
                 </NavLink>
               ))}
-
-              <hr className="my-4 border-gray-200" />
-
-              <button
-                onClick={handleSignOut}
-                className="flex items-center gap-4 p-4 text-red-500 hover:bg-red-50 rounded-xl transition-colors w-full"
-              >
-                <span className="text-lg">Sign Out</span>
-              </button>
             </nav>
           </div>
-        </div>
-      )}
 
-      <main className="max-w-5xl mx-auto px-4 py-6">
+          <div className="border-t border-gray-100 px-4 py-4">
+            <button
+              onClick={handleSignOut}
+              className="flex w-full items-center gap-4 rounded-2xl px-4 py-3.5 text-red-500 transition-colors hover:bg-red-50"
+            >
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-red-50 text-red-500">
+                <LogOut className="h-5 w-5" />
+              </div>
+              <span className="text-base font-medium">Sign Out</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <main className="mx-auto max-w-5xl px-4 py-6">
         <Outlet />
       </main>
 
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
-        <div className="flex items-center justify-around h-16">
-          {mobileNavItems.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              className={({ isActive }) =>
-                cn(
-                  'flex flex-col items-center gap-1 p-2 transition-colors',
-                  isActive ? 'text-violet-600' : 'text-gray-400'
-                )
-              }
-            >
-              <item.icon className="w-6 h-6" />
-              <span className="text-xs">{item.label.split(' ')[0]}</span>
-            </NavLink>
-          ))}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200/80 bg-white/95 backdrop-blur-xl md:hidden">
+        <div className="mx-auto max-w-5xl px-2 pb-[max(env(safe-area-inset-bottom),0.35rem)] pt-2">
+          <div className="grid grid-cols-5 gap-1">
+            {mobileNavItems.map((item) => (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                className={({ isActive }) =>
+                  cn(
+                    'flex flex-col items-center justify-center rounded-2xl px-1 py-2.5 transition-all duration-200',
+                    isActive
+                      ? 'bg-violet-50 text-violet-700'
+                      : 'text-gray-400 hover:bg-gray-50 hover:text-gray-600'
+                  )
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    <div
+                      className={cn(
+                        'mb-1.5 flex h-9 w-9 items-center justify-center rounded-2xl transition-all duration-200',
+                        isActive ? 'bg-white shadow-sm ring-1 ring-violet-100' : 'bg-transparent'
+                      )}
+                    >
+                      <item.icon className="h-5 w-5" />
+                    </div>
+                    <span className="text-[11px] font-medium leading-none">
+                      {item.shortLabel}
+                    </span>
+                  </>
+                )}
+              </NavLink>
+            ))}
+          </div>
         </div>
       </nav>
 
-      <div className="md:hidden h-16" />
+      <div className="h-20 md:hidden" />
     </div>
   );
 }

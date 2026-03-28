@@ -134,11 +134,7 @@ export function MyJobsPage() {
           <p className="text-gray-500">Track and manage your deliveries</p>
         </div>
 
-        <Link to="/create-job">
-          <Button className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white sm:w-auto">
-            New Delivery
-          </Button>
-        </Link>
+        
       </div>
 
       <div className="rounded-2xl border border-violet-100 bg-gradient-to-r from-violet-50/80 via-white to-fuchsia-50/70 p-3 shadow-sm">

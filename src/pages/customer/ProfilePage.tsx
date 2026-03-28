@@ -102,142 +102,175 @@ export function ProfilePage() {
     await signOut();
   };
 
+  const infoFieldClass =
+    'h-12 rounded-2xl border-gray-200 bg-gray-50 text-base text-gray-900 placeholder:text-gray-400 focus:border-violet-300 focus:ring-violet-200';
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-7">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">My Profile</h1>
         <p className="text-gray-500">Manage your account settings</p>
       </div>
 
-      <Card>
-        <CardContent className="p-6">
-          <div className="flex flex-col items-center">
-            <div className="relative mb-4">
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 flex items-center justify-center text-white text-3xl font-medium overflow-hidden">
-                {user?.avatar_url ? (
-                  <img
-                    src={user.avatar_url}
-                    alt={user.full_name}
-                    className="w-full h-full rounded-full object-cover"
+      <div className="space-y-4 rounded-3xl bg-gray-50/60 p-2">
+        <Card className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+          <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-violet-500 to-fuchsia-500" />
+          <CardContent className="p-6 pl-7">
+            <div className="flex flex-col items-center text-center">
+              <div className="relative mb-5">
+                <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-gradient-to-br from-violet-400 to-fuchsia-400 text-4xl font-semibold text-white shadow-[0_12px_30px_rgba(124,58,237,0.22)]">
+                  {user?.avatar_url ? (
+                    <img
+                      src={user.avatar_url}
+                      alt={user.full_name}
+                      className="h-full w-full rounded-full object-cover"
+                    />
+                  ) : (
+                    user?.full_name?.charAt(0).toUpperCase()
+                  )}
+                </div>
+
+                <label className="absolute -bottom-1 -right-1 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-violet-600 shadow-lg transition-colors hover:bg-violet-700">
+                  <Camera className="h-5 w-5 text-white" />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleAvatarUpload}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+
+              <h2 className="text-2xl font-semibold tracking-tight text-gray-900">
+                {user?.full_name}
+              </h2>
+              <p className="mt-1 capitalize text-gray-500">{user?.user_type}</p>
+
+              {isUploading && <p className="mt-3 text-sm text-gray-500">Uploading photo...</p>}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+          <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-blue-400 to-cyan-500" />
+          <CardContent className="p-6 pl-7">
+            <div className="mb-6 flex items-center justify-between gap-3">
+              <h3 className="text-xl font-semibold text-gray-900">Personal Information</h3>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
+                disabled={isSaving}
+                className="rounded-xl border-violet-200 bg-white text-violet-700 hover:bg-violet-50 hover:text-violet-800"
+              >
+                {isEditing ? (
+                  <>
+                    <Check className="mr-2 h-4 w-4" />
+                    {isSaving ? 'Saving...' : 'Save'}
+                  </>
+                ) : (
+                  <>
+                    <Edit2 className="mr-2 h-4 w-4" />
+                    Edit
+                  </>
+                )}
+              </Button>
+            </div>
+
+            <div className="space-y-5">
+              <div className="rounded-2xl border border-gray-100 bg-gray-50/70 p-4">
+                <Label className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-700">
+                  <User className="h-4 w-4 text-gray-400" />
+                  Full Name
+                </Label>
+
+                {isEditing ? (
+                  <Input
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    className={infoFieldClass}
                   />
                 ) : (
-                  user?.full_name?.charAt(0).toUpperCase()
+                  <p className="rounded-2xl bg-white px-4 py-3 text-gray-700 shadow-sm">
+                    {user?.full_name}
+                  </p>
                 )}
               </div>
 
-              <label className="absolute -bottom-2 -right-2 w-10 h-10 bg-violet-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-violet-700 transition-colors">
-                <Camera className="w-5 h-5 text-white" />
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleAvatarUpload}
-                  className="hidden"
-                />
-              </label>
-            </div>
+              <div className="rounded-2xl border border-gray-100 bg-gray-50/70 p-4">
+                <Label className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-700">
+                  <Mail className="h-4 w-4 text-gray-400" />
+                  Email
+                </Label>
 
-            <h2 className="text-xl font-semibold text-gray-900">{user?.full_name}</h2>
-            <p className="text-gray-500 capitalize">{user?.user_type}</p>
-            {isUploading && <p className="text-sm text-gray-500 mt-3">Uploading photo...</p>}
-          </div>
-        </CardContent>
-      </Card>
+                <p className="rounded-2xl bg-white px-4 py-3 text-gray-700 shadow-sm">
+                  {user?.email}
+                </p>
+              </div>
 
-      <Card>
-        <CardContent className="p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-gray-900">Personal Information</h3>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
-              disabled={isSaving}
-            >
-              {isEditing ? (
-                <>
-                  <Check className="w-4 h-4 mr-2" />
-                  {isSaving ? 'Saving...' : 'Save'}
-                </>
-              ) : (
-                <>
-                  <Edit2 className="w-4 h-4 mr-2" />
-                  Edit
-                </>
-              )}
-            </Button>
-          </div>
+              <div className="rounded-2xl border border-gray-100 bg-gray-50/70 p-4">
+                <Label className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-700">
+                  <Phone className="h-4 w-4 text-gray-400" />
+                  Phone Number
+                </Label>
 
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label className="flex items-center gap-2">
-                <User className="w-4 h-4 text-gray-400" />
-                Full Name
-              </Label>
-              {isEditing ? (
-                <Input value={fullName} onChange={(e) => setFullName(e.target.value)} />
-              ) : (
-                <p className="text-gray-700 p-2 bg-gray-50 rounded-lg">{user?.full_name}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-gray-400" />
-                Email
-              </Label>
-              <p className="text-gray-700 p-2 bg-gray-50 rounded-lg">{user?.email}</p>
-            </div>
-
-            <div className="space-y-2">
-              <Label className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-gray-400" />
-                Phone Number
-              </Label>
-              {isEditing ? (
-                <Input value={phone} onChange={(e) => setPhone(e.target.value)} />
-              ) : (
-                <p className="text-gray-700 p-2 bg-gray-50 rounded-lg">{user?.phone || 'Not set'}</p>
-              )}
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardContent className="p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Account Information</h3>
-          <div className="space-y-3">
-            <div className="flex justify-between">
-              <span className="text-gray-500">Account Type</span>
-              <span className="font-medium capitalize">{user?.user_type}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-500">Member Since</span>
-              <span className="font-medium">
-                {user?.created_at ? new Date(user.created_at).toLocaleDateString() : '-'}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-500">Account Status</span>
-              <span
-                className={cn(
-                  'font-medium',
-                  user?.is_active ? 'text-green-600' : 'text-red-600'
+                {isEditing ? (
+                  <Input
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className={infoFieldClass}
+                  />
+                ) : (
+                  <p className="rounded-2xl bg-white px-4 py-3 text-gray-700 shadow-sm">
+                    {user?.phone || 'Not set'}
+                  </p>
                 )}
-              >
-                {user?.is_active ? 'Active' : 'Inactive'}
-              </span>
+              </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+
+        <Card className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+          <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-400 to-green-500" />
+          <CardContent className="p-6 pl-7">
+            <h3 className="mb-5 text-xl font-semibold text-gray-900">Account Information</h3>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-between gap-4 rounded-2xl bg-gray-50/80 px-4 py-3">
+                <span className="text-gray-500">Account Type</span>
+                <span className="font-medium capitalize text-gray-900">{user?.user_type}</span>
+              </div>
+
+              <div className="flex items-center justify-between gap-4 rounded-2xl bg-gray-50/80 px-4 py-3">
+                <span className="text-gray-500">Member Since</span>
+                <span className="font-medium text-gray-900">
+                  {user?.created_at ? new Date(user.created_at).toLocaleDateString() : '-'}
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between gap-4 rounded-2xl bg-gray-50/80 px-4 py-3">
+                <span className="text-gray-500">Account Status</span>
+                <span
+                  className={cn(
+                    'font-semibold',
+                    user?.is_active ? 'text-green-600' : 'text-red-600'
+                  )}
+                >
+                  {user?.is_active ? 'Active' : 'Inactive'}
+                </span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
       <Button
         onClick={handleSignOut}
         variant="outline"
-        className="w-full text-red-600 border-red-200 hover:bg-red-50"
+        className="h-12 w-full rounded-2xl border-red-200 text-red-600 hover:bg-red-50"
       >
-        <LogOut className="w-4 h-4 mr-2" />
+        <LogOut className="mr-2 h-4 w-4" />
         Sign Out
       </Button>
     </div>

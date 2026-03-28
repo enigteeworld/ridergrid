@@ -3,17 +3,17 @@
 // ============================================
 
 import { Outlet, NavLink } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  Users, 
-  ClipboardCheck, 
-  ClipboardList, 
-  AlertTriangle, 
+import {
+  LayoutDashboard,
+  Users,
+  ClipboardCheck,
+  ClipboardList,
+  AlertTriangle,
   Settings,
   Menu,
   X,
   Package,
-  LogOut
+  LogOut,
 } from 'lucide-react';
 import { useState } from 'react';
 import { useAuthStore } from '@/stores/authStore';
@@ -38,47 +38,44 @@ export function AdminLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen overflow-x-hidden bg-gray-100">
       {/* Top Navigation */}
-      <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
-        <div className="px-4">
-          <div className="flex items-center justify-between h-16">
+      <header className="sticky top-0 z-50 border-b border-gray-200 bg-white">
+        <div className="px-4 sm:px-5 lg:px-6">
+          <div className="flex h-16 items-center justify-between gap-3">
             {/* Left Section */}
-            <div className="flex items-center gap-4">
+            <div className="flex min-w-0 items-center gap-3 sm:gap-4">
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="hidden lg:block p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition-colors"
+                className="hidden rounded-xl p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 lg:block"
               >
-                <Menu className="w-6 h-6" />
+                <Menu className="h-6 w-6" />
               </button>
-              
-              {/* Logo */}
-              <NavLink to="/admin" className="flex items-center gap-2">
-                <div className="bg-gradient-to-br from-violet-500 to-fuchsia-500 p-2 rounded-xl">
-                  <Package className="w-6 h-6 text-white" />
+
+              <NavLink to="/admin" className="flex min-w-0 items-center gap-2">
+                <div className="rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 p-2">
+                  <Package className="h-6 w-6 text-white" />
                 </div>
-                <span className="text-xl font-bold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">
+                <span className="truncate text-xl font-bold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">
                   Admin
                 </span>
               </NavLink>
             </div>
 
             {/* Right Section */}
-            <div className="flex items-center gap-3">
-              {/* Mobile Menu Button */}
+            <div className="flex shrink-0 items-center gap-2 sm:gap-3">
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition-colors"
+                className="rounded-xl p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 lg:hidden"
               >
-                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
 
-              {/* Sign Out */}
               <button
                 onClick={handleSignOut}
-                className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors"
+                className="flex items-center gap-2 rounded-xl px-2.5 py-2 text-gray-600 transition-colors hover:bg-red-50 hover:text-red-600 sm:px-4"
               >
-                <LogOut className="w-5 h-5" />
+                <LogOut className="h-5 w-5" />
                 <span className="hidden sm:inline">Sign Out</span>
               </button>
             </div>
@@ -86,28 +83,30 @@ export function AdminLayout() {
         </div>
       </header>
 
-      <div className="flex">
+      <div className="flex min-w-0">
         {/* Sidebar - Desktop */}
-        <aside className={cn(
-          'hidden lg:block fixed left-0 top-16 bottom-0 bg-white border-r border-gray-200 overflow-y-auto transition-all duration-300 z-40',
-          sidebarOpen ? 'w-64' : 'w-20'
-        )}>
-          <nav className="p-4 space-y-2">
+        <aside
+          className={cn(
+            'fixed bottom-0 left-0 top-16 z-40 hidden overflow-y-auto border-r border-gray-200 bg-white transition-all duration-300 lg:block',
+            sidebarOpen ? 'w-64' : 'w-20'
+          )}
+        >
+          <nav className="space-y-2 p-4">
             {navItems.map((item) => (
               <NavLink
                 key={item.path}
                 to={item.path}
                 className={({ isActive }) =>
                   cn(
-                    'flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200',
-                    isActive 
-                      ? 'text-violet-600 bg-violet-50 font-medium' 
-                      : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                    'flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200',
+                    isActive
+                      ? 'bg-violet-50 font-medium text-violet-600'
+                      : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
                   )
                 }
               >
-                <item.icon className="w-6 h-6 flex-shrink-0" />
-                {sidebarOpen && <span>{item.label}</span>}
+                <item.icon className="h-6 w-6 shrink-0" />
+                {sidebarOpen && <span className="truncate">{item.label}</span>}
               </NavLink>
             ))}
           </nav>
@@ -115,8 +114,8 @@ export function AdminLayout() {
 
         {/* Mobile Navigation Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden fixed inset-0 z-40 bg-white">
-            <div className="pt-20 px-4 pb-4">
+          <div className="fixed inset-0 z-40 bg-white lg:hidden">
+            <div className="px-4 pb-4 pt-20">
               <nav className="space-y-2">
                 {navItems.map((item) => (
                   <NavLink
@@ -125,28 +124,40 @@ export function AdminLayout() {
                     onClick={() => setMobileMenuOpen(false)}
                     className={({ isActive }) =>
                       cn(
-                        'flex items-center gap-4 p-4 rounded-xl transition-all duration-200',
-                        isActive 
-                          ? 'text-violet-600 bg-violet-50 font-medium' 
-                          : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                        'flex items-center gap-4 rounded-xl p-4 transition-all duration-200',
+                        isActive
+                          ? 'bg-violet-50 font-medium text-violet-600'
+                          : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
                       )
                     }
                   >
-                    <item.icon className="w-6 h-6" />
+                    <item.icon className="h-6 w-6 shrink-0" />
                     <span className="text-lg">{item.label}</span>
                   </NavLink>
                 ))}
+
+                <button
+                  onClick={handleSignOut}
+                  className="flex w-full items-center gap-4 rounded-xl p-4 text-red-500 transition-colors hover:bg-red-50"
+                >
+                  <LogOut className="h-6 w-6 shrink-0" />
+                  <span className="text-lg">Sign Out</span>
+                </button>
               </nav>
             </div>
           </div>
         )}
 
         {/* Main Content */}
-        <main className={cn(
-          'flex-1 p-6 transition-all duration-300',
-          sidebarOpen ? 'lg:ml-64' : 'lg:ml-20'
-        )}>
-          <Outlet />
+        <main
+          className={cn(
+            'min-w-0 flex-1 overflow-x-hidden px-4 py-5 sm:px-5 sm:py-6 lg:px-6',
+            sidebarOpen ? 'lg:ml-64' : 'lg:ml-20'
+          )}
+        >
+          <div className="mx-auto w-full min-w-0 max-w-7xl">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>

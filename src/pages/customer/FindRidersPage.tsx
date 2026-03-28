@@ -15,6 +15,7 @@ import {
   Clock3,
   Car,
   Truck,
+  MapPin,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -189,63 +190,76 @@ export function FindRidersPage() {
 
   const onlineCount = riders.filter((r) => r.is_online).length;
 
+  const getRiderAccent = (rider: CustomerRider) => {
+    if (rider.is_online) return 'from-emerald-400 to-green-500';
+    return 'from-amber-400 to-orange-500';
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-7">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Find Riders</h1>
         <p className="text-gray-500">Discover verified dispatch riders near you</p>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-4 rounded-3xl bg-gray-50/60 p-2">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
           <Input
             placeholder="Search by name, company or vehicle..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
+            className="h-12 rounded-2xl border-gray-200 bg-white pl-11 text-base placeholder:text-gray-400"
           />
         </div>
 
-        <div className="flex gap-2 overflow-x-auto pb-2">
-          {vehicleTypes.map((type) => (
-            <button
-              key={type}
-              onClick={() => setSelectedVehicle(type)}
-              className={cn(
-                'px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors',
-                selectedVehicle === type
-                  ? 'bg-violet-600 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              )}
-            >
-              {type === 'all' ? 'All Types' : type.charAt(0).toUpperCase() + type.slice(1)}
-            </button>
-          ))}
+        <div className="rounded-2xl border border-violet-100 bg-gradient-to-r from-violet-50/80 via-white to-fuchsia-50/70 p-3 shadow-sm">
+          <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+            {vehicleTypes.map((type) => {
+              const isActive = selectedVehicle === type;
+
+              return (
+                <button
+                  key={type}
+                  onClick={() => setSelectedVehicle(type)}
+                  className={cn(
+                    'group flex shrink-0 snap-start items-center gap-2 whitespace-nowrap rounded-2xl border px-5 py-2.5 transition-all duration-200',
+                    isActive
+                      ? 'border-violet-200 bg-white text-violet-700 shadow-sm shadow-violet-100'
+                      : 'border-gray-200 bg-white/70 text-gray-600 hover:bg-white hover:text-gray-900'
+                  )}
+                >
+                  <span className="text-sm font-semibold">
+                    {type === 'all' ? 'All Types' : type.charAt(0).toUpperCase() + type.slice(1)}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-4">
         <p className="text-gray-500">
           Showing {filteredRiders.length} verified rider{filteredRiders.length !== 1 ? 's' : ''}
         </p>
 
-        <div className="flex items-center gap-1 text-sm text-gray-600">
-          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+        <div className="flex items-center gap-2 rounded-full bg-green-50 px-3 py-1 text-sm text-green-700">
+          <div className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
           {onlineCount} online now
         </div>
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <Card key={i} className="animate-pulse">
-              <CardContent className="p-4">
+            <Card key={i} className="animate-pulse rounded-[28px]">
+              <CardContent className="p-5">
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-gray-200 rounded-full" />
+                  <div className="h-16 w-16 rounded-full bg-gray-200" />
                   <div className="flex-1 space-y-2">
-                    <div className="h-4 bg-gray-200 rounded w-3/4" />
-                    <div className="h-3 bg-gray-200 rounded w-1/2" />
+                    <div className="h-4 w-3/4 rounded bg-gray-200" />
+                    <div className="h-3 w-1/2 rounded bg-gray-200" />
                   </div>
                 </div>
               </CardContent>
@@ -253,104 +267,114 @@ export function FindRidersPage() {
           ))}
         </div>
       ) : filteredRiders.length === 0 ? (
-        <Card className="border-dashed border-2">
+        <Card className="border-2 border-dashed">
           <CardContent className="p-8 text-center">
-            <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
-              <Search className="w-8 h-8 text-gray-400" />
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
+              <Search className="h-8 w-8 text-gray-400" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No riders found</h3>
+            <h3 className="mb-2 text-lg font-medium text-gray-900">No riders found</h3>
             <p className="text-gray-500">Try adjusting your search or filters</p>
           </CardContent>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="space-y-6 rounded-3xl bg-gray-50/60 p-2">
           {filteredRiders.map((rider) => {
             const VehicleIcon = getVehicleIcon(rider.vehicle_type);
 
             return (
               <Card
                 key={rider.id}
-                className="hover:shadow-lg transition-all cursor-pointer group"
+                className="group relative cursor-pointer overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 active:scale-[0.985] hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]"
                 onClick={() => setSelectedRider(rider)}
               >
-                <CardContent className="p-5">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-3 min-w-0">
+                <div
+                  className={cn(
+                    'absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b',
+                    getRiderAccent(rider)
+                  )}
+                />
+
+                <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
+                  <div className="mb-5 flex items-start justify-between gap-4">
+                    <div className="flex min-w-0 items-center gap-3">
                       <div className="relative shrink-0">
                         {rider.avatar_url ? (
                           <img
                             src={rider.avatar_url}
                             alt={rider.full_name}
-                            className="w-16 h-16 rounded-full object-cover border border-gray-200"
+                            className="h-16 w-16 rounded-full border border-gray-200 object-cover shadow-sm"
                           />
                         ) : (
-                          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 flex items-center justify-center text-white text-xl font-medium">
+                          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 text-xl font-medium text-white shadow-sm">
                             {rider.full_name.charAt(0).toUpperCase()}
                           </div>
                         )}
 
                         {rider.is_online && (
-                          <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
-                            <div className="w-2 h-2 bg-white rounded-full" />
+                          <div className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-green-500">
+                            <div className="h-2 w-2 rounded-full bg-white" />
                           </div>
                         )}
                       </div>
 
                       <div className="min-w-0">
-                        <h3 className="font-semibold text-gray-900 group-hover:text-violet-600 transition-colors truncate">
+                        <h3 className="truncate text-lg font-semibold text-gray-900 transition-colors group-hover:text-violet-600">
                           {rider.full_name}
                         </h3>
                         {rider.company_name && (
-                          <p className="text-sm text-gray-500 truncate">{rider.company_name}</p>
+                          <p className="truncate text-sm text-gray-500">{rider.company_name}</p>
                         )}
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded-lg shrink-0">
-                      <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                    <div className="flex shrink-0 items-center gap-1 rounded-xl bg-amber-50 px-2.5 py-1.5">
+                      <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
                       <span className="text-sm font-medium text-amber-700">
                         {Number(rider.rating_average || 0).toFixed(1).replace('.0', '')}
                       </span>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
-                    <div className="flex items-center gap-1">
-                      <VehicleIcon className="w-4 h-4" />
+                  <div className="mb-5 flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                    <div className="flex items-center gap-1.5">
+                      <VehicleIcon className="h-4 w-4" />
                       <span className="capitalize">{rider.vehicle_type}</span>
                     </div>
 
-                    <div className="flex items-center gap-1">
-                      <CheckCircle className="w-4 h-4" />
+                    <div className="flex items-center gap-1.5">
+                      <CheckCircle className="h-4 w-4" />
                       <span>{rider.completed_jobs_count || 0} deliveries</span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                      <MapPin className="h-4 w-4" />
+                      <span>{rider.service_radius_km}km radius</span>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between text-sm mb-4 gap-2">
-                    <div className="flex items-center gap-1 text-gray-500 min-w-0">
-                      <UserCircle className="w-4 h-4 shrink-0" />
-                      <span>{rider.service_radius_km}km radius</span>
-                    </div>
-
+                  <div className="mb-5 flex items-center justify-between gap-3">
                     {rider.is_online ? (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-100 text-green-700 font-medium shrink-0">
-                        <span className="w-2 h-2 rounded-full bg-green-500" />
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1.5 text-sm font-medium text-green-700">
+                        <span className="h-2 w-2 rounded-full bg-green-500" />
                         Online now
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 font-medium shrink-0">
-                        <Clock3 className="w-3.5 h-3.5" />
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1.5 text-sm font-medium text-amber-700">
+                        <Clock3 className="h-3.5 w-3.5" />
                         Available on request
                       </span>
                     )}
+
+                    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-violet-50 text-gray-400 transition-colors duration-200 group-hover:bg-violet-100 group-hover:text-violet-600">
+                      <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
+                    </div>
                   </div>
 
                   <Button
                     variant="outline"
-                    className="w-full group-hover:bg-violet-50 group-hover:border-violet-200 transition-colors"
+                    className="h-12 w-full rounded-2xl border-violet-200 bg-white text-violet-700 transition-colors hover:bg-violet-50 hover:text-violet-800"
                   >
                     View Profile
-                    <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </CardContent>
               </Card>
@@ -360,127 +384,127 @@ export function FindRidersPage() {
       )}
 
       <Dialog open={!!selectedRider} onOpenChange={() => setSelectedRider(null)}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Rider Profile</DialogTitle>
-          </DialogHeader>
-
+        <DialogContent className="overflow-hidden rounded-[28px] border-0 bg-white p-0 shadow-[0_24px_80px_rgba(15,23,42,0.20)] sm:max-w-md">
           {selectedRider && (
-            <div className="space-y-6">
-              <div className="flex items-center gap-4">
-                <div className="relative shrink-0">
-                  {selectedRider.avatar_url ? (
-                    <img
-                      src={selectedRider.avatar_url}
-                      alt={selectedRider.full_name}
-                      className="w-20 h-20 rounded-full object-cover border border-gray-200"
-                    />
-                  ) : (
-                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 flex items-center justify-center text-white text-2xl font-medium">
-                      {selectedRider.full_name.charAt(0).toUpperCase()}
-                    </div>
-                  )}
+            <div className="bg-gradient-to-br from-violet-50 via-white to-fuchsia-50">
+              <DialogHeader className="border-b border-violet-100/70 px-6 pb-4 pt-6 text-left">
+                <div className="mb-4 flex items-center gap-4">
+                  <div className="relative shrink-0">
+                    {selectedRider.avatar_url ? (
+                      <img
+                        src={selectedRider.avatar_url}
+                        alt={selectedRider.full_name}
+                        className="h-20 w-20 rounded-full border border-gray-200 object-cover shadow-sm"
+                      />
+                    ) : (
+                      <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 text-2xl font-medium text-white shadow-sm">
+                        {selectedRider.full_name.charAt(0).toUpperCase()}
+                      </div>
+                    )}
 
-                  {selectedRider.is_online && (
-                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white" />
-                  )}
-                </div>
+                    {selectedRider.is_online && (
+                      <div className="absolute -bottom-1 -right-1 h-6 w-6 rounded-full border-2 border-white bg-green-500" />
+                    )}
+                  </div>
 
-                <div className="min-w-0">
-                  <h3 className="text-xl font-bold text-gray-900 truncate">
-                    {selectedRider.full_name}
-                  </h3>
+                  <div className="min-w-0">
+                    <DialogTitle className="truncate text-2xl font-semibold tracking-tight text-gray-900">
+                      {selectedRider.full_name}
+                    </DialogTitle>
 
-                  {selectedRider.company_name && (
-                    <p className="text-gray-500 truncate">{selectedRider.company_name}</p>
-                  )}
+                    {selectedRider.company_name && (
+                      <p className="mt-1 truncate text-gray-500">{selectedRider.company_name}</p>
+                    )}
 
-                  <div className="flex items-center gap-2 mt-1 flex-wrap">
-                    <div className="flex items-center gap-1 bg-amber-50 px-2 py-0.5 rounded-lg">
-                      <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                      <span className="text-sm font-medium text-amber-700">
-                        {Number(selectedRider.rating_average || 0).toFixed(1).replace('.0', '')}
+                    <div className="mt-2 flex flex-wrap items-center gap-2">
+                      <div className="flex items-center gap-1 rounded-xl bg-amber-50 px-2.5 py-1">
+                        <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                        <span className="text-sm font-medium text-amber-700">
+                          {Number(selectedRider.rating_average || 0).toFixed(1).replace('.0', '')}
+                        </span>
+                      </div>
+
+                      <span className="text-gray-300">•</span>
+                      <span className="text-sm capitalize text-gray-500">
+                        {selectedRider.vehicle_type}
                       </span>
                     </div>
-
-                    <span className="text-gray-400">•</span>
-                    <span className="text-sm text-gray-500 capitalize">
-                      {selectedRider.vehicle_type}
-                    </span>
                   </div>
                 </div>
-              </div>
+              </DialogHeader>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-gray-50 rounded-xl p-4 text-center">
-                  <p className="text-2xl font-bold text-gray-900">
-                    {selectedRider.completed_jobs_count || 0}
-                  </p>
-                  <p className="text-sm text-gray-500">Deliveries</p>
+              <div className="space-y-5 px-6 py-5">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="rounded-2xl border border-gray-100 bg-white p-4 text-center shadow-sm">
+                    <p className="text-2xl font-bold text-gray-900">
+                      {selectedRider.completed_jobs_count || 0}
+                    </p>
+                    <p className="text-sm text-gray-500">Deliveries</p>
+                  </div>
+
+                  <div className="rounded-2xl border border-gray-100 bg-white p-4 text-center shadow-sm">
+                    <p className="text-2xl font-bold text-gray-900">
+                      {selectedRider.service_radius_km}km
+                    </p>
+                    <p className="text-sm text-gray-500">Service Radius</p>
+                  </div>
                 </div>
 
-                <div className="bg-gray-50 rounded-xl p-4 text-center">
-                  <p className="text-2xl font-bold text-gray-900">
-                    {selectedRider.service_radius_km}km
-                  </p>
-                  <p className="text-sm text-gray-500">Service Radius</p>
+                <div className="flex items-center justify-between">
+                  {selectedRider.is_online ? (
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1.5 text-sm font-medium text-green-700">
+                      <span className="h-2 w-2 rounded-full bg-green-500" />
+                      Online now
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1.5 text-sm font-medium text-amber-700">
+                      <Clock3 className="h-3.5 w-3.5" />
+                      Available on request
+                    </span>
+                  )}
                 </div>
-              </div>
 
-              <div className="flex justify-between items-center text-sm">
-                {selectedRider.is_online ? (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-100 text-green-700 font-medium">
-                    <span className="w-2 h-2 rounded-full bg-green-500" />
-                    Online now
-                  </span>
-                ) : (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 font-medium">
-                    <Clock3 className="w-3.5 h-3.5" />
-                    Available on request
-                  </span>
-                )}
-              </div>
+                <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+                  <p className="mb-3 text-sm font-medium text-gray-700">Contact Rider</p>
 
-              <div className="space-y-3">
-                <p className="text-sm font-medium text-gray-700">Contact Rider</p>
+                  <div className="grid grid-cols-3 gap-3">
+                    <Button
+                      variant="outline"
+                      onClick={() => handleContact('call')}
+                      className="flex h-auto flex-col items-center gap-2 rounded-2xl py-4"
+                    >
+                      <Phone className="h-6 w-6 text-green-600" />
+                      <span className="text-xs">Call</span>
+                    </Button>
 
-                <div className="grid grid-cols-3 gap-3">
-                  <Button
-                    variant="outline"
-                    onClick={() => handleContact('call')}
-                    className="flex flex-col items-center gap-2 h-auto py-4"
-                  >
-                    <Phone className="w-6 h-6 text-green-600" />
-                    <span className="text-xs">Call</span>
-                  </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => handleContact('whatsapp')}
+                      className="flex h-auto flex-col items-center gap-2 rounded-2xl py-4"
+                    >
+                      <MessageCircle className="h-6 w-6 text-green-500" />
+                      <span className="text-xs">WhatsApp</span>
+                    </Button>
 
-                  <Button
-                    variant="outline"
-                    onClick={() => handleContact('whatsapp')}
-                    className="flex flex-col items-center gap-2 h-auto py-4"
-                  >
-                    <MessageCircle className="w-6 h-6 text-green-500" />
-                    <span className="text-xs">WhatsApp</span>
-                  </Button>
-
-                  <Button
-                    variant="outline"
-                    onClick={() => handleContact('sms')}
-                    className="flex flex-col items-center gap-2 h-auto py-4"
-                  >
-                    <MessageCircle className="w-6 h-6 text-blue-500" />
-                    <span className="text-xs">SMS</span>
-                  </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => handleContact('sms')}
+                      className="flex h-auto flex-col items-center gap-2 rounded-2xl py-4"
+                    >
+                      <MessageCircle className="h-6 w-6 text-blue-500" />
+                      <span className="text-xs">SMS</span>
+                    </Button>
+                  </div>
                 </div>
-              </div>
 
-              <Button
-                className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white"
-                onClick={handleCreateDeliveryWithRider}
-              >
-                Create Delivery with this Rider
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
+                <Button
+                  className="h-12 w-full rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-700 hover:to-fuchsia-700"
+                  onClick={handleCreateDeliveryWithRider}
+                >
+                  Create Delivery with this Rider
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
             </div>
           )}
         </DialogContent>

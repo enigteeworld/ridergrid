@@ -543,60 +543,103 @@ export function WalletPage() {
       </div>
 
       <Dialog open={showFundDialog} onOpenChange={setShowFundDialog}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Fund Your Wallet</DialogTitle>
-          </DialogHeader>
-
-          <div className="space-y-4">
-            <div className="rounded-2xl border border-violet-200 bg-violet-50 p-4">
-              <p className="text-sm text-violet-800">
-                Add money to your wallet securely with Paystack and use it to fund deliveries
-                inside Dispatch NG.
-              </p>
-            </div>
-
-            <div>
-              <label className="text-sm font-medium text-gray-700">Amount (₦)</label>
-              <div className="relative mt-1">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 font-medium text-gray-500">
-                  ₦
-                </span>
-                <Input
-                  type="number"
-                  placeholder={`Minimum ${formatCurrency(MIN_FUNDING)}`}
-                  value={fundAmount}
-                  onChange={(e) => setFundAmount(e.target.value)}
-                  className="pl-8"
-                />
+        <DialogContent className="max-h-[88vh] overflow-y-auto border-0 rounded-[28px] bg-white p-0 shadow-[0_24px_80px_rgba(15,23,42,0.20)] sm:max-w-md">
+          <div className="bg-gradient-to-br from-violet-50 via-white to-fuchsia-50">
+            <DialogHeader className="border-b border-violet-100/70 px-6 pb-4 pt-4 text-left sm:pt-6">
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 shadow-[0_10px_30px_rgba(124,58,237,0.25)]">
+                <Wallet className="h-7 w-7 text-white" />
               </div>
-              <p className="mt-1 text-sm text-gray-500">
-                Minimum funding: {formatCurrency(MIN_FUNDING)}
+              <DialogTitle className="text-2xl font-semibold tracking-tight text-gray-900">
+                Fund Your Wallet
+              </DialogTitle>
+              <p className="mt-2 text-sm leading-6 text-gray-500">
+                Add money securely with Paystack and use it to fund deliveries inside Dispatch NG.
               </p>
-            </div>
+            </DialogHeader>
 
-            <div className="rounded-2xl bg-gray-50 p-4">
-              <div className="mb-2 flex items-center gap-2">
-                <CreditCard className="h-5 w-5 text-gray-400" />
-                <span className="font-medium text-gray-700">Payment Method</span>
-              </div>
-              <p className="text-sm text-gray-500">Card payment via Paystack</p>
-            </div>
-
-            <Button
-              onClick={handleFundWallet}
-              disabled={isFunding || !fundAmount || parseFloat(fundAmount) < MIN_FUNDING}
-              className="w-full bg-violet-600 text-white hover:bg-violet-700"
-            >
-              {isFunding ? (
-                <div className="flex items-center gap-2">
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                  Processing...
+            <div className="space-y-5 px-6 pb-5 pt-4 sm:py-5">
+              <div className="rounded-2xl border border-violet-200 bg-violet-50/80 p-4">
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-violet-600">
+                    <CreditCard className="h-5 w-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-medium text-violet-900">Secure checkout</p>
+                    <p className="mt-1 text-sm leading-6 text-violet-800">
+                      Payments are processed securely through Paystack. Your wallet balance updates
+                      after successful verification.
+                    </p>
+                  </div>
                 </div>
-              ) : (
-                `Fund ${fundAmount ? formatCurrency(parseFloat(fundAmount)) : 'Wallet'}`
-              )}
-            </Button>
+              </div>
+
+              <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+                <label className="mb-3 block text-sm font-semibold text-gray-800">
+                  Amount (₦)
+                </label>
+
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-semibold text-gray-500">
+                    ₦
+                  </span>
+                  <Input
+                    type="number"
+                    placeholder={`Minimum ${formatCurrency(MIN_FUNDING)}`}
+                    value={fundAmount}
+                    onChange={(e) => setFundAmount(e.target.value)}
+                    className="h-14 rounded-2xl border-gray-200 bg-gray-50 pl-10 text-base font-medium text-gray-900 placeholder:text-gray-400 focus:border-violet-300 focus:ring-violet-200"
+                  />
+                </div>
+
+                <div className="mt-3 flex items-center justify-between gap-3 text-sm">
+                  <p className="text-gray-500">
+                    Minimum funding: <span className="font-medium text-gray-700">{formatCurrency(MIN_FUNDING)}</span>
+                  </p>
+
+                  {fundAmount && !Number.isNaN(parseFloat(fundAmount)) && (
+                    <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-semibold text-violet-700">
+                      {formatCurrency(parseFloat(fundAmount || '0'))}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gray-100 text-gray-500">
+                    <CreditCard className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900">Payment Method</p>
+                    <p className="text-sm text-gray-500">Card payment via Paystack</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-3 pt-1">
+                <Button
+                  onClick={handleFundWallet}
+                  disabled={isFunding || !fundAmount || parseFloat(fundAmount) < MIN_FUNDING}
+                  className="h-12 w-full rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-[0_12px_30px_rgba(124,58,237,0.20)] hover:from-violet-700 hover:to-fuchsia-700"
+                >
+                  {isFunding ? (
+                    <div className="flex items-center gap-2">
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                      Processing...
+                    </div>
+                  ) : (
+                    <>
+                      <Plus className="mr-2 h-4 w-4" />
+                      {fundAmount ? `Fund ${formatCurrency(parseFloat(fundAmount))}` : 'Fund Wallet'}
+                    </>
+                  )}
+                </Button>
+
+                <p className="text-center text-xs leading-5 text-gray-400">
+                  You’ll be redirected to Paystack to complete payment securely.
+                </p>
+              </div>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
