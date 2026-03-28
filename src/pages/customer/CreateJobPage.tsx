@@ -2,7 +2,7 @@
 // DISPATCH NG - Create Job Page
 // ============================================
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   MapPin,
@@ -27,8 +27,6 @@ import { showToast } from '@/stores/uiStore';
 import { formatCurrency } from '@/utils/format';
 import { cn } from '@/lib/utils';
 
-const PLATFORM_FEE = 200;
-
 export function CreateJobPage() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -38,6 +36,8 @@ export function CreateJobPage() {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [platformFee, setPlatformFee] = useState(200);
+  const [isLoadingPlatformFee, setIsLoadingPlatformFee] = useState(true);
 
   // Selected rider passed from Find Riders page
   const selectedRiderId = searchParams.get('riderId') || location.state?.riderId || null;
@@ -63,7 +63,36 @@ export function CreateJobPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const amountNumber = useMemo(() => parseFloat(agreedAmount) || 0, [agreedAmount]);
-  const riderEarnings = useMemo(() => amountNumber - PLATFORM_FEE, [amountNumber]);
+  const riderEarnings = useMemo(
+    () => Math.max(amountNumber - platformFee, 0),
+    [amountNumber, platformFee]
+  );
+
+  useEffect(() => {
+    const fetchPlatformFee = async () => {
+      try {
+        setIsLoadingPlatformFee(true);
+
+        const { data, error } = await supabase
+          .from('platform_settings')
+          .select('setting_value')
+          .eq('setting_key', 'platform_fee_amount')
+          .maybeSingle();
+
+        if (error) throw error;
+
+        const fee = Number(data?.setting_value || 200);
+        setPlatformFee(Number.isFinite(fee) ? fee : 200);
+      } catch (error) {
+        console.error('Error fetching platform fee:', error);
+        setPlatformFee(200);
+      } finally {
+        setIsLoadingPlatformFee(false);
+      }
+    };
+
+    void fetchPlatformFee();
+  }, []);
 
   const validateStep = () => {
     const newErrors: Record<string, string> = {};
@@ -87,8 +116,12 @@ export function CreateJobPage() {
         newErrors.agreedAmount = 'Please enter a valid amount';
       }
 
-      if (amountNumber < 200) {
-        newErrors.agreedAmount = 'Minimum delivery amount is ₦200';
+      if (amountNumber < 500) {
+        newErrors.agreedAmount = 'Minimum delivery amount is ₦500';
+      }
+
+      if (amountNumber <= platformFee) {
+        newErrors.agreedAmount = `Amount must be more than the platform fee of ₦${platformFee}`;
       }
     }
 
@@ -131,7 +164,6 @@ export function CreateJobPage() {
       return;
     }
 
-    // Wallet check remains unchanged for now
     if ((wallet?.available_balance || 0) < amountNumber) {
       showToast('error', 'Insufficient balance', 'Please fund your wallet first');
       setShowConfirmDialog(false);
@@ -158,7 +190,7 @@ export function CreateJobPage() {
           package_description: packageDescription,
           package_weight_kg: packageWeight ? parseFloat(packageWeight) : null,
           agreed_amount: amountNumber,
-          platform_fee: PLATFORM_FEE,
+          platform_fee: platformFee,
           rider_earnings: riderEarnings,
           status: 'awaiting_rider',
         })
@@ -167,7 +199,11 @@ export function CreateJobPage() {
 
       if (jobError) throw jobError;
 
-      showToast('success', 'Delivery created!', 'Your delivery request has been sent to the selected rider');
+      showToast(
+        'success',
+        'Delivery created!',
+        'Your delivery request has been sent to the selected rider'
+      );
       navigate(`/jobs/${job.id}`);
     } catch (error: any) {
       console.error('Error creating job:', error);
@@ -202,7 +238,9 @@ export function CreateJobPage() {
                   className={cn(errors.pickupAddress && 'border-red-500')}
                   rows={3}
                 />
-                {errors.pickupAddress && <p className="text-sm text-red-500">{errors.pickupAddress}</p>}
+                {errors.pickupAddress && (
+                  <p className="text-sm text-red-500">{errors.pickupAddress}</p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -388,9 +426,13 @@ export function CreateJobPage() {
                   <p className="text-sm text-red-500">{errors.agreedAmount}</p>
                 )}
                 <p className="text-sm text-gray-500">
-                  Minimum: ₦500. Platform fee of ₦{PLATFORM_FEE} will be deducted.
+                  Minimum: ₦500. Platform fee of ₦{platformFee} will be deducted.
                 </p>
               </div>
+
+              {isLoadingPlatformFee && (
+                <p className="text-sm text-gray-500">Loading platform fee...</p>
+              )}
 
               {agreedAmount && amountNumber > 0 && (
                 <Card className="bg-violet-50 border-violet-200">
@@ -407,7 +449,7 @@ export function CreateJobPage() {
                       <div className="flex justify-between">
                         <span className="text-gray-600">Platform Fee</span>
                         <span className="font-medium text-red-600">
-                          -{formatCurrency(PLATFORM_FEE)}
+                          -{formatCurrency(platformFee)}
                         </span>
                       </div>
                       <div className="border-t border-violet-200 pt-2 flex justify-between">
@@ -530,6 +572,18 @@ export function CreateJobPage() {
                       </span>
                     </div>
                     <div className="flex justify-between">
+                      <span className="text-gray-600">Platform Fee</span>
+                      <span className="font-medium text-red-600">
+                        -{formatCurrency(platformFee)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Rider Receives</span>
+                      <span className="font-medium text-violet-700">
+                        {formatCurrency(riderEarnings)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
                       <span className="text-gray-600">From Wallet</span>
                       <span className="text-gray-500">
                         {formatCurrency(wallet?.available_balance || 0)} available
@@ -553,7 +607,6 @@ export function CreateJobPage() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      {/* Progress */}
       <div className="flex items-center justify-center gap-2 mb-8">
         {[1, 2, 3, 4].map((s) => (
           <div
@@ -566,12 +619,10 @@ export function CreateJobPage() {
         ))}
       </div>
 
-      {/* Card */}
       <Card>
         <CardContent className="p-6">
           {renderStep()}
 
-          {/* Navigation Buttons */}
           <div className="flex gap-3 mt-8">
             {step > 1 && (
               <Button type="button" variant="outline" onClick={handleBack} className="flex-1">
@@ -581,6 +632,7 @@ export function CreateJobPage() {
             )}
             <Button
               onClick={handleNext}
+              disabled={isLoadingPlatformFee}
               className="flex-1 bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white"
             >
               {step === 4 ? (
@@ -596,7 +648,6 @@ export function CreateJobPage() {
         </CardContent>
       </Card>
 
-      {/* Confirmation Dialog */}
       <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
         <DialogContent>
           <DialogHeader>
@@ -604,13 +655,13 @@ export function CreateJobPage() {
           </DialogHeader>
           <div className="space-y-4">
             <p className="text-gray-600">
-              You are about to create a delivery for{' '}
-              <strong>{formatCurrency(amountNumber)}</strong>.
+              You are about to create a delivery for <strong>{formatCurrency(amountNumber)}</strong>.
               This amount will be reserved from your wallet.
             </p>
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
               <p className="text-sm text-amber-800">
-                <strong>Note:</strong> The funds will be locked in escrow until the delivery is completed.
+                <strong>Note:</strong> The funds will be locked in escrow until the delivery is
+                completed.
               </p>
             </div>
             <div className="flex gap-3">
@@ -623,7 +674,7 @@ export function CreateJobPage() {
               </Button>
               <Button
                 onClick={handleSubmit}
-                disabled={isSubmitting}
+                disabled={isSubmitting || isLoadingPlatformFee}
                 className="flex-1 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white"
               >
                 {isSubmitting ? (
