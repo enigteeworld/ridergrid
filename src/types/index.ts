@@ -19,6 +19,8 @@ export interface Profile {
   last_login_at: string | null;
   role?: string | null;
   verification_status?: VerificationStatus | null;
+  email_verified_at?: string | null;
+  phone_verified_at?: string | null;
 }
 
 // KYC Types

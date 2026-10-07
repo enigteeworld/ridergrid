@@ -27,9 +27,12 @@ import { useAuthStore } from '@/stores/authStore';
 import { showToast } from '@/stores/uiStore';
 import { cn } from '@/lib/utils';
 import { PersonalAvatar } from '@/components/PersonalAvatar';
+import { KycVerificationCard } from '@/components/KycVerificationCard';
 import type { VehicleType, BankAccount } from '@/types';
 
 const vehicleTypes: VehicleType[] = ['bicycle', 'motorcycle', 'car', 'van', 'truck'];
+
+import { AccountVerificationCard } from '@/components/AccountVerificationCard';
 
 export function RiderProfilePage() {
   const { user, riderProfile, setRiderProfile, setUser, signOut } = useAuthStore();
@@ -623,6 +626,8 @@ export function RiderProfilePage() {
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+    <div className="mt-5"><KycVerificationCard /></div>
+      <div className="mt-5"><AccountVerificationCard /></div>
+      </div>
   );
 }

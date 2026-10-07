@@ -27,6 +27,9 @@ export interface Database {
           created_at: string;
           updated_at: string;
           last_login_at: string | null;
+          verification_status: 'pending' | 'verified' | 'rejected' | 'expired' | null;
+          email_verified_at: string | null;
+          phone_verified_at: string | null;
         };
         Insert: {
           id: string;

@@ -22,6 +22,9 @@ import { useAuthStore } from '@/stores/authStore';
 import { showToast } from '@/stores/uiStore';
 import { cn } from '@/lib/utils';
 import { PersonalAvatar } from '@/components/PersonalAvatar';
+import { KycVerificationCard } from '@/components/KycVerificationCard';
+
+import { AccountVerificationCard } from '@/components/AccountVerificationCard';
 
 export function ProfilePage() {
   const { user, setUser, signOut } = useAuthStore();
@@ -321,6 +324,8 @@ export function ProfilePage() {
         <LogOut className="mr-2 h-4 w-4" />
         Sign Out
       </Button>
-    </div>
+    <div className="mt-5"><KycVerificationCard /></div>
+      <div className="mt-5"><AccountVerificationCard /></div>
+      </div>
   );
 }

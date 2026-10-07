@@ -150,7 +150,7 @@ export function RiderLayout() {
 
       <div
         className={cn(
-          'fixed inset-0 z-40 bg-black/30 transition-opacity duration-200 md:hidden',
+          'fixed inset-0 z-[60] bg-black/30 transition-opacity duration-200 md:hidden',
           mobileMenuOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         )}
         onClick={() => setMobileMenuOpen(false)}
@@ -158,7 +158,7 @@ export function RiderLayout() {
 
       <aside
         className={cn(
-          'fixed inset-y-0 right-0 z-50 h-[100dvh] max-h-[100dvh] w-[88%] max-w-sm border-l border-gray-200/80 bg-white shadow-[0_18px_55px_rgba(15,23,42,0.16)] transition-transform duration-200 md:hidden',
+          'fixed bottom-0 right-0 top-0 z-[70] h-[100dvh] max-h-[100dvh] w-[88%] max-w-sm border-l border-gray-200/80 bg-white shadow-[0_18px_55px_rgba(15,23,42,0.16)] transition-transform duration-200 md:hidden',
           mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         )}
       >
@@ -280,7 +280,7 @@ export function RiderLayout() {
             </nav>
           </div>
 
-          <div className="shrink-0 border-t border-gray-100 bg-white px-4 pb-[max(env(safe-area-inset-bottom),1rem)] pt-3">
+          <div className="sticky bottom-0 z-10 shrink-0 border-t border-gray-100 bg-white px-4 pb-[max(env(safe-area-inset-bottom),1.25rem)] pt-3 shadow-[0_-8px_24px_rgba(15,23,42,0.06)]">
             <button
               onClick={handleSignOut}
               className="flex w-full items-center gap-4 rounded-2xl px-4 py-3.5 text-red-500 transition-colors hover:bg-red-50"

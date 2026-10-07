@@ -117,7 +117,7 @@ export function AdminDashboardPage() {
           .eq('status', 'completed'),
 
         supabase
-          .from('rider_profiles')
+          .from('kyc_records')
           .select('*', { count: 'exact', head: true })
           .eq('verification_status', 'pending'),
 

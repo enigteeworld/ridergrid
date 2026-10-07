@@ -21,6 +21,8 @@ interface PlatformSettings {
   require_customer_kyc: boolean;
   require_rider_kyc: boolean;
   enable_delivery_otp: boolean;
+  enable_email_verification: boolean;
+  enable_phone_verification: boolean;
   site_name: string;
   logo_url: string;
   favicon_url: string;
@@ -35,6 +37,8 @@ export function AdminSettingsPage() {
     require_customer_kyc: false,
     require_rider_kyc: true,
     enable_delivery_otp: true,
+    enable_email_verification: false,
+    enable_phone_verification: false,
     site_name: 'Dispatch NG',
     logo_url: '',
     favicon_url: '',
@@ -109,6 +113,8 @@ export function AdminSettingsPage() {
         { key: 'require_customer_kyc', value: settings.require_customer_kyc.toString(), type: 'boolean' },
         { key: 'require_rider_kyc', value: settings.require_rider_kyc.toString(), type: 'boolean' },
         { key: 'enable_delivery_otp', value: settings.enable_delivery_otp.toString(), type: 'boolean' },
+        { key: 'enable_email_verification', value: settings.enable_email_verification.toString(), type: 'boolean' },
+        { key: 'enable_phone_verification', value: settings.enable_phone_verification.toString(), type: 'boolean' },
         { key: 'site_name', value: settings.site_name, type: 'string' },
         { key: 'logo_url', value: settings.logo_url, type: 'string' },
         { key: 'favicon_url', value: settings.favicon_url, type: 'string' },
@@ -239,6 +245,16 @@ export function AdminSettingsPage() {
                 onCheckedChange={(checked) => setSettings({ ...settings, require_rider_kyc: checked })}
               />
             </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardContent className="p-6">
+          <div className="mb-6 flex items-center gap-2"><Bell className="h-5 w-5 text-teal-600"/><div><h3 className="text-lg font-semibold text-gray-900">Account Verification</h3><p className="text-sm text-gray-500">Channels are wired but can stay disabled until providers are configured.</p></div></div>
+          <div className="space-y-5">
+            <div className="flex items-center justify-between gap-4"><div><p className="font-medium text-gray-900">Email verification</p><p className="text-sm text-gray-500">Send a verification code by email. Keep off until your domain and Resend sender are ready.</p></div><Switch checked={settings.enable_email_verification} onCheckedChange={(checked)=>setSettings({...settings,enable_email_verification:checked})}/></div>
+            <div className="flex items-center justify-between gap-4"><div><p className="font-medium text-gray-900">Phone verification</p><p className="text-sm text-gray-500">Reserved for Vonage/Twilio OTP. Keep off until an SMS provider is configured.</p></div><Switch checked={settings.enable_phone_verification} onCheckedChange={(checked)=>setSettings({...settings,enable_phone_verification:checked})}/></div>
           </div>
         </CardContent>
       </Card>

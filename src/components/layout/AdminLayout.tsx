@@ -89,7 +89,7 @@ export function AdminLayout() {
       </header>
 
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-30 flex h-[100dvh] max-h-[100dvh] min-h-0 flex-col overflow-hidden bg-white lg:hidden">
+        <div className="fixed inset-0 z-[70] flex h-[100dvh] max-h-[100dvh] min-h-0 flex-col overflow-hidden bg-white lg:hidden">
           <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-4 pt-20">
             <nav className="space-y-2">
               {navItems.map((item) => (
@@ -100,7 +100,7 @@ export function AdminLayout() {
               ))}
             </nav>
           </div>
-          <div className="shrink-0 border-t border-gray-100 bg-white px-4 pb-[max(env(safe-area-inset-bottom),1rem)] pt-3">
+          <div className="sticky bottom-0 z-10 shrink-0 border-t border-gray-100 bg-white px-4 pb-[max(env(safe-area-inset-bottom),1.25rem)] pt-3 shadow-[0_-8px_24px_rgba(15,23,42,0.06)]">
             <button onClick={handleSignOut} className="flex w-full items-center gap-4 rounded-xl p-4 text-red-500 hover:bg-red-50"><LogOut className="h-6 w-6" /><span className="text-lg">Sign Out</span></button>
           </div>
         </div>
