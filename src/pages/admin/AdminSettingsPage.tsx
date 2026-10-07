@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { supabase } from '@/lib/supabase';
 import { showToast } from '@/stores/uiStore';
-import { clearBrandingCache } from '@/hooks/useBranding';
+import { refreshBranding, setBrandingImmediately } from '@/hooks/useBranding';
 
 interface PlatformSettings {
   platform_fee_amount: number;
@@ -81,8 +81,19 @@ export function AdminSettingsPage() {
       const { error } = await supabase.storage.from('branding').upload(path, file, { upsert: true, cacheControl: '3600' });
       if (error) throw error;
       const { data } = supabase.storage.from('branding').getPublicUrl(path);
-      setSettings(prev => ({ ...prev, [kind === 'logo' ? 'logo_url' : 'favicon_url']: data.publicUrl }));
-      showToast('success', `${kind === 'logo' ? 'Logo' : 'Favicon'} uploaded`, 'Save settings to publish this branding change.');
+      const key = kind === 'logo' ? 'logo_url' : 'favicon_url';
+      const publicUrl = data.publicUrl;
+
+      // Persist the asset immediately. Uploading branding must not depend on a second Save click.
+      const { error: persistError } = await supabase
+        .from('platform_settings')
+        .upsert({ setting_key: key, setting_value: publicUrl, setting_type: 'string', updated_at: new Date().toISOString() }, { onConflict: 'setting_key' });
+      if (persistError) throw persistError;
+
+      setSettings(prev => ({ ...prev, [key]: publicUrl }));
+      setBrandingImmediately({ [key]: publicUrl });
+      await refreshBranding();
+      showToast('success', `${kind === 'logo' ? 'Logo' : 'Favicon'} updated`, `The ${kind} is now live across Dispatch NG.`);
     } catch (error: any) { showToast('error', 'Upload failed', error.message); }
     finally { setUploading(null); }
   };
@@ -110,7 +121,7 @@ export function AdminSettingsPage() {
         if (error) throw error;
       }
 
-      clearBrandingCache();
+      await refreshBranding();
       showToast('success', 'Settings saved', 'Platform settings and branding have been updated');
     } catch (error: any) {
       showToast('error', 'Error', error.message);

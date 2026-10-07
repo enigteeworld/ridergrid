@@ -21,6 +21,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/stores/authStore';
 import { showToast } from '@/stores/uiStore';
 import { cn } from '@/lib/utils';
+import { BrandMark } from '@/components/BrandMark';
 import type { VehicleType } from '@/types';
 
 const vehicleTypes: { type: VehicleType; icon: typeof Bike; label: string }[] = [
@@ -537,9 +538,7 @@ export function OnboardingPage() {
           <div className="rounded-[28px] border border-white/12 bg-white/10 shadow-2xl shadow-black/30 backdrop-blur-2xl">
             <div className="rounded-[28px] border border-white/5 bg-gradient-to-br from-white/10 via-white/5 to-transparent p-5 sm:p-6">
               <div className="mb-6 text-center">
-                <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-emerald-600 to-teal-600 shadow-lg shadow-emerald-900/30">
-                  <Truck className="h-8 w-8 text-white" />
-                </div>
+                <div className="mx-auto mb-4 flex min-h-16 items-center justify-center"><BrandMark className="max-h-16" imageClassName="max-w-[230px] rounded-xl bg-white/95 px-3 py-2" iconClassName="h-8 w-8" /></div>
 
                 <h2 className="mb-1.5 text-2xl font-bold text-white sm:text-3xl">
                   Rider onboarding

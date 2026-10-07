@@ -26,6 +26,8 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/stores/authStore';
 import { showToast } from '@/stores/uiStore';
 import { cn } from '@/lib/utils';
+import { BrandMark } from '@/components/BrandMark';
+import { useBranding } from '@/hooks/useBranding';
 
 type PublicRider = {
   id: string;
@@ -55,6 +57,7 @@ const vehicleTypes = [
 ];
 
 export function PublicRidersPage() {
+  const branding = useBranding();
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuthStore();
 
@@ -225,12 +228,8 @@ export function PublicRidersPage() {
               className="flex items-center gap-2 cursor-pointer"
               onClick={() => navigate('/')}
             >
-              <div className="w-10 h-10 bg-gradient-to-br from-emerald-600 to-teal-600 rounded-xl flex items-center justify-center">
-                <Truck className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-                Dispatch NG
-              </span>
+              <BrandMark className="max-h-10" imageClassName="max-w-[145px]" iconClassName="h-5 w-5" />
+              {!branding.logo_url && <span className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">{branding.site_name}</span>}
             </div>
 
             <div className="flex items-center gap-3">

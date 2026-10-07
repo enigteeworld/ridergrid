@@ -87,11 +87,9 @@ export function RiderLayout() {
         <div className="mx-auto max-w-5xl px-4">
           <div className="flex h-14 items-center justify-between">
             <NavLink to="/rider" className="flex items-center gap-3">
-              <BrandMark className="h-9 min-w-9" iconClassName="h-4.5 w-4.5" />
+              <BrandMark className="max-h-9" imageClassName="max-w-[132px]" iconClassName="h-4.5 w-4.5" />
 
-              <span className="hidden bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-xl font-bold text-transparent sm:block">
-                Rider Portal
-              </span>
+              {!branding.logo_url && <span className="hidden bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-xl font-bold text-transparent sm:block">Rider Portal</span>}
             </NavLink>
 
             <nav className="hidden items-center gap-2 md:flex">
@@ -168,7 +166,7 @@ export function RiderLayout() {
           <div className="border-b border-gray-100 px-5 pb-5 pt-5">
             <div className="mb-5 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <BrandMark className="h-9 min-w-9" iconClassName="h-4.5 w-4.5" />
+                <BrandMark className="max-h-9" imageClassName="max-w-[132px]" iconClassName="h-4.5 w-4.5" />
                 <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-lg font-bold text-transparent">
                   Rider Portal
                 </span>

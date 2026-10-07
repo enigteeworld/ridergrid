@@ -194,3 +194,16 @@ body {
     font-size: 15px;
   }
 }
+
+@keyframes brandLoad {
+  0% { transform: translateX(-120%); }
+  50% { transform: translateX(100%); }
+  100% { transform: translateX(240%); }
+}
+
+/* Dispatch NG preloader: lightweight favicon motion, no full-screen brand-color flood. */
+@keyframes dispatchFaviconFloat {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  45% { transform: translateY(-9px) rotate(4deg); }
+  70% { transform: translateY(-3px) rotate(1deg); }
+}

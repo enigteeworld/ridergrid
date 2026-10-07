@@ -274,9 +274,9 @@ export function LandingPage() {
             onClick={() => navigate('/')}
             className="flex min-w-0 items-center gap-3 text-left"
           >
-            <BrandMark className="h-11 min-w-11 shrink-0" iconClassName="h-5 w-5" />
+            <BrandMark className="max-h-11 shrink-0" imageClassName="max-w-[155px] rounded-lg bg-white/95 px-2 py-1" iconClassName="h-5 w-5" />
             <div className="min-w-0">
-              <p className="truncate text-xl font-bold leading-tight text-white">{branding.site_name}</p>
+              {!branding.logo_url && <p className="truncate text-xl font-bold leading-tight text-white">{branding.site_name}</p>}
               <p className="truncate text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Coming to App Store
               </p>
@@ -1060,11 +1060,9 @@ export function LandingPage() {
           <div className="grid gap-12 md:grid-cols-2 xl:grid-cols-4">
             <div className="space-y-6">
               <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 to-emerald-600">
-                  <Truck className="h-5 w-5 text-white" />
-                </div>
+                <BrandMark className="max-h-11" imageClassName="max-w-[155px] rounded-lg bg-white/95 px-2 py-1" iconClassName="h-5 w-5" />
                 <div>
-                  <p className="text-lg font-bold text-white">Dispatch NG</p>
+                  {!branding.logo_url && <p className="text-lg font-bold text-white">{branding.site_name}</p>}
                   <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Secure logistics
                   </p>

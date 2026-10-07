@@ -20,9 +20,12 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/stores/authStore';
 import { showToast } from '@/stores/uiStore';
 import { cn } from '@/lib/utils';
+import { BrandMark } from '@/components/BrandMark';
+import { useBranding } from '@/hooks/useBranding';
 
 export function LoginPage() {
   const navigate = useNavigate();
+  const branding = useBranding();
   const { setLoading } = useAuthStore();
 
   const [email, setEmail] = useState('');
@@ -171,11 +174,9 @@ export function LoginPage() {
             onClick={() => navigate('/')}
             className="mb-4 flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-white/8 px-4 py-3 text-left backdrop-blur-xl transition hover:bg-white/12 sm:mb-5"
           >
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-600 shadow-lg shadow-emerald-900/30">
-              <Truck className="h-5 w-5 text-white" />
-            </div>
+            <BrandMark className="max-h-10" imageClassName="max-w-[150px] rounded-lg bg-white/95 px-2 py-1" iconClassName="h-5 w-5" />
             <div className="min-w-0">
-              <p className="truncate text-base font-semibold text-white">Dispatch NG</p>
+              {!branding.logo_url && <p className="truncate text-base font-semibold text-white">{branding.site_name}</p>}
               <p className="truncate text-xs text-white/60">Tap to return to homepage</p>
             </div>
           </button>
@@ -183,9 +184,7 @@ export function LoginPage() {
           <div className="rounded-[28px] border border-white/12 bg-white/10 shadow-2xl shadow-black/30 backdrop-blur-2xl">
             <div className="rounded-[28px] border border-white/5 bg-gradient-to-br from-white/10 via-white/5 to-transparent p-5 sm:p-6">
               <div className="mb-6 text-center">
-                <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-emerald-600 to-teal-600 shadow-lg shadow-emerald-900/30">
-                  <Truck className="h-8 w-8 text-white" />
-                </div>
+                <div className="mx-auto mb-4 flex min-h-16 items-center justify-center"><BrandMark className="max-h-16" imageClassName="max-w-[230px] rounded-xl bg-white/95 px-3 py-2" iconClassName="h-8 w-8" /></div>
 
                 <h2 className="mb-1.5 text-2xl font-bold text-white sm:text-3xl">Welcome back</h2>
                 <p className="text-sm text-white/65 sm:text-[15px]">

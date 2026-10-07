@@ -4,16 +4,8 @@
 
 import { Outlet, NavLink } from 'react-router-dom';
 import {
-  LayoutDashboard,
-  Users,
-  ClipboardCheck,
-  ClipboardList,
-  AlertTriangle,
-  Settings,
-  Menu,
-  X,
-  Package,
-  LogOut,
+  LayoutDashboard, Users, ClipboardCheck, ClipboardList, AlertTriangle,
+  Settings, Menu, X, LogOut,
 } from 'lucide-react';
 import { useState } from 'react';
 import { useAuthStore } from '@/stores/authStore';
@@ -35,132 +27,87 @@ export function AdminLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const { signOut } = useAuthStore();
-
-  const handleSignOut = async () => {
-    await signOut();
-  };
+  const handleSignOut = async () => { await signOut(); };
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-gray-100">
-      {/* Top Navigation */}
-      <header className="sticky top-0 z-50 border-b border-gray-200 bg-white">
-        <div className="px-4 sm:px-5 lg:px-6">
-          <div className="flex h-16 items-center justify-between gap-3">
-            {/* Left Section */}
-            <div className="flex min-w-0 items-center gap-3 sm:gap-4">
-              <button
-                onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="hidden rounded-xl p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 lg:block"
-              >
-                <Menu className="h-6 w-6" />
-              </button>
+      {/* Desktop sidebar owns the complete left rail, including its brand/header area. */}
+      <aside className={cn(
+        'fixed inset-y-0 left-0 z-50 hidden border-r border-gray-200 bg-white transition-[width] duration-300 lg:flex lg:flex-col',
+        sidebarOpen ? 'w-64' : 'w-20'
+      )}>
+        <div className="flex h-16 shrink-0 items-center border-b border-gray-200 px-3">
+          <button
+            onClick={() => setSidebarOpen(v => !v)}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
+            aria-label={sidebarOpen ? 'Collapse admin sidebar' : 'Expand admin sidebar'}
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+          {sidebarOpen && (
+            <NavLink to="/admin" className="ml-2 flex min-w-0 flex-1 items-center overflow-hidden">
+              <BrandMark className="max-h-9" imageClassName="max-h-9 max-w-[140px] object-contain" iconClassName="h-5 w-5" />
+              {!branding.logo_url && <span className="ml-2 truncate text-base font-bold text-emerald-700">{branding.site_name}</span>}
+            </NavLink>
+          )}
+        </div>
 
-              <NavLink to="/admin" className="flex min-w-0 items-center gap-2">
-                <BrandMark className="h-10 min-w-10" iconClassName="h-5 w-5" />
-                <span className="truncate text-xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-                  {branding.site_name} Admin
-                </span>
-              </NavLink>
-            </div>
+        <nav className="flex-1 space-y-2 overflow-y-auto p-4">
+          {navItems.map((item) => (
+            <NavLink key={item.path} to={item.path} className={({ isActive }) => cn(
+              'flex items-center rounded-xl py-3 transition-colors duration-200',
+              sidebarOpen ? 'gap-3 px-4' : 'justify-center px-2',
+              isActive ? 'bg-slate-50 font-medium text-emerald-600' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
+            )}>
+              <item.icon className="h-6 w-6 shrink-0" />
+              {sidebarOpen && <span className="truncate">{item.label}</span>}
+            </NavLink>
+          ))}
+        </nav>
+      </aside>
 
-            {/* Right Section */}
-            <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="rounded-xl p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 lg:hidden"
-              >
-                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </button>
-
-              <button
-                onClick={handleSignOut}
-                className="flex items-center gap-2 rounded-xl px-2.5 py-2 text-gray-600 transition-colors hover:bg-red-50 hover:text-red-600 sm:px-4"
-              >
-                <LogOut className="h-5 w-5" />
-                <span className="hidden sm:inline">Sign Out</span>
-              </button>
-            </div>
+      {/* Header starts exactly where the desktop sidebar ends. */}
+      <header className={cn(
+        'fixed left-0 right-0 top-0 z-40 h-16 border-b border-gray-200 bg-white transition-[left] duration-300',
+        sidebarOpen ? 'lg:left-64' : 'lg:left-20'
+      )}>
+        <div className="flex h-full items-center px-4 lg:px-6">
+          <div className="flex min-w-0 flex-1 items-center lg:hidden">
+            <NavLink to="/admin" className="flex min-w-0 items-center">
+              <BrandMark className="max-h-9" imageClassName="max-h-9 max-w-[138px] object-contain" iconClassName="h-5 w-5" />
+            </NavLink>
+          </div>
+          <div className="ml-auto flex shrink-0 items-center gap-1">
+            <button onClick={() => setMobileMenuOpen(v => !v)} className="rounded-xl p-2 text-gray-500 hover:bg-gray-100 lg:hidden" aria-label="Toggle admin menu">
+              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+            <button onClick={handleSignOut} className="flex items-center gap-2 rounded-xl px-3 py-2 text-gray-600 transition-colors hover:bg-red-50 hover:text-red-600">
+              <LogOut className="h-5 w-5" /><span className="hidden sm:inline">Sign Out</span>
+            </button>
           </div>
         </div>
       </header>
 
-      <div className="flex min-w-0">
-        {/* Sidebar - Desktop */}
-        <aside
-          className={cn(
-            'fixed bottom-0 left-0 top-16 z-40 hidden overflow-y-auto border-r border-gray-200 bg-white transition-all duration-300 lg:block',
-            sidebarOpen ? 'w-64' : 'w-20'
-          )}
-        >
-          <nav className="space-y-2 p-4">
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-30 bg-white lg:hidden">
+          <div className="px-4 pb-4 pt-20"><nav className="space-y-2">
             {navItems.map((item) => (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                className={({ isActive }) =>
-                  cn(
-                    'flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200',
-                    isActive
-                      ? 'bg-slate-50 font-medium text-emerald-600'
-                      : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
-                  )
-                }
-              >
-                <item.icon className="h-6 w-6 shrink-0" />
-                {sidebarOpen && <span className="truncate">{item.label}</span>}
-              </NavLink>
+              <NavLink key={item.path} to={item.path} onClick={() => setMobileMenuOpen(false)} className={({ isActive }) => cn(
+                'flex items-center gap-4 rounded-xl p-4 transition-colors duration-200',
+                isActive ? 'bg-slate-50 font-medium text-emerald-600' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
+              )}><item.icon className="h-6 w-6 shrink-0" /><span className="text-lg">{item.label}</span></NavLink>
             ))}
-          </nav>
-        </aside>
+            <button onClick={handleSignOut} className="flex w-full items-center gap-4 rounded-xl p-4 text-red-500 hover:bg-red-50"><LogOut className="h-6 w-6" /><span className="text-lg">Sign Out</span></button>
+          </nav></div>
+        </div>
+      )}
 
-        {/* Mobile Navigation Menu */}
-        {mobileMenuOpen && (
-          <div className="fixed inset-0 z-40 bg-white lg:hidden">
-            <div className="px-4 pb-4 pt-20">
-              <nav className="space-y-2">
-                {navItems.map((item) => (
-                  <NavLink
-                    key={item.path}
-                    to={item.path}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={({ isActive }) =>
-                      cn(
-                        'flex items-center gap-4 rounded-xl p-4 transition-all duration-200',
-                        isActive
-                          ? 'bg-slate-50 font-medium text-emerald-600'
-                          : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
-                      )
-                    }
-                  >
-                    <item.icon className="h-6 w-6 shrink-0" />
-                    <span className="text-lg">{item.label}</span>
-                  </NavLink>
-                ))}
-
-                <button
-                  onClick={handleSignOut}
-                  className="flex w-full items-center gap-4 rounded-xl p-4 text-red-500 transition-colors hover:bg-red-50"
-                >
-                  <LogOut className="h-6 w-6 shrink-0" />
-                  <span className="text-lg">Sign Out</span>
-                </button>
-              </nav>
-            </div>
-          </div>
-        )}
-
-        {/* Main Content */}
-        <main
-          className={cn(
-            'min-w-0 flex-1 overflow-x-hidden px-4 py-5 sm:px-5 sm:py-6 lg:px-6',
-            sidebarOpen ? 'lg:ml-64' : 'lg:ml-20'
-          )}
-        >
-          <div className="mx-auto w-full min-w-0 max-w-7xl">
-            <Outlet />
-          </div>
-        </main>
-      </div>
+      <main className={cn(
+        'min-w-0 overflow-x-hidden px-4 pb-5 pt-20 transition-[margin] duration-300 sm:px-5 sm:pb-6 sm:pt-20 lg:px-6',
+        sidebarOpen ? 'lg:ml-64' : 'lg:ml-20'
+      )}>
+        <div className="mx-auto w-full min-w-0 max-w-7xl"><Outlet /></div>
+      </main>
     </div>
   );
 }
