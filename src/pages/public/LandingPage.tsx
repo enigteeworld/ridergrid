@@ -288,7 +288,7 @@ export function LandingPage() {
               <a
                 key={item}
                 href={`#${item.toLowerCase().replace(' ', '-')}`}
-                className="text-sm font-medium text-gray-300 transition-colors hover:text-teal-400"
+                className="text-sm font-medium text-gray-300 transition-colors hover:text-slate-400"
               >
                 {item}
               </a>
@@ -299,7 +299,7 @@ export function LandingPage() {
             {isAuthenticated ? (
               <Button
                 onClick={() => navigate('/dashboard')}
-                className="h-11 rounded-full bg-teal-500 px-6 text-white hover:bg-teal-600 font-semibold"
+                className="h-11 rounded-full bg-slate-500 px-6 text-white hover:bg-slate-600 font-semibold"
               >
                 Dashboard
               </Button>
@@ -314,7 +314,7 @@ export function LandingPage() {
                 </Button>
                 <Button
                   onClick={() => navigate('/signup')}
-                  className="h-11 rounded-full bg-teal-500 px-6 text-white hover:bg-teal-600 font-semibold shadow-lg shadow-teal-500/25"
+                  className="h-11 rounded-full bg-slate-500 px-6 text-white hover:bg-slate-600 font-semibold shadow-lg shadow-slate-500/25"
                 >
                   Get Started
                 </Button>
@@ -340,7 +340,7 @@ export function LandingPage() {
                   key={item}
                   href={`#${item.toLowerCase().replace(' ', '-')}`}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block rounded-xl px-4 py-3 text-sm font-medium text-gray-300 transition-colors hover:bg-white/5 hover:text-teal-400"
+                  className="block rounded-xl px-4 py-3 text-sm font-medium text-gray-300 transition-colors hover:bg-white/5 hover:text-slate-400"
                 >
                   {item}
                 </a>
@@ -353,7 +353,7 @@ export function LandingPage() {
                     setMobileMenuOpen(false);
                     navigate('/dashboard');
                   }}
-                  className="w-full h-12 rounded-full bg-teal-500 text-white hover:bg-teal-600 font-semibold"
+                  className="w-full h-12 rounded-full bg-slate-500 text-white hover:bg-slate-600 font-semibold"
                 >
                   Go to Dashboard
                 </Button>
@@ -374,7 +374,7 @@ export function LandingPage() {
                       setMobileMenuOpen(false);
                       navigate('/signup');
                     }}
-                    className="w-full h-12 rounded-full bg-teal-500 text-white hover:bg-teal-600 font-semibold"
+                    className="w-full h-12 rounded-full bg-slate-500 text-white hover:bg-slate-600 font-semibold"
                   >
                     Get Started
                   </Button>
@@ -389,9 +389,9 @@ export function LandingPage() {
       <section ref={heroRef} className="relative overflow-hidden bg-gray-950 pt-20">
         {/* Background Effects */}
         <div className="absolute inset-0">
-          <div className="absolute left-1/4 top-0 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-teal-500/10 blur-[120px]" />
+          <div className="absolute left-1/4 top-0 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-slate-500/10 blur-[120px]" />
           <div className="absolute right-0 top-1/3 h-[500px] w-[500px] rounded-full bg-emerald-500/10 blur-[100px]" />
-          <div className="absolute bottom-0 left-1/2 h-[400px] w-[800px] -translate-x-1/2 rounded-full bg-teal-900/20 blur-[100px]" />
+          <div className="absolute bottom-0 left-1/2 h-[400px] w-[800px] -translate-x-1/2 rounded-full bg-slate-900/20 blur-[100px]" />
         </div>
 
         {/* Grid Pattern Overlay */}
@@ -408,10 +408,10 @@ export function LandingPage() {
             {/* Left Content */}
             <div className="space-y-8">
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 rounded-full border border-teal-500/30 bg-teal-500/10 px-4 py-2 text-sm font-semibold text-teal-400 backdrop-blur-sm">
+              <div className="inline-flex items-center gap-2 rounded-full border border-slate-500/30 bg-slate-500/10 px-4 py-2 text-sm font-semibold text-slate-400 backdrop-blur-sm">
                 <span className="relative flex h-2.5 w-2.5">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-teal-400 opacity-75" />
-                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-teal-500" />
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-slate-400 opacity-75" />
+                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-slate-500" />
                 </span>
                 Launching soon on iOS & Android
               </div>
@@ -420,7 +420,7 @@ export function LandingPage() {
                 <h1 className="text-5xl font-black leading-[1.1] tracking-tight text-white sm:text-6xl lg:text-7xl">
                   Delivery,
                   <br />
-                  <span className="bg-gradient-to-r from-teal-400 via-emerald-400 to-teal-400 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-slate-400 via-emerald-400 to-slate-400 bg-clip-text text-transparent">
                     reimagined.
                   </span>
                 </h1>
@@ -436,7 +436,7 @@ export function LandingPage() {
                 <Button
                   size="lg"
                   onClick={handlePrimaryAction}
-                  className="h-14 rounded-full bg-teal-500 px-8 text-base font-bold text-white hover:bg-teal-600 shadow-xl shadow-teal-500/20 transition-transform hover:scale-105"
+                  className="h-14 rounded-full bg-slate-500 px-8 text-base font-bold text-white hover:bg-slate-600 shadow-xl shadow-slate-500/20 transition-transform hover:scale-105"
                 >
                   {isAuthenticated ? 'Open Dashboard' : 'Get Started Free'}
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -485,7 +485,7 @@ export function LandingPage() {
                     ) : (
                       <div
                         key={rider.id}
-                        className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-950 bg-gradient-to-br from-teal-500 to-emerald-600 text-xs font-bold text-white"
+                        className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-950 bg-gradient-to-br from-slate-500 to-emerald-600 text-xs font-bold text-white"
                       >
                         {getInitials(rider.name)}
                       </div>
@@ -520,24 +520,24 @@ export function LandingPage() {
             <div className="relative hidden lg:block">
               {/* Phone Frame */}
               <div className="relative mx-auto w-[320px]">
-                <div className="relative rounded-[3rem] border-[8px] border-gray-800 bg-gray-950 p-2 shadow-2xl shadow-teal-500/10">
+                <div className="relative rounded-[3rem] border-[8px] border-gray-800 bg-gray-950 p-2 shadow-2xl shadow-slate-500/10">
                   <div className="absolute left-1/2 top-0 z-10 h-6 w-32 -translate-x-1/2 rounded-b-2xl bg-gray-800" />
                   <div className="overflow-hidden rounded-[2.2rem] bg-gray-900">
                     {/* Mock App Header */}
-                    <div className="bg-gradient-to-r from-teal-600 to-emerald-600 px-5 pb-8 pt-12">
+                    <div className="bg-gradient-to-r from-slate-600 to-emerald-600 px-5 pb-8 pt-12">
                       <div className="flex items-center justify-between">
                         <div className="h-8 w-8 rounded-full bg-white/20" />
                         <div className="h-8 w-8 rounded-full bg-white/20" />
                       </div>
                       <p className="mt-4 text-2xl font-bold text-white">Hello there 👋</p>
-                      <p className="text-sm text-teal-100">Where are we delivering today?</p>
+                      <p className="text-sm text-slate-100">Where are we delivering today?</p>
                     </div>
 
                     {/* Mock App Content */}
                     <div className="space-y-3 p-4">
                       <div className="rounded-2xl bg-gray-800/50 p-4">
                         <div className="flex items-center gap-3">
-                          <div className="h-10 w-10 rounded-full bg-teal-500/20" />
+                          <div className="h-10 w-10 rounded-full bg-slate-500/20" />
                           <div className="flex-1 space-y-2">
                             <div className="h-3 w-3/4 rounded bg-gray-700" />
                             <div className="h-2 w-1/2 rounded bg-gray-700" />
@@ -565,7 +565,7 @@ export function LandingPage() {
                             {rider.avatar ? (
                               <img src={rider.avatar} alt="" className="h-10 w-10 rounded-full object-cover" />
                             ) : (
-                              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-emerald-600 text-xs font-bold text-white">
+                              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-slate-500 to-emerald-600 text-xs font-bold text-white">
                                 {getInitials(rider.name)}
                               </div>
                             )}
@@ -587,10 +587,10 @@ export function LandingPage() {
                 </div>
 
                 {/* Floating Elements */}
-                <div className="absolute -right-8 top-20 rounded-2xl border border-teal-500/20 bg-gray-900/90 p-4 shadow-xl backdrop-blur-xl">
+                <div className="absolute -right-8 top-20 rounded-2xl border border-slate-500/20 bg-gray-900/90 p-4 shadow-xl backdrop-blur-xl">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-teal-500/20">
-                      <Shield className="h-5 w-5 text-teal-400" />
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-500/20">
+                      <Shield className="h-5 w-5 text-slate-400" />
                     </div>
                     <div>
                       <p className="text-xs font-bold text-white">Escrow Active</p>
@@ -633,9 +633,9 @@ export function LandingPage() {
             {stats.map((stat, i) => (
               <div
                 key={stat.label}
-                className="group relative overflow-hidden rounded-3xl border border-gray-100 bg-gray-50 p-6 text-center transition-all hover:border-emerald-200 hover:shadow-lg hover:shadow-teal-500/5"
+                className="group relative overflow-hidden rounded-3xl border border-gray-100 bg-gray-50 p-6 text-center transition-all hover:border-emerald-200 hover:shadow-lg hover:shadow-slate-500/5"
               >
-                <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-teal-500/5 transition-transform group-hover:scale-150" />
+                <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-slate-500/5 transition-transform group-hover:scale-150" />
                 <div className="relative">
                   <div className="text-3xl font-black text-gray-900 sm:text-4xl">{stat.value}</div>
                   <div className="mt-1 text-sm font-medium text-gray-500">{stat.label}</div>
@@ -655,7 +655,7 @@ export function LandingPage() {
                 key={feat.label}
                 className="flex items-start gap-4 rounded-2xl bg-white p-5 shadow-sm border border-gray-100"
               >
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-teal-50 text-teal-600">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-slate-600">
                   <feat.icon className="h-6 w-6" />
                 </div>
                 <div>
@@ -672,7 +672,7 @@ export function LandingPage() {
       <section id="how-it-works" className="bg-white py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto mb-16 max-w-3xl text-center">
-            <p className="text-sm font-bold uppercase tracking-widest text-teal-600">How it works</p>
+            <p className="text-sm font-bold uppercase tracking-widest text-slate-600">How it works</p>
             <h2 className="mt-3 text-4xl font-black text-gray-900 sm:text-5xl">
               Book in 4 taps.
             </h2>
@@ -683,7 +683,7 @@ export function LandingPage() {
 
           <div className="relative">
             {/* Connecting Line */}
-            <div className="absolute left-8 top-0 hidden h-full w-0.5 bg-gradient-to-b from-emerald-200 via-teal-200 to-cyan-200 lg:left-1/2 lg:-translate-x-1/2 xl:block" />
+            <div className="absolute left-8 top-0 hidden h-full w-0.5 bg-gradient-to-b from-emerald-200 via-slate-200 to-cyan-200 lg:left-1/2 lg:-translate-x-1/2 xl:block" />
 
             <div className="space-y-12 xl:space-y-24">
               {howItWorks.map((step, index) => {
@@ -699,11 +699,11 @@ export function LandingPage() {
                     {/* Content */}
                     <div className={cn('flex-1 xl:text-left', isEven ? 'xl:pr-16' : 'xl:pl-16')}>
                       <div className="rounded-3xl border border-gray-100 bg-gray-50 p-8 sm:p-10">
-                        <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 text-white shadow-lg shadow-teal-500/20">
+                        <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-500 to-emerald-600 text-white shadow-lg shadow-slate-500/20">
                           <step.icon className="h-8 w-8" />
                         </div>
                         <div className="flex items-center gap-3 mb-3">
-                          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-100 text-sm font-bold text-teal-700">
+                          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-sm font-bold text-slate-700">
                             {index + 1}
                           </span>
                           <h3 className="text-2xl font-bold text-gray-900">{step.title}</h3>
@@ -713,7 +713,7 @@ export function LandingPage() {
                     </div>
 
                     {/* Center Dot */}
-                    <div className="relative z-10 hidden xl:flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-4 border-white bg-teal-500 shadow-xl shadow-teal-500/30">
+                    <div className="relative z-10 hidden xl:flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-4 border-white bg-slate-500 shadow-xl shadow-slate-500/30">
                       <div className="h-3 w-3 rounded-full bg-white" />
                     </div>
 
@@ -729,12 +729,12 @@ export function LandingPage() {
 
       {/* Features Grid */}
       <section id="features" className="bg-gray-950 py-20 sm:py-28 relative overflow-hidden">
-        <div className="absolute left-0 top-0 h-[500px] w-[500px] rounded-full bg-teal-500/5 blur-[120px]" />
+        <div className="absolute left-0 top-0 h-[500px] w-[500px] rounded-full bg-slate-500/5 blur-[120px]" />
         <div className="absolute right-0 bottom-0 h-[400px] w-[400px] rounded-full bg-emerald-500/5 blur-[100px]" />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto mb-16 max-w-3xl text-center">
-            <p className="text-sm font-bold uppercase tracking-widest text-teal-400">Why Dispatch NG</p>
+            <p className="text-sm font-bold uppercase tracking-widest text-slate-400">Why Dispatch NG</p>
             <h2 className="mt-3 text-4xl font-black text-white sm:text-5xl">
               Built different.
             </h2>
@@ -747,11 +747,11 @@ export function LandingPage() {
             {features.map((feature, i) => (
               <div
                 key={feature.title}
-                className="group relative overflow-hidden rounded-3xl border border-white/5 bg-white/5 p-8 backdrop-blur-sm transition-all hover:border-teal-500/30 hover:bg-white/10"
+                className="group relative overflow-hidden rounded-3xl border border-white/5 bg-white/5 p-8 backdrop-blur-sm transition-all hover:border-slate-500/30 hover:bg-white/10"
               >
-                <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-teal-500/10 transition-transform group-hover:scale-150" />
+                <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-slate-500/10 transition-transform group-hover:scale-150" />
                 <div className="relative flex gap-5">
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-teal-500/20 to-emerald-500/20 text-teal-400 ring-1 ring-teal-500/20">
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-500/20 to-emerald-500/20 text-slate-400 ring-1 ring-slate-500/20">
                     <feature.icon className="h-7 w-7" />
                   </div>
                   <div>
@@ -770,7 +770,7 @@ export function LandingPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div className="max-w-2xl">
-              <p className="text-sm font-bold uppercase tracking-widest text-teal-600">Rider Network</p>
+              <p className="text-sm font-bold uppercase tracking-widest text-slate-600">Rider Network</p>
               <h2 className="mt-3 text-4xl font-black text-gray-900 sm:text-5xl">
                 Meet your riders.
               </h2>
@@ -782,7 +782,7 @@ export function LandingPage() {
             <Button
               variant="outline"
               onClick={handleProtectedRidersAccess}
-              className="h-12 rounded-full border-gray-200 px-6 text-base font-semibold text-gray-900 hover:border-emerald-300 hover:bg-teal-50 hover:text-teal-700"
+              className="h-12 rounded-full border-gray-200 px-6 text-base font-semibold text-gray-900 hover:border-emerald-300 hover:bg-slate-50 hover:text-slate-700"
             >
               {isAuthenticated ? 'View All Riders' : 'Login to Book'}
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -821,9 +821,9 @@ export function LandingPage() {
               {featuredRiders.map((rider) => (
                 <div
                   key={rider.id}
-                  className="group relative overflow-hidden rounded-3xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-teal-500/5"
+                  className="group relative overflow-hidden rounded-3xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-500/5"
                 >
-                  <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-teal-50 transition-transform group-hover:scale-150" />
+                  <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-slate-50 transition-transform group-hover:scale-150" />
 
                   <div className="relative">
                     <div className="relative mx-auto w-fit">
@@ -834,13 +834,13 @@ export function LandingPage() {
                           className="h-24 w-24 rounded-full object-cover ring-4 ring-gray-50"
                         />
                       ) : (
-                        <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-emerald-600 text-2xl font-bold text-white ring-4 ring-gray-50">
+                        <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-slate-500 to-emerald-600 text-2xl font-bold text-white ring-4 ring-gray-50">
                           {getInitials(rider.name)}
                         </div>
                       )}
 
                       {rider.isOnline && (
-                        <span className="absolute bottom-1 right-1 h-5 w-5 rounded-full border-[3px] border-white bg-teal-500 shadow-sm" />
+                        <span className="absolute bottom-1 right-1 h-5 w-5 rounded-full border-[3px] border-white bg-slate-500 shadow-sm" />
                       )}
                     </div>
 
@@ -871,14 +871,14 @@ export function LandingPage() {
                     <div className="mt-5 grid grid-cols-2 gap-3">
                       <button
                         onClick={handleProtectedRidersAccess}
-                        className="inline-flex items-center justify-center rounded-xl bg-teal-50 px-3 py-3 text-sm font-semibold text-teal-700 transition-colors hover:bg-teal-100"
+                        className="inline-flex items-center justify-center rounded-xl bg-slate-50 px-3 py-3 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100"
                       >
                         <Phone className="mr-2 h-4 w-4" />
                         Call
                       </button>
                       <button
                         onClick={handleProtectedRidersAccess}
-                        className="inline-flex items-center justify-center rounded-xl bg-teal-50 px-3 py-3 text-sm font-semibold text-emerald-700 transition-colors hover:bg-teal-100"
+                        className="inline-flex items-center justify-center rounded-xl bg-slate-50 px-3 py-3 text-sm font-semibold text-emerald-700 transition-colors hover:bg-slate-100"
                       >
                         <MessageCircle className="mr-2 h-4 w-4" />
                         Message
@@ -903,7 +903,7 @@ export function LandingPage() {
       {/* Download App CTA */}
       <section className="bg-gray-950 py-20 sm:py-28 relative overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute left-1/4 top-1/2 h-[600px] w-[600px] -translate-y-1/2 rounded-full bg-teal-500/10 blur-[120px]" />
+          <div className="absolute left-1/4 top-1/2 h-[600px] w-[600px] -translate-y-1/2 rounded-full bg-slate-500/10 blur-[120px]" />
           <div className="absolute right-1/4 top-1/2 h-[400px] w-[400px] -translate-y-1/2 rounded-full bg-emerald-500/10 blur-[100px]" />
         </div>
 
@@ -911,11 +911,11 @@ export function LandingPage() {
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div className="space-y-8">
               <div>
-                <p className="text-sm font-bold uppercase tracking-widest text-teal-400">Get the app</p>
+                <p className="text-sm font-bold uppercase tracking-widest text-slate-400">Get the app</p>
                 <h2 className="mt-3 text-4xl font-black text-white sm:text-5xl lg:text-6xl">
                   Your delivery,
                   <br />
-                  <span className="text-teal-400">in your pocket.</span>
+                  <span className="text-slate-400">in your pocket.</span>
                 </h2>
                 <p className="mt-6 max-w-lg text-lg leading-relaxed text-gray-400">
                   Download Dispatch NG and book verified riders in seconds. Track deliveries in real-time.
@@ -942,15 +942,15 @@ export function LandingPage() {
 
               <div className="flex items-center gap-6 text-sm text-gray-500">
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-teal-500" />
+                  <CheckCircle className="h-4 w-4 text-slate-500" />
                   <span>Free download</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-teal-500" />
+                  <CheckCircle className="h-4 w-4 text-slate-500" />
                   <span>No hidden fees</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-teal-500" />
+                  <CheckCircle className="h-4 w-4 text-slate-500" />
                   <span>iOS & Android</span>
                 </div>
               </div>
@@ -959,9 +959,9 @@ export function LandingPage() {
             {/* Phone Mockup */}
             <div className="relative hidden lg:flex justify-center">
               <div className="relative w-[280px] rotate-[-6deg] transition-transform hover:rotate-0 duration-500">
-                <div className="rounded-[2.5rem] border-[6px] border-gray-800 bg-gray-950 p-2 shadow-2xl shadow-teal-500/10">
+                <div className="rounded-[2.5rem] border-[6px] border-gray-800 bg-gray-950 p-2 shadow-2xl shadow-slate-500/10">
                   <div className="overflow-hidden rounded-[2rem] bg-gray-900">
-                    <div className="bg-gradient-to-br from-teal-600 to-emerald-700 px-5 pb-6 pt-10">
+                    <div className="bg-gradient-to-br from-slate-600 to-emerald-700 px-5 pb-6 pt-10">
                       <div className="flex items-center justify-between">
                         <div className="h-7 w-7 rounded-full bg-white/20" />
                         <div className="h-7 w-7 rounded-full bg-white/20" />
@@ -971,8 +971,8 @@ export function LandingPage() {
                     </div>
                     <div className="p-4 space-y-3">
                       <div className="rounded-xl bg-gray-800/50 p-3 flex items-center gap-3">
-                        <div className="h-8 w-8 rounded-full bg-teal-500/20 flex items-center justify-center">
-                          <Truck className="h-4 w-4 text-teal-400" />
+                        <div className="h-8 w-8 rounded-full bg-slate-500/20 flex items-center justify-center">
+                          <Truck className="h-4 w-4 text-slate-400" />
                         </div>
                         <div className="flex-1">
                           <div className="h-2.5 w-20 rounded bg-gray-700" />
@@ -983,8 +983,8 @@ export function LandingPage() {
                         <div className="h-2 w-full rounded bg-gray-700" />
                         <div className="h-2 w-3/4 rounded bg-gray-700" />
                       </div>
-                      <div className="rounded-xl bg-teal-500/20 p-3 text-center">
-                        <p className="text-xs font-bold text-teal-400">Confirm Delivery</p>
+                      <div className="rounded-xl bg-slate-500/20 p-3 text-center">
+                        <p className="text-xs font-bold text-slate-400">Confirm Delivery</p>
                       </div>
                     </div>
                   </div>
@@ -1017,7 +1017,7 @@ export function LandingPage() {
       {/* Final CTA */}
       <section className="bg-white py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-r from-teal-500 via-emerald-500 to-teal-500 px-8 py-16 text-center sm:px-16 sm:py-20">
+          <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-r from-slate-500 via-emerald-500 to-slate-500 px-8 py-16 text-center sm:px-16 sm:py-20">
             <div className="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
             <div className="absolute -bottom-20 -right-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
 
@@ -1025,7 +1025,7 @@ export function LandingPage() {
               <h2 className="text-4xl font-black text-white sm:text-5xl">
                 Ready to move?
               </h2>
-              <p className="mx-auto max-w-xl text-lg leading-relaxed text-teal-50">
+              <p className="mx-auto max-w-xl text-lg leading-relaxed text-slate-50">
                 Join thousands of Lagosians who've switched to safer, smarter deliveries.
                 Your first booking takes 30 seconds.
               </p>
@@ -1034,7 +1034,7 @@ export function LandingPage() {
                 <Button
                   size="lg"
                   onClick={() => navigate('/signup')}
-                  className="h-14 rounded-full bg-white px-8 text-base font-bold text-teal-700 hover:bg-gray-100 shadow-xl"
+                  className="h-14 rounded-full bg-white px-8 text-base font-bold text-slate-700 hover:bg-gray-100 shadow-xl"
                 >
                   <Users className="mr-2 h-5 w-5" />
                   Sign Up — It's Free
@@ -1073,10 +1073,10 @@ export function LandingPage() {
                 and real support when you need it.
               </p>
               <div className="flex gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-gray-400 hover:bg-teal-500/20 hover:text-teal-400 transition-colors cursor-pointer">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-gray-400 hover:bg-slate-500/20 hover:text-slate-400 transition-colors cursor-pointer">
                   <Apple className="h-4 w-4" />
                 </div>
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-gray-400 hover:bg-teal-500/20 hover:text-teal-400 transition-colors cursor-pointer">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-gray-400 hover:bg-slate-500/20 hover:text-slate-400 transition-colors cursor-pointer">
                   <Download className="h-4 w-4" />
                 </div>
               </div>
@@ -1088,7 +1088,7 @@ export function LandingPage() {
                 <li>
                   <button
                     onClick={handleProtectedRidersAccess}
-                    className="transition-colors hover:text-teal-400"
+                    className="transition-colors hover:text-slate-400"
                   >
                     Find Riders
                   </button>
@@ -1096,18 +1096,18 @@ export function LandingPage() {
                 <li>
                   <button
                     onClick={() => navigate('/signup')}
-                    className="transition-colors hover:text-teal-400"
+                    className="transition-colors hover:text-slate-400"
                   >
                     Become a Rider
                   </button>
                 </li>
                 <li>
-                  <a href="#how-it-works" className="transition-colors hover:text-teal-400">
+                  <a href="#how-it-works" className="transition-colors hover:text-slate-400">
                     How It Works
                   </a>
                 </li>
                 <li>
-                  <a href="#features" className="transition-colors hover:text-teal-400">
+                  <a href="#features" className="transition-colors hover:text-slate-400">
                     Features
                   </a>
                 </li>

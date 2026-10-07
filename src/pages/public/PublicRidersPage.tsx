@@ -213,7 +213,7 @@ export function PublicRidersPage() {
     }
 
     return (
-      <div className="w-24 h-24 rounded-full bg-gradient-to-br from-emerald-400 to-teal-400 flex items-center justify-center mx-auto border-4 border-white shadow-lg text-white text-2xl font-semibold">
+      <div className="w-24 h-24 rounded-full bg-gradient-to-br from-emerald-400 to-slate-400 flex items-center justify-center mx-auto border-4 border-white shadow-lg text-white text-2xl font-semibold">
         {rider.full_name.charAt(0).toUpperCase()}
       </div>
     );
@@ -229,14 +229,14 @@ export function PublicRidersPage() {
               onClick={() => navigate('/')}
             >
               <BrandMark className="max-h-10" imageClassName="max-w-[145px]" iconClassName="h-5 w-5" />
-              {!branding.logo_url && <span className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">{branding.site_name}</span>}
+              {!branding.logo_url && <span className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-slate-600 bg-clip-text text-transparent">{branding.site_name}</span>}
             </div>
 
             <div className="flex items-center gap-3">
               {isAuthenticated ? (
                 <Button
                   onClick={() => navigate(user?.user_type === 'rider' ? '/rider' : '/dashboard')}
-                  className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white"
+                  className="bg-gradient-to-r from-emerald-600 to-slate-600 text-white"
                 >
                   Dashboard
                 </Button>
@@ -251,7 +251,7 @@ export function PublicRidersPage() {
                   </Button>
                   <Button
                     onClick={() => navigate('/signup')}
-                    className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white"
+                    className="bg-gradient-to-r from-emerald-600 to-slate-600 text-white"
                   >
                     Get Started
                   </Button>
@@ -262,7 +262,7 @@ export function PublicRidersPage() {
         </div>
       </nav>
 
-      <div className="bg-gradient-to-br from-emerald-600 to-teal-600 py-12">
+      <div className="bg-gradient-to-br from-emerald-600 to-slate-600 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Find Verified Riders
@@ -450,7 +450,7 @@ export function PublicRidersPage() {
 
                   <div className="space-y-2">
                     <Button
-                      className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white"
+                      className="w-full bg-gradient-to-r from-emerald-600 to-slate-600 text-white"
                       onClick={() => handleBookRider(rider)}
                     >
                       Book Rider
@@ -482,7 +482,7 @@ export function PublicRidersPage() {
         )}
 
         {!isAuthenticated && (
-          <div className="mt-12 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl p-8 text-center">
+          <div className="mt-12 bg-gradient-to-r from-emerald-50 to-slate-50 rounded-2xl p-8 text-center">
             <Shield className="w-12 h-12 text-emerald-600 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
               Ready to book a rider?
@@ -493,7 +493,7 @@ export function PublicRidersPage() {
             <div className="flex flex-wrap justify-center gap-4">
               <Button
                 onClick={() => navigate('/signup')}
-                className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white"
+                className="bg-gradient-to-r from-emerald-600 to-slate-600 text-white"
               >
                 Create Account
                 <ArrowRight className="w-4 h-4 ml-2" />

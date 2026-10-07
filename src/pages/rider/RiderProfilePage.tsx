@@ -279,11 +279,11 @@ export function RiderProfilePage() {
         </CardContent>
       </Card>
 
-      <Card className="overflow-hidden rounded-[20px] border-slate-200 bg-gradient-to-br from-emerald-50/70 via-white to-teal-50/50 shadow-sm">
+      <Card className="overflow-hidden rounded-[20px] border-slate-200 bg-gradient-to-br from-emerald-50/70 via-white to-slate-50/50 shadow-sm">
         <CardContent className="p-6">
           <div className="flex flex-col items-center text-center">
             <div className="relative mb-4">
-              <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-emerald-400 to-teal-400 text-3xl font-medium text-white shadow-[0_10px_30px_rgba(16,185,129,0.20)] ring-4 ring-white">
+              <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-emerald-400 to-slate-400 text-3xl font-medium text-white shadow-[0_10px_30px_rgba(16,185,129,0.20)] ring-4 ring-white">
                 {user?.avatar_url ? (
                   <img
                     src={user.avatar_url}
@@ -330,7 +330,7 @@ export function RiderProfilePage() {
       </Card>
 
       <Card className="group relative overflow-hidden rounded-[20px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)]">
-        <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-500 to-teal-500" />
+        <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-500 to-slate-500" />
         <CardContent className="p-6 pl-7">
           <div className="mb-6 flex items-center justify-between gap-3">
             <div>

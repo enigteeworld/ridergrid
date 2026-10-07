@@ -319,7 +319,7 @@ export function WalletPage() {
     onToggle: () => void;
   }) => (
     <button type="button" onClick={onToggle} className="w-full">
-      <Card className="overflow-hidden rounded-[28px] border-slate-200 bg-gradient-to-br from-emerald-50/70 via-white to-teal-50/50 shadow-sm transition-all duration-200 hover:shadow-md">
+      <Card className="overflow-hidden rounded-[28px] border-slate-200 bg-gradient-to-br from-emerald-50/70 via-white to-slate-50/50 shadow-sm transition-all duration-200 hover:shadow-md">
         <CardContent className="p-5">
           <div className="flex items-center justify-between gap-4">
             <div className="min-w-0 flex-1">
@@ -347,7 +347,7 @@ export function WalletPage() {
         <p className="text-gray-500">Manage your funds and transactions</p>
       </div>
 
-      <Card className="overflow-hidden rounded-[28px] border-slate-200 bg-gradient-to-r from-white via-slate-50 to-teal-50/30 shadow-sm">
+      <Card className="overflow-hidden rounded-[28px] border-slate-200 bg-gradient-to-r from-white via-slate-50 to-slate-50/30 shadow-sm">
         <CardContent className="p-4 sm:p-5">
           <div className="flex items-start gap-3">
             <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100">
@@ -366,7 +366,7 @@ export function WalletPage() {
       </Card>
 
       <div className="space-y-4 rounded-3xl bg-gray-50/60 p-2">
-        <Card className="overflow-hidden border-0 bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-[0_10px_30px_rgba(16,185,129,0.25)]">
+        <Card className="overflow-hidden border-0 bg-gradient-to-br from-emerald-500 to-slate-600 text-white shadow-[0_10px_30px_rgba(16,185,129,0.25)]">
           <CardContent className="p-6">
             <div className="flex items-center justify-between gap-4">
               <div>
@@ -557,9 +557,9 @@ export function WalletPage() {
 
       <Dialog open={showFundDialog} onOpenChange={setShowFundDialog}>
         <DialogContent className="max-h-[88vh] overflow-y-auto rounded-[28px] border-0 bg-white p-0 shadow-[0_24px_80px_rgba(15,23,42,0.20)] sm:max-w-md">
-          <div className="bg-gradient-to-br from-white via-slate-50 to-teal-50/30">
+          <div className="bg-gradient-to-br from-white via-slate-50 to-slate-50/30">
             <DialogHeader className="border-b border-slate-200 px-6 pb-4 pt-4 text-left sm:pt-6">
-              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 shadow-[0_10px_30px_rgba(16,185,129,0.25)]">
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-slate-500 shadow-[0_10px_30px_rgba(16,185,129,0.25)]">
                 <Wallet className="h-7 w-7 text-white" />
               </div>
 
@@ -638,7 +638,7 @@ export function WalletPage() {
                 <Button
                   onClick={handleFundWallet}
                   disabled={isFunding || !fundAmount || parseFloat(fundAmount) < MIN_FUNDING}
-                  className="h-12 w-full rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-[0_12px_30px_rgba(16,185,129,0.20)] hover:from-emerald-700 hover:to-teal-700"
+                  className="h-12 w-full rounded-2xl bg-gradient-to-r from-emerald-600 to-slate-600 text-white shadow-[0_12px_30px_rgba(16,185,129,0.20)] hover:from-emerald-700 hover:to-slate-700"
                 >
                   {isFunding ? (
                     <div className="flex items-center gap-2">

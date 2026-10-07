@@ -7,12 +7,12 @@ import { showToast } from '@/stores/uiStore';
 import { cn } from '@/lib/utils';
 
 const PERSONAL_AVATARS = [
-  { key: 'wave', face: '👋🏾', bg: 'from-emerald-100 to-teal-100' },
+  { key: 'wave', face: '👋🏾', bg: 'from-emerald-100 to-slate-100' },
   { key: 'cap', face: '🧢', bg: 'from-sky-100 to-cyan-100' },
   { key: 'cool', face: '😎', bg: 'from-amber-100 to-orange-100' },
   { key: 'smile', face: '😊', bg: 'from-lime-100 to-emerald-100' },
   { key: 'helmet', face: '⛑️', bg: 'from-red-100 to-orange-100' },
-  { key: 'bike', face: '🚴🏾', bg: 'from-teal-100 to-cyan-100' },
+  { key: 'bike', face: '🚴🏾', bg: 'from-slate-100 to-cyan-100' },
   { key: 'scooter', face: '🛵', bg: 'from-emerald-100 to-lime-100' },
   { key: 'parcel', face: '📦', bg: 'from-amber-100 to-yellow-100' },
   { key: 'rocket', face: '🚀', bg: 'from-sky-100 to-indigo-100' },
@@ -20,7 +20,7 @@ const PERSONAL_AVATARS = [
   { key: 'star', face: '⭐', bg: 'from-yellow-100 to-amber-100' },
   { key: 'bolt', face: '⚡', bg: 'from-lime-100 to-yellow-100' },
   { key: 'heart', face: '💚', bg: 'from-emerald-100 to-green-100' },
-  { key: 'shield', face: '🛡️', bg: 'from-slate-100 to-teal-100' },
+  { key: 'shield', face: '🛡️', bg: 'from-slate-100 to-slate-100' },
   { key: 'map', face: '🗺️', bg: 'from-cyan-100 to-emerald-100' },
   { key: 'check', face: '✅', bg: 'from-green-100 to-emerald-100' },
 ] as const;

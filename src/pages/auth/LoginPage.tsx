@@ -165,7 +165,7 @@ export function LoginPage() {
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#090912] via-[#151529] to-[#0b0b14]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(139,92,246,0.28),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(217,70,239,0.24),transparent_30%),radial-gradient(circle_at_center,rgba(255,255,255,0.04),transparent_45%)]" />
       <div className="absolute -top-24 -left-16 h-56 w-56 rounded-full bg-emerald-600/20 blur-3xl" />
-      <div className="absolute -bottom-20 -right-14 h-56 w-56 rounded-full bg-teal-600/20 blur-3xl" />
+      <div className="absolute -bottom-20 -right-14 h-56 w-56 rounded-full bg-slate-600/20 blur-3xl" />
 
       <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-5 sm:px-6 sm:py-8">
         <div className="w-full max-w-md">
@@ -314,7 +314,7 @@ export function LoginPage() {
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="h-12 w-full rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-900/30 transition-all duration-300 hover:from-emerald-700 hover:to-teal-700 hover:shadow-xl hover:shadow-emerald-900/40"
+                    className="h-12 w-full rounded-2xl bg-gradient-to-r from-emerald-600 to-slate-600 text-white shadow-lg shadow-emerald-900/30 transition-all duration-300 hover:from-emerald-700 hover:to-slate-700 hover:shadow-xl hover:shadow-emerald-900/40"
                   >
                     {isSubmitting ? (
                       <div className="flex items-center gap-2">

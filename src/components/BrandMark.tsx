@@ -33,7 +33,7 @@ export function BrandMark({
   }
 
   return (
-    <div className={cn('flex items-center justify-center rounded-xl bg-gradient-to-br from-emerald-600 to-teal-600 p-2 text-white', className, fallbackClassName)}>
+    <div className={cn('flex items-center justify-center rounded-xl bg-gradient-to-br from-emerald-600 to-slate-600 p-2 text-white', className, fallbackClassName)}>
       <Package className={iconClassName} />
     </div>
   );

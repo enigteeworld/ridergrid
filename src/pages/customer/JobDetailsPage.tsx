@@ -430,7 +430,7 @@ export function JobDetailsPage() {
       case 'awaiting_rider':
       case 'awaiting_funding':
       case 'funded':
-        return 'from-emerald-500 to-teal-500';
+        return 'from-emerald-500 to-slate-500';
       case 'cancelled':
       case 'refunded':
       case 'disputed':
@@ -499,9 +499,9 @@ export function JobDetailsPage() {
         Back to My Deliveries
       </button>
 
-      <div className="relative overflow-hidden rounded-[32px] border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-teal-50/30 p-5 shadow-sm sm:p-6">
+      <div className="relative overflow-hidden rounded-[32px] border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-slate-50/30 p-5 shadow-sm sm:p-6">
         <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-emerald-100/20 blur-3xl" />
-        <div className="absolute -bottom-14 left-8 h-32 w-32 rounded-full bg-teal-100/20 blur-3xl" />
+        <div className="absolute -bottom-14 left-8 h-32 w-32 rounded-full bg-slate-100/20 blur-3xl" />
 
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
@@ -536,7 +536,7 @@ export function JobDetailsPage() {
         'customer_marked_complete',
         'completed',
       ].includes(job.status) && (
-        <Card className="overflow-hidden rounded-[28px] border-slate-200 bg-gradient-to-br from-white via-slate-50 to-teal-50/25 shadow-sm">
+        <Card className="overflow-hidden rounded-[28px] border-slate-200 bg-gradient-to-br from-white via-slate-50 to-slate-50/25 shadow-sm">
           <CardContent className="p-5 sm:p-6">
             <div className="mb-5 flex items-center gap-3">
               <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600">
@@ -607,7 +607,7 @@ export function JobDetailsPage() {
               <div className="relative">
                 <div className="absolute left-0 right-0 top-5 h-1 rounded-full bg-gray-200" />
                 <div
-                  className="absolute left-0 top-5 h-1 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 transition-all"
+                  className="absolute left-0 top-5 h-1 rounded-full bg-gradient-to-r from-emerald-600 to-slate-600 transition-all"
                   style={{
                     width: `${steps.length > 1 ? (currentIndex / (steps.length - 1)) * 100 : 0}%`,
                   }}
@@ -703,7 +703,7 @@ export function JobDetailsPage() {
           title="Pickup"
           icon={MapPin}
           iconClassName="bg-slate-50 text-emerald-600"
-          accent="from-emerald-500 to-teal-500"
+          accent="from-emerald-500 to-slate-500"
         >
           <p className="break-words text-gray-700">{job.pickup_address}</p>
 
@@ -783,7 +783,7 @@ export function JobDetailsPage() {
           title="Payment"
           icon={Wallet}
           iconClassName="bg-slate-50 text-emerald-600"
-          accent="from-emerald-500 to-teal-500"
+          accent="from-emerald-500 to-slate-500"
         >
           <div className="space-y-4">
             <div className="flex items-start justify-between gap-3">
@@ -821,7 +821,7 @@ export function JobDetailsPage() {
 
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <div className="min-w-0 flex items-center gap-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-400 text-xl font-medium text-white shadow-md">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-slate-400 text-xl font-medium text-white shadow-md">
                   {job.rider_name.charAt(0)}
                 </div>
 
@@ -896,7 +896,7 @@ export function JobDetailsPage() {
         </Card>
       )}
 
-      <Card className="overflow-hidden rounded-[28px] border-slate-200 bg-gradient-to-br from-white via-slate-50 to-teal-50/25 shadow-sm">
+      <Card className="overflow-hidden rounded-[28px] border-slate-200 bg-gradient-to-br from-white via-slate-50 to-slate-50/25 shadow-sm">
         <CardContent className="p-5 sm:p-6">
           <div className="mb-4">
             <h3 className="text-lg font-semibold text-gray-900">Actions</h3>
@@ -983,7 +983,7 @@ export function JobDetailsPage() {
 
       <Dialog open={showRatingDialog} onOpenChange={setShowRatingDialog}>
         <DialogContent className="overflow-hidden rounded-[28px] border-0 p-0 shadow-2xl sm:max-w-md">
-          <div className="bg-gradient-to-br from-white via-slate-50 to-teal-50/30 p-6">
+          <div className="bg-gradient-to-br from-white via-slate-50 to-slate-50/30 p-6">
             <DialogHeader className="space-y-1">
               <DialogTitle className="text-2xl font-bold tracking-tight text-gray-950">
                 Rate Your Delivery
@@ -1022,7 +1022,7 @@ export function JobDetailsPage() {
 
               <Button
                 onClick={handleSubmitRating}
-                className="h-12 w-full rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white"
+                className="h-12 w-full rounded-2xl bg-gradient-to-r from-emerald-600 to-slate-600 text-white"
               >
                 Submit Rating
                 <ChevronRight className="ml-2 h-4 w-4" />

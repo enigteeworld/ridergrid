@@ -101,8 +101,8 @@ export function getStatusColorClass(status: string): string {
     awaiting_funding: 'bg-amber-100 text-amber-700',
     funded: 'bg-blue-100 text-blue-700',
     in_progress: 'bg-blue-100 text-blue-700',
-    rider_marked_complete: 'bg-teal-100 text-teal-700',
-    customer_marked_complete: 'bg-teal-100 text-teal-700',
+    rider_marked_complete: 'bg-slate-100 text-slate-700',
+    customer_marked_complete: 'bg-slate-100 text-slate-700',
     completed: 'bg-green-100 text-green-700',
     disputed: 'bg-red-100 text-red-700',
     cancelled: 'bg-red-100 text-red-700',
@@ -111,14 +111,14 @@ export function getStatusColorClass(status: string): string {
     // Escrow statuses
     not_created: 'bg-gray-100 text-gray-700',
     locked: 'bg-blue-100 text-blue-700',
-    partially_released: 'bg-teal-100 text-teal-700',
+    partially_released: 'bg-slate-100 text-slate-700',
     released: 'bg-green-100 text-green-700',
     under_review: 'bg-amber-100 text-amber-700',
     
     // Withdrawal statuses
     withdrawal_pending: 'bg-amber-100 text-amber-700',
     approved: 'bg-blue-100 text-blue-700',
-    processing: 'bg-teal-100 text-teal-700',
+    processing: 'bg-slate-100 text-slate-700',
     paid: 'bg-green-100 text-green-700',
     failed: 'bg-red-100 text-red-700',
     withdrawal_rejected: 'bg-red-100 text-red-700',

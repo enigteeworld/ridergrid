@@ -145,7 +145,7 @@ export function ProfilePage() {
         <p className="text-gray-500">Manage your account settings</p>
       </div>
 
-      <Card className="overflow-hidden rounded-[28px] border-slate-200 bg-gradient-to-r from-white via-slate-50 to-teal-50/30 shadow-sm">
+      <Card className="overflow-hidden rounded-[28px] border-slate-200 bg-gradient-to-r from-white via-slate-50 to-slate-50/30 shadow-sm">
         <CardContent className="p-4 sm:p-5">
           <div className="flex items-start gap-3">
             <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100">
@@ -165,11 +165,11 @@ export function ProfilePage() {
 
       <div className="space-y-4 rounded-3xl bg-gray-50/60 p-2">
         <Card className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
-          <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-500 to-teal-500" />
+          <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-500 to-slate-500" />
           <CardContent className="p-6 pl-7">
             <div className="flex flex-col items-center text-center">
               <div className="relative mb-5">
-                <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-gradient-to-br from-emerald-400 to-teal-400 text-4xl font-semibold text-white shadow-[0_12px_30px_rgba(16,185,129,0.22)]">
+                <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-gradient-to-br from-emerald-400 to-slate-400 text-4xl font-semibold text-white shadow-[0_12px_30px_rgba(16,185,129,0.22)]">
                   {user?.avatar_url ? (
                     <img
                       src={user.avatar_url}

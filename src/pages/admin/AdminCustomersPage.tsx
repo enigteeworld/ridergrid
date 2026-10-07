@@ -172,7 +172,7 @@ export function AdminCustomersPage() {
     }
 
     return (
-      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-400 to-teal-400 flex items-center justify-center text-white font-medium">
+      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-400 to-slate-400 flex items-center justify-center text-white font-medium">
         {customer.full_name?.charAt(0)?.toUpperCase() || 'C'}
       </div>
     );
@@ -261,7 +261,7 @@ export function AdminCustomersPage() {
                     className="w-16 h-16 rounded-full object-cover border border-gray-200"
                   />
                 ) : (
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-400 to-teal-400 flex items-center justify-center text-white text-xl font-medium">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-400 to-slate-400 flex items-center justify-center text-white text-xl font-medium">
                     {selectedCustomer.full_name?.charAt(0)?.toUpperCase() || 'C'}
                   </div>
                 )}

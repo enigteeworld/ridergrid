@@ -116,7 +116,7 @@ export function MyJobsPage() {
       case 'awaiting_rider':
       case 'awaiting_funding':
       case 'funded':
-        return 'from-emerald-500 to-teal-500';
+        return 'from-emerald-500 to-slate-500';
       case 'cancelled':
       case 'refunded':
       case 'disputed':
@@ -137,7 +137,7 @@ export function MyJobsPage() {
         
       </div>
 
-      <div className="rounded-2xl border border-slate-200 bg-gradient-to-r from-emerald-50/80 via-white to-teal-50/70 p-3 shadow-sm">
+      <div className="rounded-2xl border border-slate-200 bg-gradient-to-r from-emerald-50/80 via-white to-slate-50/70 p-3 shadow-sm">
         <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {filters.map((f) => {
             const isActive = filter === f.value;
@@ -172,7 +172,7 @@ export function MyJobsPage() {
       </div>
 
       <button type="button" onClick={() => setShowJobsList((prev) => !prev)} className="w-full">
-        <Card className="overflow-hidden border-slate-200 bg-gradient-to-br from-emerald-50/70 via-white to-teal-50/50 shadow-sm transition-all duration-200 hover:shadow-md">
+        <Card className="overflow-hidden border-slate-200 bg-gradient-to-br from-emerald-50/70 via-white to-slate-50/50 shadow-sm transition-all duration-200 hover:shadow-md">
           <CardContent className="p-5">
             <div className="flex items-center justify-between gap-4">
               <div className="min-w-0 text-left">
@@ -223,7 +223,7 @@ export function MyJobsPage() {
 
                 {filter === 'all' && (
                   <Link to="/create-job">
-                    <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white">
+                    <Button className="bg-gradient-to-r from-emerald-600 to-slate-600 text-white">
                       Create Delivery
                     </Button>
                   </Link>

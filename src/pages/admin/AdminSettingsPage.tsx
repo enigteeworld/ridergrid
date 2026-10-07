@@ -146,7 +146,7 @@ export function AdminSettingsPage() {
       <Card className="border-gray-200 shadow-sm">
         <CardContent className="p-6">
           <div className="mb-6 flex items-center gap-2">
-            <ImageIcon className="h-5 w-5 text-teal-600" />
+            <ImageIcon className="h-5 w-5 text-slate-600" />
             <div><h3 className="text-lg font-semibold text-gray-900">Branding</h3><p className="text-sm text-gray-500">Set the logo and browser favicon used across Dispatch NG.</p></div>
           </div>
           <div className="grid gap-5 md:grid-cols-2">
@@ -159,7 +159,7 @@ export function AdminSettingsPage() {
             <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4">
               <Label className="mb-3 block">Browser Favicon</Label>
               <div className="mb-4 flex h-20 items-center justify-center rounded-xl border border-dashed border-gray-300 bg-white">{settings.favicon_url ? <img src={settings.favicon_url} alt="Current favicon" className="h-12 w-12 object-contain" /> : <span className="text-sm text-gray-400">No custom favicon uploaded</span>}</div>
-              <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-teal-800"><Upload className="h-4 w-4" />{uploading === 'favicon' ? 'Uploading...' : 'Upload favicon'}<input className="hidden" type="file" accept="image/png,image/x-icon,image/svg+xml,image/webp" disabled={!!uploading} onChange={(e) => uploadBrandAsset('favicon', e.target.files?.[0])} /></label>
+              <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-slate-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"><Upload className="h-4 w-4" />{uploading === 'favicon' ? 'Uploading...' : 'Upload favicon'}<input className="hidden" type="file" accept="image/png,image/x-icon,image/svg+xml,image/webp" disabled={!!uploading} onChange={(e) => uploadBrandAsset('favicon', e.target.files?.[0])} /></label>
             </div>
           </div>
         </CardContent>
@@ -251,7 +251,7 @@ export function AdminSettingsPage() {
 
       <Card>
         <CardContent className="p-6">
-          <div className="mb-6 flex items-center gap-2"><Bell className="h-5 w-5 text-teal-600"/><div><h3 className="text-lg font-semibold text-gray-900">Account Verification</h3><p className="text-sm text-gray-500">Channels are wired but can stay disabled until providers are configured.</p></div></div>
+          <div className="mb-6 flex items-center gap-2"><Bell className="h-5 w-5 text-slate-600"/><div><h3 className="text-lg font-semibold text-gray-900">Account Verification</h3><p className="text-sm text-gray-500">Channels are wired but can stay disabled until providers are configured.</p></div></div>
           <div className="space-y-5">
             <div className="flex items-center justify-between gap-4"><div><p className="font-medium text-gray-900">Email verification</p><p className="text-sm text-gray-500">Send a verification code by email. Keep off until your domain and Resend sender are ready.</p></div><Switch checked={settings.enable_email_verification} onCheckedChange={(checked)=>setSettings({...settings,enable_email_verification:checked})}/></div>
             <div className="flex items-center justify-between gap-4"><div><p className="font-medium text-gray-900">Phone verification</p><p className="text-sm text-gray-500">Reserved for Vonage/Twilio OTP. Keep off until an SMS provider is configured.</p></div><Switch checked={settings.enable_phone_verification} onCheckedChange={(checked)=>setSettings({...settings,enable_phone_verification:checked})}/></div>

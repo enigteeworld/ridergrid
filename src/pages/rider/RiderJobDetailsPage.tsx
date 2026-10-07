@@ -206,7 +206,7 @@ export function RiderJobDetailsPage() {
         Back to Jobs
       </button>
 
-      <Card className="overflow-hidden rounded-[20px] border-slate-200 bg-gradient-to-br from-emerald-50/70 via-white to-teal-50/50 shadow-sm">
+      <Card className="overflow-hidden rounded-[20px] border-slate-200 bg-gradient-to-br from-emerald-50/70 via-white to-slate-50/50 shadow-sm">
         <CardContent className="p-4 sm:p-5">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="min-w-0">
@@ -248,7 +248,7 @@ export function RiderJobDetailsPage() {
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card className="group relative overflow-hidden rounded-[20px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
-          <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-500 to-teal-500" />
+          <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-500 to-slate-500" />
           <CardContent className="p-4 pl-5 sm:p-5 sm:pl-6">
             <h3 className="mb-4 flex items-center gap-2 font-semibold text-gray-900">
               <MapPin className="h-5 w-5 text-emerald-600" />
@@ -335,7 +335,7 @@ export function RiderJobDetailsPage() {
       </Card>
 
       <Card className="group relative overflow-hidden rounded-[20px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
-        <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-500 to-teal-500" />
+        <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-500 to-slate-500" />
         <CardContent className="p-4 pl-5 sm:p-5 sm:pl-6">
           <h3 className="mb-4 flex items-center gap-2 font-semibold text-gray-900">
             <Wallet className="h-5 w-5 text-emerald-600" />

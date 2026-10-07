@@ -235,7 +235,7 @@ export function HomePage() {
       case 'awaiting_rider':
       case 'awaiting_funding':
       case 'funded':
-        return 'from-emerald-500 to-teal-500';
+        return 'from-emerald-500 to-slate-500';
       case 'cancelled':
       case 'refunded':
       case 'disputed':
@@ -270,7 +270,7 @@ export function HomePage() {
       className={cn(
         'group relative overflow-hidden rounded-[30px] border shadow-[0_10px_35px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_20px_45px_rgba(15,23,42,0.10)]',
         featured
-          ? 'border-slate-200 bg-gradient-to-br from-white via-slate-50 to-teal-50/25'
+          ? 'border-slate-200 bg-gradient-to-br from-white via-slate-50 to-slate-50/25'
           : 'border-gray-100 bg-white'
       )}
     >
@@ -278,7 +278,7 @@ export function HomePage() {
       {featured && (
         <>
           <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-emerald-100/20 blur-2xl" />
-          <div className="absolute -bottom-12 left-10 h-28 w-28 rounded-full bg-teal-100/20 blur-2xl" />
+          <div className="absolute -bottom-12 left-10 h-28 w-28 rounded-full bg-slate-100/20 blur-2xl" />
         </>
       )}
 
@@ -335,8 +335,8 @@ export function HomePage() {
       className={cn(
         'overflow-hidden rounded-[28px] shadow-sm',
         tone === 'violet'
-          ? 'border-slate-200 bg-gradient-to-br from-emerald-50/80 via-white to-teal-50/60'
-          : 'border-slate-200 bg-gradient-to-br from-emerald-50/80 via-white to-green-50/60'
+          ? 'border-slate-200 bg-gradient-to-br from-slate-50 via-white to-slate-100/70'
+          : 'border-slate-200 bg-gradient-to-br from-slate-50 via-white to-slate-100/70'
       )}
     >
       <CardContent className="p-5">
@@ -353,13 +353,13 @@ export function HomePage() {
 
   return (
     <div className="space-y-7">
-      <div className="relative overflow-hidden rounded-[32px] border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-teal-50/30 p-5 shadow-sm sm:p-6">
-        <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-emerald-100/20 blur-3xl" />
-        <div className="absolute -bottom-14 left-8 h-32 w-32 rounded-full bg-teal-100/20 blur-3xl" />
+      <div className="relative overflow-hidden rounded-[32px] border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-slate-100/80 p-5 shadow-sm sm:p-6">
+        <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-slate-300/20 blur-3xl" />
+        <div className="absolute -bottom-14 left-8 h-32 w-32 rounded-full bg-slate-300/15 blur-3xl" />
 
         <div className="relative flex min-h-[118px] items-center justify-between gap-4">
           <div className="min-w-0 flex-1">
-            <div className="mb-2 inline-flex items-center rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-100 backdrop-blur-sm">
+            <div className="mb-2 inline-flex items-center rounded-full bg-slate-100/90 px-3 py-1 text-xs font-semibold text-slate-700 ring-1 ring-slate-200 backdrop-blur-sm">
               Dispatch NG Customer
             </div>
 
@@ -375,7 +375,7 @@ export function HomePage() {
         </div>
       </div>
 
-      <Card className="overflow-hidden rounded-[28px] border-slate-200 bg-gradient-to-r from-white via-slate-50 to-teal-50/30 shadow-sm">
+      <Card className="overflow-hidden rounded-[28px] border-slate-200 bg-gradient-to-r from-white via-slate-50 to-slate-100/80 shadow-sm">
         <CardContent className="p-4 sm:p-5">
           <div className="flex items-start gap-3">
             <div className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-100">
@@ -398,7 +398,7 @@ export function HomePage() {
           title="Wallet Balance"
           value={formatCurrency(wallet?.available_balance || 0)}
           icon={Wallet}
-          accent="from-emerald-500 to-teal-500"
+          accent="from-emerald-500 to-slate-500"
           iconClassName="bg-slate-50 text-emerald-500 group-hover:bg-emerald-100"
           subtitle="Available now for funding deliveries"
           featured
@@ -409,7 +409,7 @@ export function HomePage() {
             title="Total Deliveries"
             value={`${totalDeliveries}`}
             icon={Package}
-            accent="from-emerald-500 to-teal-500"
+            accent="from-emerald-500 to-slate-500"
             iconClassName="bg-slate-50 text-emerald-500 group-hover:bg-emerald-100"
             subtitle="All delivery requests created"
           />
@@ -465,7 +465,7 @@ export function HomePage() {
                 Start by choosing a rider and creating your first delivery
               </p>
               <Link to="/find-riders">
-                <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white">
+                <Button className="bg-gradient-to-r from-emerald-600 to-slate-600 text-white">
                   Find Riders
                 </Button>
               </Link>
@@ -593,7 +593,7 @@ export function HomePage() {
 
                           <div className="pt-1">
                             <Link to={`/jobs/${job.id}`} className="block">
-                              <Button className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white">
+                              <Button className="w-full bg-gradient-to-r from-emerald-600 to-slate-600 text-white">
                                 Open Delivery
                                 <ArrowRight className="ml-2 h-4 w-4" />
                               </Button>
@@ -639,14 +639,14 @@ export function HomePage() {
                 key={rider.id}
                 className="relative overflow-hidden rounded-[22px] border border-gray-100 bg-white shadow-[0_5px_18px_rgba(15,23,42,0.05)]"
               >
-                <div className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-emerald-500 to-teal-500" />
+                <div className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-emerald-500 to-slate-500" />
                 <CardContent className="p-4 pl-5">
                   <div className="flex items-start gap-3">
                     <div className="relative shrink-0">
                       {rider.avatar_url ? (
                         <img src={rider.avatar_url} alt={rider.full_name} className="h-16 w-16 rounded-2xl object-cover ring-1 ring-gray-100" />
                       ) : (
-                        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 text-xl font-semibold text-white">
+                        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-slate-500 text-xl font-semibold text-white">
                           {rider.full_name.charAt(0).toUpperCase()}
                         </div>
                       )}
@@ -680,11 +680,11 @@ export function HomePage() {
                   </div>
 
                   <div className="mt-3 grid grid-cols-[1fr_auto_auto] gap-2">
-                    <Button className="h-10 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-sm text-white" onClick={() => handleBookRider(rider)}>
+                    <Button className="h-10 rounded-xl bg-gradient-to-r from-emerald-600 to-slate-600 text-sm text-white" onClick={() => handleBookRider(rider)}>
                       Book Rider <ArrowRight className="ml-1.5 h-4 w-4" />
                     </Button>
                     <button aria-label="Call rider" onClick={() => handleContactRider(rider, 'call')} className="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-50 text-emerald-700 ring-1 ring-gray-100"><Phone className="h-4 w-4" /></button>
-                    <button aria-label="WhatsApp rider" onClick={() => handleContactRider(rider, 'whatsapp')} className="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-50 text-teal-700 ring-1 ring-gray-100"><MessageCircle className="h-4 w-4" /></button>
+                    <button aria-label="WhatsApp rider" onClick={() => handleContactRider(rider, 'whatsapp')} className="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-50 text-slate-700 ring-1 ring-gray-100"><MessageCircle className="h-4 w-4" /></button>
                   </div>
                 </CardContent>
               </Card>

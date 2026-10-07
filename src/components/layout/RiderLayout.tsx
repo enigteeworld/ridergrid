@@ -89,7 +89,7 @@ export function RiderLayout() {
             <NavLink to="/rider" className="flex items-center gap-3">
               <BrandMark className="max-h-9" imageClassName="max-w-[132px]" iconClassName="h-4.5 w-4.5" />
 
-              {!branding.logo_url && <span className="hidden bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-xl font-bold text-transparent sm:block">Rider Portal</span>}
+              {!branding.logo_url && <span className="hidden bg-gradient-to-r from-emerald-600 to-slate-600 bg-clip-text text-xl font-bold text-transparent sm:block">Rider Portal</span>}
             </NavLink>
 
             <nav className="hidden items-center gap-2 md:flex">
@@ -167,7 +167,7 @@ export function RiderLayout() {
             <div className="mb-5 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <BrandMark className="max-h-9" imageClassName="max-w-[132px]" iconClassName="h-4.5 w-4.5" />
-                <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-lg font-bold text-transparent">
+                <span className="bg-gradient-to-r from-emerald-600 to-slate-600 bg-clip-text text-lg font-bold text-transparent">
                   Rider Portal
                 </span>
               </div>
@@ -186,8 +186,8 @@ export function RiderLayout() {
               onClick={() => setMobileMenuOpen(false)}
               className="block"
             >
-              <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-gradient-to-r from-emerald-50/80 via-white to-teal-50/70 p-3">
-                <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-emerald-400 to-teal-400 text-base font-semibold text-white shadow-sm">
+              <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-gradient-to-r from-emerald-50/80 via-white to-slate-50/70 p-3">
+                <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-emerald-400 to-slate-400 text-base font-semibold text-white shadow-sm">
                   {user?.avatar_url ? (
                     <img
                       src={user.avatar_url}
@@ -298,8 +298,8 @@ export function RiderLayout() {
         <Outlet />
       </main>
 
-      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200/80 bg-white md:bg-white/95 md:backdrop-blur-xl md:hidden">
-        <div className="mx-auto max-w-5xl px-2 pb-[max(env(safe-area-inset-bottom),0.35rem)] pt-2">
+      <nav className="pointer-events-none fixed bottom-0 left-0 right-0 z-50 px-2.5 pb-[max(env(safe-area-inset-bottom),0.5rem)] md:hidden">
+        <div className="pointer-events-auto mx-auto max-w-md rounded-[1.6rem] border border-slate-200/90 bg-white/95 p-1.5 shadow-[0_12px_38px_rgba(15,23,42,0.16)] backdrop-blur-xl">
           <div className="grid grid-cols-5 gap-1">
             {mobileNavItems.map((item) => (
               <NavLink
@@ -308,10 +308,10 @@ export function RiderLayout() {
                 end={item.path === '/rider'}
                 className={({ isActive }) =>
                   cn(
-                    'flex flex-col items-center justify-center rounded-xl px-1 py-2 transition-all duration-200',
+                    'group flex min-w-0 flex-col items-center justify-center rounded-[1.15rem] px-1 py-1.5 transition-[background-color,color,transform] duration-200 ease-out active:scale-[0.97]',
                     isActive
-                      ? 'bg-slate-50 text-emerald-700'
-                      : 'text-gray-400 hover:bg-gray-50 hover:text-gray-600'
+                      ? 'bg-emerald-50/90 text-emerald-700'
+                      : 'text-slate-400 hover:bg-slate-50 hover:text-slate-600'
                   )
                 }
               >
@@ -319,13 +319,15 @@ export function RiderLayout() {
                   <>
                     <div
                       className={cn(
-                        'mb-1 flex h-8 w-8 items-center justify-center rounded-xl transition-all duration-200',
-                        isActive ? 'bg-white shadow-sm ring-1 ring-emerald-100' : 'bg-transparent'
+                        'mb-0.5 flex h-8 w-9 items-center justify-center rounded-xl transition-[background-color,box-shadow,transform] duration-200 ease-out',
+                        isActive
+                          ? 'translate-y-[-1px] bg-white shadow-[0_3px_10px_rgba(15,23,42,0.08)] ring-1 ring-emerald-100'
+                          : 'bg-transparent group-hover:bg-white/80'
                       )}
                     >
-                      <item.icon className="h-5 w-5" />
+                      <item.icon className={cn("h-[19px] w-[19px] transition-transform duration-200", isActive && "scale-105")} />
                     </div>
-                    <span className="text-[11px] font-medium leading-none">
+                    <span className={cn("max-w-full truncate text-[10.5px] leading-none transition-all duration-200", isActive ? "font-semibold" : "font-medium")}>
                       {item.shortLabel}
                     </span>
                   </>
@@ -336,7 +338,7 @@ export function RiderLayout() {
         </div>
       </nav>
 
-      <div className="h-20 md:hidden" />
+      <div className="h-[5.75rem] md:hidden" />
     </div>
   );
 }

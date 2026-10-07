@@ -189,7 +189,7 @@ export function AdminRidersPage() {
 
     return (
       <div
-        className={`${size} rounded-full bg-gradient-to-br from-emerald-400 to-teal-400 flex items-center justify-center text-white font-medium`}
+        className={`${size} rounded-full bg-gradient-to-br from-emerald-400 to-slate-400 flex items-center justify-center text-white font-medium`}
       >
         {(rider.full_name || 'R').charAt(0).toUpperCase()}
       </div>

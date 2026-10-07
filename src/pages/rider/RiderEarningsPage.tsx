@@ -222,7 +222,7 @@ export function RiderEarningsPage() {
             title="This Week"
             value={formatCurrency(stats.thisWeek)}
             icon={CalendarDays}
-            accent="from-emerald-500 to-teal-500"
+            accent="from-emerald-500 to-slate-500"
             iconClassName="bg-slate-50 text-emerald-500 group-hover:bg-emerald-100"
           />
 

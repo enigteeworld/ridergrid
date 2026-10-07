@@ -241,7 +241,7 @@ export function RiderDashboardPage() {
       className={cn(
         'group relative overflow-hidden rounded-[20px] border shadow-[0_6px_22px_rgba(15,23,42,0.05)] transition-colors duration-150',
         featured
-          ? 'border-slate-200 bg-gradient-to-br from-white via-slate-50 to-teal-50/25'
+          ? 'border-slate-200 bg-gradient-to-br from-white via-slate-50 to-slate-50/25'
           : 'border-gray-100 bg-white'
       )}
     >
@@ -315,7 +315,7 @@ export function RiderDashboardPage() {
         className={cn(
           'overflow-hidden rounded-[22px] shadow-sm transition-colors duration-150',
           tone === 'violet'
-            ? 'border-slate-200 bg-gradient-to-br from-emerald-50/80 via-white to-teal-50/60'
+            ? 'border-slate-200 bg-gradient-to-br from-emerald-50/80 via-white to-slate-50/60'
             : 'border-slate-200 bg-gradient-to-br from-emerald-50/80 via-white to-green-50/60'
         )}
       >
@@ -415,7 +415,7 @@ export function RiderDashboardPage() {
           title="Available to Withdraw"
           value={formatCurrency(availableBalance)}
           icon={Wallet}
-          accent="from-emerald-500 to-teal-500"
+          accent="from-emerald-500 to-slate-500"
           iconClassName="bg-slate-50 text-emerald-500 group-hover:bg-emerald-100"
           subtitle="Ready for payout when you request withdrawal"
           featured
@@ -480,7 +480,7 @@ export function RiderDashboardPage() {
               {myJobs.slice(0, 3).map((job) => (
                 <Link key={job.id} to={`/rider/jobs/${job.id}`}>
                   <Card className="group relative cursor-pointer overflow-hidden rounded-[20px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 active:scale-[0.995] hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
-                    <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-500 to-teal-500" />
+                    <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-500 to-slate-500" />
 
                     <CardContent className="p-4 pl-5 sm:p-5 sm:pl-6">
                       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">

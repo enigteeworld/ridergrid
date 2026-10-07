@@ -633,7 +633,7 @@ export function CreateJobPage() {
             <Button
               onClick={handleNext}
               disabled={isLoadingPlatformFee}
-              className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white"
+              className="flex-1 bg-gradient-to-r from-emerald-600 to-slate-600 hover:from-emerald-700 hover:to-slate-700 text-white"
             >
               {step === 4 ? (
                 <>Create Delivery</>
@@ -675,7 +675,7 @@ export function CreateJobPage() {
               <Button
                 onClick={handleSubmit}
                 disabled={isSubmitting || isLoadingPlatformFee}
-                className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 text-white"
+                className="flex-1 bg-gradient-to-r from-emerald-600 to-slate-600 text-white"
               >
                 {isSubmitting ? (
                   <div className="flex items-center gap-2">

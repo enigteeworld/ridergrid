@@ -213,7 +213,7 @@ export function FindRidersPage() {
           />
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-gradient-to-r from-emerald-50/80 via-white to-teal-50/70 p-3 shadow-sm">
+        <div className="rounded-2xl border border-slate-200 bg-gradient-to-r from-emerald-50/80 via-white to-slate-50/70 p-3 shadow-sm">
           <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {vehicleTypes.map((type) => {
               const isActive = selectedVehicle === type;
@@ -305,7 +305,7 @@ export function FindRidersPage() {
                             className="h-14 w-14 rounded-2xl border border-gray-200 object-cover"
                           />
                         ) : (
-                          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 text-lg font-medium text-white">
+                          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-slate-500 text-lg font-medium text-white">
                             {rider.full_name.charAt(0).toUpperCase()}
                           </div>
                         )}
@@ -386,7 +386,7 @@ export function FindRidersPage() {
       <Dialog open={!!selectedRider} onOpenChange={() => setSelectedRider(null)}>
         <DialogContent className="overflow-hidden rounded-[28px] border-0 bg-white p-0 shadow-[0_24px_80px_rgba(15,23,42,0.20)] sm:max-w-md">
           {selectedRider && (
-            <div className="bg-gradient-to-br from-white via-slate-50 to-teal-50/30">
+            <div className="bg-gradient-to-br from-white via-slate-50 to-slate-50/30">
               <DialogHeader className="border-b border-slate-200 px-6 pb-4 pt-6 text-left">
                 <div className="mb-4 flex items-center gap-4">
                   <div className="relative shrink-0">
@@ -397,7 +397,7 @@ export function FindRidersPage() {
                         className="h-20 w-20 rounded-full border border-gray-200 object-cover shadow-sm"
                       />
                     ) : (
-                      <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-400 text-2xl font-medium text-white shadow-sm">
+                      <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-slate-400 text-2xl font-medium text-white shadow-sm">
                         {selectedRider.full_name.charAt(0).toUpperCase()}
                       </div>
                     )}
@@ -498,7 +498,7 @@ export function FindRidersPage() {
                 </div>
 
                 <Button
-                  className="h-12 w-full rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:from-emerald-700 hover:to-teal-700"
+                  className="h-12 w-full rounded-2xl bg-gradient-to-r from-emerald-600 to-slate-600 text-white hover:from-emerald-700 hover:to-slate-700"
                   onClick={handleCreateDeliveryWithRider}
                 >
                   Create Delivery with this Rider

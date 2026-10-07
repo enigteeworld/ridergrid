@@ -315,7 +315,7 @@ export function RiderWalletPage() {
     onToggle: () => void;
   }) => (
     <button type="button" onClick={onToggle} className="w-full">
-      <Card className="overflow-hidden border-slate-200 bg-gradient-to-br from-emerald-50/70 via-white to-teal-50/50 shadow-sm transition-all duration-200 hover:shadow-md">
+      <Card className="overflow-hidden border-slate-200 bg-gradient-to-br from-emerald-50/70 via-white to-slate-50/50 shadow-sm transition-all duration-200 hover:shadow-md">
         <CardContent className="p-5">
           <div className="flex items-center justify-between gap-4">
             <div className="min-w-0 flex-1">
@@ -343,7 +343,7 @@ export function RiderWalletPage() {
         <p className="text-gray-500">Manage your earnings</p>
       </div>
 
-      <Card className="overflow-hidden border-slate-200 bg-gradient-to-r from-emerald-50/80 via-white to-teal-50/70 shadow-sm">
+      <Card className="overflow-hidden border-slate-200 bg-gradient-to-r from-emerald-50/80 via-white to-slate-50/70 shadow-sm">
         <CardContent className="p-4 sm:p-5">
           <div className="flex items-start gap-3">
             <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100">
@@ -362,7 +362,7 @@ export function RiderWalletPage() {
       </Card>
 
       <div className="space-y-4 rounded-3xl bg-gray-50/60 p-2">
-        <Card className="overflow-hidden border-0 bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-[0_10px_30px_rgba(16,185,129,0.25)]">
+        <Card className="overflow-hidden border-0 bg-gradient-to-br from-emerald-500 to-slate-600 text-white shadow-[0_10px_30px_rgba(16,185,129,0.25)]">
           <CardContent className="p-6">
             <div className="flex items-center justify-between gap-4">
               <div>
@@ -643,9 +643,9 @@ export function RiderWalletPage() {
 
       <Dialog open={showWithdrawDialog} onOpenChange={setShowWithdrawDialog}>
         <DialogContent className="overflow-hidden rounded-[20px] border-0 bg-white p-0 shadow-[0_24px_80px_rgba(15,23,42,0.20)] sm:max-w-md">
-          <div className="bg-gradient-to-br from-white via-slate-50 to-teal-50/30">
+          <div className="bg-gradient-to-br from-white via-slate-50 to-slate-50/30">
             <DialogHeader className="border-b border-slate-200 px-6 pb-4 pt-6 text-left">
-              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 shadow-[0_10px_30px_rgba(16,185,129,0.22)]">
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-slate-500 shadow-[0_10px_30px_rgba(16,185,129,0.22)]">
                 <Wallet className="h-7 w-7 text-white" />
               </div>
               <DialogTitle className="text-2xl font-semibold tracking-tight text-gray-900">
