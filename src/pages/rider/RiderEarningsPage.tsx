@@ -183,7 +183,7 @@ export function RiderEarningsPage() {
     onToggle: () => void;
   }) => (
     <button type="button" onClick={onToggle} className="w-full">
-      <Card className="overflow-hidden border-emerald-100 bg-gradient-to-br from-emerald-50/70 via-white to-green-50/50 shadow-sm transition-all duration-200 hover:shadow-md">
+      <Card className="overflow-hidden border-slate-200 bg-gradient-to-br from-emerald-50/70 via-white to-green-50/50 shadow-sm transition-all duration-200 hover:shadow-md">
         <CardContent className="p-5">
           <div className="flex items-center justify-between gap-4">
             <div className="min-w-0 flex-1 text-left">
@@ -222,8 +222,8 @@ export function RiderEarningsPage() {
             title="This Week"
             value={formatCurrency(stats.thisWeek)}
             icon={CalendarDays}
-            accent="from-violet-500 to-fuchsia-500"
-            iconClassName="bg-violet-50 text-violet-500 group-hover:bg-violet-100"
+            accent="from-emerald-500 to-teal-500"
+            iconClassName="bg-slate-50 text-emerald-500 group-hover:bg-emerald-100"
           />
 
           <MetricCard
@@ -249,11 +249,11 @@ export function RiderEarningsPage() {
           <h3 className="mb-5 text-xl font-semibold text-gray-900">Performance Stats</h3>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <div className="rounded-[24px] border border-violet-100 bg-violet-50 p-5 text-center">
-              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-violet-600 shadow-sm">
+            <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5 text-center">
+              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-emerald-600 shadow-sm">
                 <CheckCircle className="h-6 w-6" />
               </div>
-              <p className="text-3xl font-bold tracking-tight text-violet-600">{deliveryCount}</p>
+              <p className="text-3xl font-bold tracking-tight text-emerald-600">{deliveryCount}</p>
               <p className="mt-1 text-sm text-gray-500">Total Deliveries</p>
             </div>
 

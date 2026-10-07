@@ -220,8 +220,8 @@ export function CreateJobPage() {
         return (
           <div className="space-y-5">
             <div className="text-center mb-6">
-              <div className="w-12 h-12 mx-auto bg-violet-100 rounded-full flex items-center justify-center mb-3">
-                <MapPin className="w-6 h-6 text-violet-600" />
+              <div className="w-12 h-12 mx-auto bg-emerald-100 rounded-full flex items-center justify-center mb-3">
+                <MapPin className="w-6 h-6 text-emerald-600" />
               </div>
               <h3 className="text-lg font-semibold text-gray-900">Pickup Details</h3>
               <p className="text-gray-500">Where should the rider pick up the package?</p>
@@ -296,8 +296,8 @@ export function CreateJobPage() {
         return (
           <div className="space-y-5">
             <div className="text-center mb-6">
-              <div className="w-12 h-12 mx-auto bg-violet-100 rounded-full flex items-center justify-center mb-3">
-                <MapPin className="w-6 h-6 text-violet-600" />
+              <div className="w-12 h-12 mx-auto bg-emerald-100 rounded-full flex items-center justify-center mb-3">
+                <MapPin className="w-6 h-6 text-emerald-600" />
               </div>
               <h3 className="text-lg font-semibold text-gray-900">Delivery Details</h3>
               <p className="text-gray-500">Where should the package be delivered?</p>
@@ -372,8 +372,8 @@ export function CreateJobPage() {
         return (
           <div className="space-y-5">
             <div className="text-center mb-6">
-              <div className="w-12 h-12 mx-auto bg-violet-100 rounded-full flex items-center justify-center mb-3">
-                <Package className="w-6 h-6 text-violet-600" />
+              <div className="w-12 h-12 mx-auto bg-emerald-100 rounded-full flex items-center justify-center mb-3">
+                <Package className="w-6 h-6 text-emerald-600" />
               </div>
               <h3 className="text-lg font-semibold text-gray-900">Package Details</h3>
               <p className="text-gray-500">Tell us about the package and delivery fee</p>
@@ -435,11 +435,11 @@ export function CreateJobPage() {
               )}
 
               {agreedAmount && amountNumber > 0 && (
-                <Card className="bg-violet-50 border-violet-200">
+                <Card className="bg-slate-50 border-emerald-200">
                   <CardContent className="p-4">
                     <div className="flex items-center gap-2 mb-3">
-                      <Info className="w-5 h-5 text-violet-600" />
-                      <span className="font-medium text-violet-900">Cost Breakdown</span>
+                      <Info className="w-5 h-5 text-emerald-600" />
+                      <span className="font-medium text-emerald-900">Cost Breakdown</span>
                     </div>
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
@@ -452,9 +452,9 @@ export function CreateJobPage() {
                           -{formatCurrency(platformFee)}
                         </span>
                       </div>
-                      <div className="border-t border-violet-200 pt-2 flex justify-between">
+                      <div className="border-t border-emerald-200 pt-2 flex justify-between">
                         <span className="font-medium text-gray-900">Rider Receives</span>
-                        <span className="font-bold text-violet-700">
+                        <span className="font-bold text-emerald-700">
                           {formatCurrency(riderEarnings)}
                         </span>
                       </div>
@@ -516,7 +516,7 @@ export function CreateJobPage() {
               <Card>
                 <CardContent className="p-4">
                   <h4 className="font-medium text-gray-900 mb-3 flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-violet-600" />
+                    <MapPin className="w-4 h-4 text-emerald-600" />
                     Pickup
                   </h4>
                   <p className="text-gray-700">{pickupAddress}</p>
@@ -558,16 +558,16 @@ export function CreateJobPage() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-violet-50 border-violet-200">
+              <Card className="bg-slate-50 border-emerald-200">
                 <CardContent className="p-4">
-                  <h4 className="font-medium text-violet-900 mb-3 flex items-center gap-2">
+                  <h4 className="font-medium text-emerald-900 mb-3 flex items-center gap-2">
                     <Wallet className="w-4 h-4" />
                     Payment
                   </h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Total Amount</span>
-                      <span className="font-bold text-violet-900">
+                      <span className="font-bold text-emerald-900">
                         {formatCurrency(amountNumber)}
                       </span>
                     </div>
@@ -579,7 +579,7 @@ export function CreateJobPage() {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Rider Receives</span>
-                      <span className="font-medium text-violet-700">
+                      <span className="font-medium text-emerald-700">
                         {formatCurrency(riderEarnings)}
                       </span>
                     </div>
@@ -613,7 +613,7 @@ export function CreateJobPage() {
             key={s}
             className={cn(
               'w-3 h-3 rounded-full transition-colors',
-              s <= step ? 'bg-violet-600' : 'bg-gray-200'
+              s <= step ? 'bg-emerald-600' : 'bg-gray-200'
             )}
           />
         ))}
@@ -633,7 +633,7 @@ export function CreateJobPage() {
             <Button
               onClick={handleNext}
               disabled={isLoadingPlatformFee}
-              className="flex-1 bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white"
+              className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white"
             >
               {step === 4 ? (
                 <>Create Delivery</>
@@ -675,7 +675,7 @@ export function CreateJobPage() {
               <Button
                 onClick={handleSubmit}
                 disabled={isSubmitting || isLoadingPlatformFee}
-                className="flex-1 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white"
+                className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 text-white"
               >
                 {isSubmitting ? (
                   <div className="flex items-center gap-2">

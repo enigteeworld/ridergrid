@@ -161,8 +161,8 @@ export function LoginPage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#090912] via-[#151529] to-[#0b0b14]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(139,92,246,0.28),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(217,70,239,0.24),transparent_30%),radial-gradient(circle_at_center,rgba(255,255,255,0.04),transparent_45%)]" />
-      <div className="absolute -top-24 -left-16 h-56 w-56 rounded-full bg-violet-600/20 blur-3xl" />
-      <div className="absolute -bottom-20 -right-14 h-56 w-56 rounded-full bg-fuchsia-600/20 blur-3xl" />
+      <div className="absolute -top-24 -left-16 h-56 w-56 rounded-full bg-emerald-600/20 blur-3xl" />
+      <div className="absolute -bottom-20 -right-14 h-56 w-56 rounded-full bg-teal-600/20 blur-3xl" />
 
       <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-5 sm:px-6 sm:py-8">
         <div className="w-full max-w-md">
@@ -171,7 +171,7 @@ export function LoginPage() {
             onClick={() => navigate('/')}
             className="mb-4 flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-white/8 px-4 py-3 text-left backdrop-blur-xl transition hover:bg-white/12 sm:mb-5"
           >
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-600 shadow-lg shadow-violet-900/30">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-600 shadow-lg shadow-emerald-900/30">
               <Truck className="h-5 w-5 text-white" />
             </div>
             <div className="min-w-0">
@@ -183,7 +183,7 @@ export function LoginPage() {
           <div className="rounded-[28px] border border-white/12 bg-white/10 shadow-2xl shadow-black/30 backdrop-blur-2xl">
             <div className="rounded-[28px] border border-white/5 bg-gradient-to-br from-white/10 via-white/5 to-transparent p-5 sm:p-6">
               <div className="mb-6 text-center">
-                <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-violet-600 to-fuchsia-600 shadow-lg shadow-violet-900/30">
+                <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-emerald-600 to-teal-600 shadow-lg shadow-emerald-900/30">
                   <Truck className="h-8 w-8 text-white" />
                 </div>
 
@@ -208,7 +208,7 @@ export function LoginPage() {
                     <Mail
                       className={cn(
                         'absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 transition-colors duration-200',
-                        focusedField === 'email' ? 'text-violet-300' : 'text-white/45',
+                        focusedField === 'email' ? 'text-emerald-300' : 'text-white/45',
                         errors.email && 'text-red-300'
                       )}
                     />
@@ -224,8 +224,8 @@ export function LoginPage() {
                       className={cn(
                         'h-12 rounded-2xl border border-white/14 bg-white/[0.08] pl-12 pr-11 text-[15px] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-md',
                         'placeholder:text-white/32',
-                        'focus:border-violet-400/70 focus:bg-white/[0.1] focus:text-white focus:ring-4 focus:ring-violet-500/10 focus-visible:ring-4 focus-visible:ring-violet-500/10',
-                        'selection:bg-violet-500/30',
+                        'focus:border-emerald-400/70 focus:bg-white/[0.1] focus:text-white focus:ring-4 focus:ring-emerald-500/10 focus-visible:ring-4 focus-visible:ring-emerald-500/10',
+                        'selection:bg-emerald-500/30',
                         errors.email &&
                           'border-red-300/70 focus:border-red-400 focus:ring-red-500/10'
                       )}
@@ -255,7 +255,7 @@ export function LoginPage() {
                     <Lock
                       className={cn(
                         'absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 transition-colors duration-200',
-                        focusedField === 'password' ? 'text-violet-300' : 'text-white/45',
+                        focusedField === 'password' ? 'text-emerald-300' : 'text-white/45',
                         errors.password && 'text-red-300'
                       )}
                     />
@@ -271,8 +271,8 @@ export function LoginPage() {
                       className={cn(
                         'h-12 rounded-2xl border border-white/14 bg-white/[0.08] pl-12 pr-12 text-[15px] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-md',
                         'placeholder:text-white/32',
-                        'focus:border-violet-400/70 focus:bg-white/[0.1] focus:text-white focus:ring-4 focus:ring-violet-500/10 focus-visible:ring-4 focus-visible:ring-violet-500/10',
-                        'selection:bg-violet-500/30',
+                        'focus:border-emerald-400/70 focus:bg-white/[0.1] focus:text-white focus:ring-4 focus:ring-emerald-500/10 focus-visible:ring-4 focus-visible:ring-emerald-500/10',
+                        'selection:bg-emerald-500/30',
                         errors.password &&
                           'border-red-300/70 focus:border-red-400 focus:ring-red-500/10'
                       )}
@@ -296,7 +296,7 @@ export function LoginPage() {
                       id="remember"
                       checked={rememberMe}
                       onCheckedChange={(checked) => setRememberMe(checked as boolean)}
-                      className="border-white/25 data-[state=checked]:border-violet-500 data-[state=checked]:bg-violet-600"
+                      className="border-white/25 data-[state=checked]:border-emerald-500 data-[state=checked]:bg-emerald-600"
                     />
                     <Label htmlFor="remember" className="cursor-pointer text-sm text-white/70">
                       Remember me
@@ -305,7 +305,7 @@ export function LoginPage() {
 
                   <Link
                     to="/forgot-password"
-                    className="text-sm font-medium text-violet-300 transition-colors hover:text-violet-200"
+                    className="text-sm font-medium text-emerald-300 transition-colors hover:text-emerald-200"
                   >
                     Forgot password?
                   </Link>
@@ -315,7 +315,7 @@ export function LoginPage() {
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="h-12 w-full rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg shadow-violet-900/30 transition-all duration-300 hover:from-violet-700 hover:to-fuchsia-700 hover:shadow-xl hover:shadow-violet-900/40"
+                    className="h-12 w-full rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-900/30 transition-all duration-300 hover:from-emerald-700 hover:to-teal-700 hover:shadow-xl hover:shadow-emerald-900/40"
                   >
                     {isSubmitting ? (
                       <div className="flex items-center gap-2">
@@ -381,7 +381,7 @@ export function LoginPage() {
                 Don&apos;t have an account?{' '}
                 <Link
                   to="/signup"
-                  className="font-semibold text-violet-300 transition-colors hover:text-violet-200"
+                  className="font-semibold text-emerald-300 transition-colors hover:text-emerald-200"
                 >
                   Sign up
                 </Link>

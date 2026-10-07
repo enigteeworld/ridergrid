@@ -143,13 +143,13 @@ export function SignupPage() {
   };
 
   const fieldBaseClass =
-    'h-12 rounded-2xl border border-white/14 bg-white/[0.08] pl-12 pr-11 text-[15px] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-md placeholder:text-white/32 transition-all duration-200 focus:border-violet-400/70 focus:bg-white/[0.1] focus:text-white focus:ring-4 focus:ring-violet-500/10 focus-visible:ring-4 focus-visible:ring-violet-500/10 selection:bg-violet-500/30';
+    'h-12 rounded-2xl border border-white/14 bg-white/[0.08] pl-12 pr-11 text-[15px] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-md placeholder:text-white/32 transition-all duration-200 focus:border-emerald-400/70 focus:bg-white/[0.1] focus:text-white focus:ring-4 focus:ring-emerald-500/10 focus-visible:ring-4 focus-visible:ring-emerald-500/10 selection:bg-emerald-500/30';
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#090912] via-[#151529] to-[#0b0b14]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(139,92,246,0.28),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(217,70,239,0.24),transparent_30%),radial-gradient(circle_at_center,rgba(255,255,255,0.04),transparent_45%)]" />
-      <div className="absolute -top-24 -left-16 h-56 w-56 rounded-full bg-violet-600/20 blur-3xl" />
-      <div className="absolute -bottom-20 -right-14 h-56 w-56 rounded-full bg-fuchsia-600/20 blur-3xl" />
+      <div className="absolute -top-24 -left-16 h-56 w-56 rounded-full bg-emerald-600/20 blur-3xl" />
+      <div className="absolute -bottom-20 -right-14 h-56 w-56 rounded-full bg-teal-600/20 blur-3xl" />
 
       <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-5 sm:px-6 sm:py-8">
         <div className="w-full max-w-md">
@@ -158,7 +158,7 @@ export function SignupPage() {
             onClick={() => navigate('/')}
             className="mb-4 flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-white/8 px-4 py-3 text-left backdrop-blur-xl transition hover:bg-white/12 sm:mb-5"
           >
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-600 shadow-lg shadow-violet-900/30">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-600 shadow-lg shadow-emerald-900/30">
               <Truck className="h-5 w-5 text-white" />
             </div>
             <div className="min-w-0">
@@ -170,7 +170,7 @@ export function SignupPage() {
           <div className="rounded-[28px] border border-white/12 bg-white/10 shadow-2xl shadow-black/30 backdrop-blur-2xl">
             <div className="rounded-[28px] border border-white/5 bg-gradient-to-br from-white/10 via-white/5 to-transparent p-5 sm:p-6">
               <div className="mb-6 text-center">
-                <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-violet-600 to-fuchsia-600 shadow-lg shadow-violet-900/30">
+                <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-emerald-600 to-teal-600 shadow-lg shadow-emerald-900/30">
                   <Truck className="h-8 w-8 text-white" />
                 </div>
 
@@ -190,7 +190,7 @@ export function SignupPage() {
                   className={cn(
                     'h-2 w-20 rounded-full transition-all duration-300',
                     step === 'account'
-                      ? 'bg-gradient-to-r from-violet-500 to-fuchsia-500'
+                      ? 'bg-gradient-to-r from-emerald-500 to-teal-500'
                       : 'bg-white/10'
                   )}
                 />
@@ -198,7 +198,7 @@ export function SignupPage() {
                   className={cn(
                     'h-2 w-20 rounded-full transition-all duration-300',
                     step === 'type'
-                      ? 'bg-gradient-to-r from-violet-500 to-fuchsia-500'
+                      ? 'bg-gradient-to-r from-emerald-500 to-teal-500'
                       : 'bg-white/10'
                   )}
                 />
@@ -220,7 +220,7 @@ export function SignupPage() {
                       <User
                         className={cn(
                           'absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 transition-colors duration-200',
-                          focusedField === 'fullName' ? 'text-violet-300' : 'text-white/45',
+                          focusedField === 'fullName' ? 'text-emerald-300' : 'text-white/45',
                           errors.fullName && 'text-red-300'
                         )}
                       />
@@ -263,7 +263,7 @@ export function SignupPage() {
                       <Mail
                         className={cn(
                           'absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 transition-colors duration-200',
-                          focusedField === 'email' ? 'text-violet-300' : 'text-white/45',
+                          focusedField === 'email' ? 'text-emerald-300' : 'text-white/45',
                           errors.email && 'text-red-300'
                         )}
                       />
@@ -307,7 +307,7 @@ export function SignupPage() {
                       <Phone
                         className={cn(
                           'absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 transition-colors duration-200',
-                          focusedField === 'phone' ? 'text-violet-300' : 'text-white/45',
+                          focusedField === 'phone' ? 'text-emerald-300' : 'text-white/45',
                           errors.phone && 'text-red-300'
                         )}
                       />
@@ -351,7 +351,7 @@ export function SignupPage() {
                       <Lock
                         className={cn(
                           'absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 transition-colors duration-200',
-                          focusedField === 'password' ? 'text-violet-300' : 'text-white/45',
+                          focusedField === 'password' ? 'text-emerald-300' : 'text-white/45',
                           errors.password && 'text-red-300'
                         )}
                       />
@@ -401,7 +401,7 @@ export function SignupPage() {
                       <Lock
                         className={cn(
                           'absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 transition-colors duration-200',
-                          focusedField === 'confirmPassword' ? 'text-violet-300' : 'text-white/45',
+                          focusedField === 'confirmPassword' ? 'text-emerald-300' : 'text-white/45',
                           errors.confirmPassword && 'text-red-300'
                         )}
                       />
@@ -439,7 +439,7 @@ export function SignupPage() {
                     <Button
                       type="button"
                       onClick={handleContinue}
-                      className="h-12 w-full rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg shadow-violet-900/30 transition-all duration-300 hover:from-violet-700 hover:to-fuchsia-700 hover:shadow-xl hover:shadow-violet-900/40"
+                      className="h-12 w-full rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-900/30 transition-all duration-300 hover:from-emerald-700 hover:to-teal-700 hover:shadow-xl hover:shadow-emerald-900/40"
                     >
                       <div className="flex items-center gap-2">
                         Continue
@@ -457,7 +457,7 @@ export function SignupPage() {
                       className={cn(
                         'rounded-2xl border p-4 text-center transition-all',
                         userType === 'customer'
-                          ? 'border-violet-400 bg-violet-500/12 shadow-lg shadow-violet-900/10'
+                          ? 'border-emerald-400 bg-emerald-500/12 shadow-lg shadow-emerald-900/10'
                           : 'border-white/12 bg-white/[0.05] hover:bg-white/[0.09]'
                       )}
                     >
@@ -465,7 +465,7 @@ export function SignupPage() {
                         className={cn(
                           'mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full',
                           userType === 'customer'
-                            ? 'bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white'
+                            ? 'bg-gradient-to-br from-emerald-600 to-teal-600 text-white'
                             : 'bg-white/10 text-white/60'
                         )}
                       >
@@ -475,7 +475,7 @@ export function SignupPage() {
                       <h3
                         className={cn(
                           'font-semibold',
-                          userType === 'customer' ? 'text-violet-200' : 'text-white'
+                          userType === 'customer' ? 'text-emerald-200' : 'text-white'
                         )}
                       >
                         Customer
@@ -490,7 +490,7 @@ export function SignupPage() {
                       className={cn(
                         'rounded-2xl border p-4 text-center transition-all',
                         userType === 'rider'
-                          ? 'border-violet-400 bg-violet-500/12 shadow-lg shadow-violet-900/10'
+                          ? 'border-emerald-400 bg-emerald-500/12 shadow-lg shadow-emerald-900/10'
                           : 'border-white/12 bg-white/[0.05] hover:bg-white/[0.09]'
                       )}
                     >
@@ -498,7 +498,7 @@ export function SignupPage() {
                         className={cn(
                           'mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full',
                           userType === 'rider'
-                            ? 'bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white'
+                            ? 'bg-gradient-to-br from-emerald-600 to-teal-600 text-white'
                             : 'bg-white/10 text-white/60'
                         )}
                       >
@@ -508,7 +508,7 @@ export function SignupPage() {
                       <h3
                         className={cn(
                           'font-semibold',
-                          userType === 'rider' ? 'text-violet-200' : 'text-white'
+                          userType === 'rider' ? 'text-emerald-200' : 'text-white'
                         )}
                       >
                         Rider
@@ -524,7 +524,7 @@ export function SignupPage() {
                         id="terms"
                         checked={agreedToTerms}
                         onCheckedChange={(checked) => setAgreedToTerms(checked as boolean)}
-                        className="mt-0.5 border-white/25 data-[state=checked]:border-violet-500 data-[state=checked]:bg-violet-600"
+                        className="mt-0.5 border-white/25 data-[state=checked]:border-emerald-500 data-[state=checked]:bg-emerald-600"
                       />
                       <Label
                         htmlFor="terms"
@@ -533,14 +533,14 @@ export function SignupPage() {
                         I agree to the{' '}
                         <Link
                           to="/terms"
-                          className="font-medium text-violet-300 hover:text-violet-200"
+                          className="font-medium text-emerald-300 hover:text-emerald-200"
                         >
                           Terms of Service
                         </Link>{' '}
                         and{' '}
                         <Link
                           to="/privacy"
-                          className="font-medium text-violet-300 hover:text-violet-200"
+                          className="font-medium text-emerald-300 hover:text-emerald-200"
                         >
                           Privacy Policy
                         </Link>
@@ -552,7 +552,7 @@ export function SignupPage() {
                     <Button
                       type="submit"
                       disabled={isSubmitting || !agreedToTerms}
-                      className="h-12 w-full rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg shadow-violet-900/30 transition-all duration-300 hover:from-violet-700 hover:to-fuchsia-700 hover:shadow-xl hover:shadow-violet-900/40 disabled:opacity-50"
+                      className="h-12 w-full rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-900/30 transition-all duration-300 hover:from-emerald-700 hover:to-teal-700 hover:shadow-xl hover:shadow-emerald-900/40 disabled:opacity-50"
                     >
                       {isSubmitting ? (
                         <div className="flex items-center gap-2">
@@ -583,7 +583,7 @@ export function SignupPage() {
                 Already have an account?{' '}
                 <Link
                   to="/login"
-                  className="font-semibold text-violet-300 transition-colors hover:text-violet-200"
+                  className="font-semibold text-emerald-300 transition-colors hover:text-emerald-200"
                 >
                   Sign in
                 </Link>

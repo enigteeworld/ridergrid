@@ -114,7 +114,7 @@ export function ProfilePage() {
   };
 
   const infoFieldClass =
-    'h-12 rounded-2xl border-gray-200 bg-gray-50 text-base text-gray-900 placeholder:text-gray-400 focus:border-violet-300 focus:ring-violet-200';
+    'h-12 rounded-2xl border-gray-200 bg-gray-50 text-base text-gray-900 placeholder:text-gray-400 focus:border-emerald-300 focus:ring-emerald-200';
 
   const DetailBlock = ({
     icon: Icon,
@@ -141,11 +141,11 @@ export function ProfilePage() {
         <p className="text-gray-500">Manage your account settings</p>
       </div>
 
-      <Card className="overflow-hidden rounded-[28px] border-violet-100 bg-gradient-to-r from-violet-50 via-white to-fuchsia-50 shadow-sm">
+      <Card className="overflow-hidden rounded-[28px] border-slate-200 bg-gradient-to-r from-white via-slate-50 to-teal-50/30 shadow-sm">
         <CardContent className="p-4 sm:p-5">
           <div className="flex items-start gap-3">
-            <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-100">
-              <ShieldCheck className="h-5 w-5 text-violet-600" />
+            <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100">
+              <ShieldCheck className="h-5 w-5 text-emerald-600" />
             </div>
 
             <div className="min-w-0">
@@ -161,11 +161,11 @@ export function ProfilePage() {
 
       <div className="space-y-4 rounded-3xl bg-gray-50/60 p-2">
         <Card className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
-          <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-violet-500 to-fuchsia-500" />
+          <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-500 to-teal-500" />
           <CardContent className="p-6 pl-7">
             <div className="flex flex-col items-center text-center">
               <div className="relative mb-5">
-                <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-gradient-to-br from-violet-400 to-fuchsia-400 text-4xl font-semibold text-white shadow-[0_12px_30px_rgba(124,58,237,0.22)]">
+                <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-gradient-to-br from-emerald-400 to-teal-400 text-4xl font-semibold text-white shadow-[0_12px_30px_rgba(16,185,129,0.22)]">
                   {user?.avatar_url ? (
                     <img
                       src={user.avatar_url}
@@ -177,7 +177,7 @@ export function ProfilePage() {
                   )}
                 </div>
 
-                <label className="absolute -bottom-1 -right-1 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-violet-600 shadow-lg transition-colors hover:bg-violet-700">
+                <label className="absolute -bottom-1 -right-1 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-emerald-600 shadow-lg transition-colors hover:bg-emerald-700">
                   <Camera className="h-5 w-5 text-white" />
                   <input
                     type="file"
@@ -193,7 +193,7 @@ export function ProfilePage() {
               </h2>
               <p className="mt-1 capitalize text-gray-500">{user?.user_type}</p>
 
-              <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-violet-50 px-4 py-2 text-sm font-medium text-violet-700">
+              <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-slate-50 px-4 py-2 text-sm font-medium text-emerald-700">
                 <Sparkles className="h-4 w-4" />
                 Customer profile
               </div>
@@ -214,7 +214,7 @@ export function ProfilePage() {
                 size="sm"
                 onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
                 disabled={isSaving}
-                className="rounded-xl border-violet-200 bg-white text-violet-700 hover:bg-violet-50 hover:text-violet-800"
+                className="rounded-xl border-emerald-200 bg-white text-emerald-700 hover:bg-slate-50 hover:text-emerald-800"
               >
                 {isEditing ? (
                   <>

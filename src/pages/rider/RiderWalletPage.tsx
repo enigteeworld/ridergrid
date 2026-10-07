@@ -296,7 +296,7 @@ export function RiderWalletPage() {
 
     if (value === 'pending') return 'bg-amber-100 text-amber-700';
     if (value === 'approved') return 'bg-blue-100 text-blue-700';
-    if (value === 'processing') return 'bg-violet-100 text-violet-700';
+    if (value === 'processing') return 'bg-emerald-100 text-emerald-700';
     if (value === 'completed') return 'bg-green-100 text-green-700';
     if (value === 'rejected') return 'bg-red-100 text-red-700';
 
@@ -315,19 +315,19 @@ export function RiderWalletPage() {
     onToggle: () => void;
   }) => (
     <button type="button" onClick={onToggle} className="w-full">
-      <Card className="overflow-hidden border-violet-100 bg-gradient-to-br from-violet-50/70 via-white to-fuchsia-50/50 shadow-sm transition-all duration-200 hover:shadow-md">
+      <Card className="overflow-hidden border-slate-200 bg-gradient-to-br from-emerald-50/70 via-white to-teal-50/50 shadow-sm transition-all duration-200 hover:shadow-md">
         <CardContent className="p-5">
           <div className="flex items-center justify-between gap-4">
             <div className="min-w-0 flex-1">
               <div className="grid grid-cols-[1fr_auto] items-center gap-3">
                 <p className="truncate text-left text-xl font-semibold text-gray-900">{title}</p>
-                <span className="inline-flex min-w-[2.25rem] items-center justify-center rounded-full bg-violet-100 px-2.5 py-1 text-xs font-semibold text-violet-700">
+                <span className="inline-flex min-w-[2.25rem] items-center justify-center rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700">
                   {count}
                 </span>
               </div>
             </div>
 
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-violet-600 shadow-sm ring-1 ring-violet-100">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-emerald-600 shadow-sm ring-1 ring-emerald-100">
               {isOpen ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
             </div>
           </div>
@@ -343,15 +343,15 @@ export function RiderWalletPage() {
         <p className="text-gray-500">Manage your earnings</p>
       </div>
 
-      <Card className="overflow-hidden border-violet-100 bg-gradient-to-r from-violet-50/80 via-white to-fuchsia-50/70 shadow-sm">
+      <Card className="overflow-hidden border-slate-200 bg-gradient-to-r from-emerald-50/80 via-white to-teal-50/70 shadow-sm">
         <CardContent className="p-4 sm:p-5">
           <div className="flex items-start gap-3">
-            <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-100">
-              <Info className="h-5 w-5 text-violet-600" />
+            <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100">
+              <Info className="h-5 w-5 text-emerald-600" />
             </div>
             <div className="min-w-0">
-              <p className="font-semibold text-violet-900">Weekly payouts every Friday</p>
-              <p className="mt-1 text-sm leading-6 text-violet-700">
+              <p className="font-semibold text-emerald-900">Weekly payouts every Friday</p>
+              <p className="mt-1 text-sm leading-6 text-emerald-700">
                 Withdrawal requests are reviewed and paid out every Friday. Submit your request
                 before Friday to be included in the next payout cycle. Only one active withdrawal
                 request can be open at a time.
@@ -362,31 +362,31 @@ export function RiderWalletPage() {
       </Card>
 
       <div className="space-y-4 rounded-3xl bg-gray-50/60 p-2">
-        <Card className="overflow-hidden border-0 bg-gradient-to-br from-violet-500 to-purple-600 text-white shadow-[0_10px_30px_rgba(124,58,237,0.25)]">
+        <Card className="overflow-hidden border-0 bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-[0_10px_30px_rgba(16,185,129,0.25)]">
           <CardContent className="p-6">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="text-sm text-violet-100">Available to Withdraw</p>
+                <p className="text-sm text-emerald-100">Available to Withdraw</p>
                 <p className="mt-2 text-4xl font-bold tracking-tight">
                   {formatCurrency(liveAvailableBalance)}
                 </p>
               </div>
 
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm">
-                <Wallet className="h-8 w-8 text-violet-100" />
+                <Wallet className="h-8 w-8 text-emerald-100" />
               </div>
             </div>
 
             <Button
               onClick={() => setShowWithdrawDialog(true)}
               disabled={hasActiveWithdrawalRequest}
-              className="mt-5 bg-white text-violet-600 hover:bg-violet-50 disabled:bg-white/70 disabled:text-violet-400"
+              className="mt-5 bg-white text-emerald-600 hover:bg-slate-50 disabled:bg-white/70 disabled:text-emerald-400"
             >
               {hasActiveWithdrawalRequest ? 'Withdrawal In Progress' : 'Withdraw'}
             </Button>
 
             {hasActiveWithdrawalRequest && (
-              <p className="mt-3 text-xs text-violet-100">
+              <p className="mt-3 text-xs text-emerald-100">
                 You already have a withdrawal request in progress.
               </p>
             )}
@@ -643,9 +643,9 @@ export function RiderWalletPage() {
 
       <Dialog open={showWithdrawDialog} onOpenChange={setShowWithdrawDialog}>
         <DialogContent className="overflow-hidden rounded-[28px] border-0 bg-white p-0 shadow-[0_24px_80px_rgba(15,23,42,0.20)] sm:max-w-md">
-          <div className="bg-gradient-to-br from-violet-50 via-white to-fuchsia-50">
-            <DialogHeader className="border-b border-violet-100/70 px-6 pb-4 pt-6 text-left">
-              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 shadow-[0_10px_30px_rgba(124,58,237,0.22)]">
+          <div className="bg-gradient-to-br from-white via-slate-50 to-teal-50/30">
+            <DialogHeader className="border-b border-slate-200 px-6 pb-4 pt-6 text-left">
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 shadow-[0_10px_30px_rgba(16,185,129,0.22)]">
                 <Wallet className="h-7 w-7 text-white" />
               </div>
               <DialogTitle className="text-2xl font-semibold tracking-tight text-gray-900">
@@ -667,14 +667,14 @@ export function RiderWalletPage() {
                 </div>
               ) : (
                 <>
-                  <div className="rounded-2xl border border-violet-200 bg-violet-50/80 p-4">
+                  <div className="rounded-2xl border border-emerald-200 bg-slate-50 p-4">
                     <div className="flex items-start gap-3">
-                      <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-violet-600">
+                      <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-emerald-600">
                         <CreditCard className="h-5 w-5" />
                       </div>
                       <div>
-                        <p className="font-medium text-violet-900">Friday payout cycle</p>
-                        <p className="mt-1 text-sm leading-6 text-violet-800">
+                        <p className="font-medium text-emerald-900">Friday payout cycle</p>
+                        <p className="mt-1 text-sm leading-6 text-emerald-800">
                           Withdrawal requests are paid out every Friday after review. Submit early to
                           be included in the next cycle.
                         </p>
@@ -691,7 +691,7 @@ export function RiderWalletPage() {
                       placeholder={`Minimum ${formatCurrency(MIN_WITHDRAWAL)}`}
                       value={withdrawAmount}
                       onChange={(e) => setWithdrawAmount(e.target.value)}
-                      className="h-14 rounded-2xl border-gray-200 bg-gray-50 text-base font-medium text-gray-900 placeholder:text-gray-400 focus:border-violet-300 focus:ring-violet-200"
+                      className="h-14 rounded-2xl border-gray-200 bg-gray-50 text-base font-medium text-gray-900 placeholder:text-gray-400 focus:border-emerald-300 focus:ring-emerald-200"
                     />
                     <p className="mt-3 text-sm text-gray-500">
                       Minimum withdrawal: {formatCurrency(MIN_WITHDRAWAL)}
@@ -712,7 +712,7 @@ export function RiderWalletPage() {
                       <select
                         value={selectedBankId}
                         onChange={(e) => setSelectedBankId(e.target.value)}
-                        className="h-14 w-full rounded-2xl border border-gray-200 bg-gray-50 px-4 text-base font-medium text-gray-900 outline-none transition-all focus:border-violet-300 focus:ring-4 focus:ring-violet-200/60"
+                        className="h-14 w-full rounded-2xl border border-gray-200 bg-gray-50 px-4 text-base font-medium text-gray-900 outline-none transition-all focus:border-emerald-300 focus:ring-4 focus:ring-emerald-200/60"
                       >
                         {bankAccounts.map((account) => (
                           <option key={account.id} value={account.id}>
@@ -726,7 +726,7 @@ export function RiderWalletPage() {
                   <Button
                     onClick={handleWithdraw}
                     disabled={isWithdrawing || bankAccounts.length === 0}
-                    className="h-12 w-full rounded-2xl bg-violet-600 text-white hover:bg-violet-700"
+                    className="h-12 w-full rounded-2xl bg-emerald-600 text-white hover:bg-emerald-700"
                   >
                     {isWithdrawing ? 'Processing...' : 'Request Withdrawal'}
                   </Button>

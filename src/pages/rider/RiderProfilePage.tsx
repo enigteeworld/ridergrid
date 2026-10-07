@@ -265,11 +265,11 @@ export function RiderProfilePage() {
         <p className="text-gray-500">Manage your rider profile</p>
       </div>
 
-      <Card className="overflow-hidden rounded-[28px] border-violet-100 bg-gradient-to-br from-violet-50/70 via-white to-fuchsia-50/50 shadow-sm">
+      <Card className="overflow-hidden rounded-[28px] border-slate-200 bg-gradient-to-br from-emerald-50/70 via-white to-teal-50/50 shadow-sm">
         <CardContent className="p-6">
           <div className="flex flex-col items-center text-center">
             <div className="relative mb-4">
-              <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 text-3xl font-medium text-white shadow-[0_10px_30px_rgba(124,58,237,0.20)] ring-4 ring-white">
+              <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-emerald-400 to-teal-400 text-3xl font-medium text-white shadow-[0_10px_30px_rgba(16,185,129,0.20)] ring-4 ring-white">
                 {user?.avatar_url ? (
                   <img
                     src={user.avatar_url}
@@ -281,7 +281,7 @@ export function RiderProfilePage() {
                 )}
               </div>
 
-              <label className="absolute -bottom-2 -right-2 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-violet-600 text-white shadow-lg transition-colors hover:bg-violet-700">
+              <label className="absolute -bottom-2 -right-2 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-emerald-600 text-white shadow-lg transition-colors hover:bg-emerald-700">
                 <Camera className="h-5 w-5" />
                 <input
                   type="file"
@@ -316,7 +316,7 @@ export function RiderProfilePage() {
       </Card>
 
       <Card className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)]">
-        <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-violet-500 to-fuchsia-500" />
+        <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-500 to-teal-500" />
         <CardContent className="p-6 pl-7">
           <div className="mb-6 flex items-center justify-between gap-3">
             <div>
@@ -391,7 +391,7 @@ export function RiderProfilePage() {
         <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-400 to-green-500" />
         <CardContent className="p-6 pl-7">
           <div className="mb-6 flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-50 text-emerald-600">
               <ShieldCheck className="h-5 w-5" />
             </div>
             <div>
@@ -429,7 +429,7 @@ export function RiderProfilePage() {
                 <select
                   value={vehicleType}
                   onChange={(e) => setVehicleType(e.target.value as VehicleType)}
-                  className="h-12 w-full rounded-2xl border border-gray-200 bg-white px-4 text-sm text-gray-700 outline-none ring-0 transition focus:border-violet-300 focus:ring-4 focus:ring-violet-100"
+                  className="h-12 w-full rounded-2xl border border-gray-200 bg-white px-4 text-sm text-gray-700 outline-none ring-0 transition focus:border-emerald-300 focus:ring-4 focus:ring-emerald-100"
                 >
                   {vehicleTypes.map((t) => (
                     <option key={t} value={t}>
@@ -535,7 +535,7 @@ export function RiderProfilePage() {
                     </div>
 
                     {account.is_default && (
-                      <span className="inline-flex shrink-0 items-center rounded-full bg-violet-100 px-3 py-1 text-xs font-semibold text-violet-700">
+                      <span className="inline-flex shrink-0 items-center rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
                         Default
                       </span>
                     )}
@@ -604,7 +604,7 @@ export function RiderProfilePage() {
 
               <Button
                 onClick={handleAddBankAccount}
-                className="h-12 w-full rounded-2xl bg-violet-600 text-white hover:bg-violet-700"
+                className="h-12 w-full rounded-2xl bg-emerald-600 text-white hover:bg-emerald-700"
               >
                 Add Account
               </Button>

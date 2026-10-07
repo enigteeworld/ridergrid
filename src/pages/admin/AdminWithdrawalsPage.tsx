@@ -202,7 +202,7 @@ export function AdminWithdrawalsPage() {
 
     if (value === 'pending') return 'bg-amber-100 text-amber-700';
     if (value === 'approved') return 'bg-blue-100 text-blue-700';
-    if (value === 'processing') return 'bg-violet-100 text-violet-700';
+    if (value === 'processing') return 'bg-emerald-100 text-emerald-700';
     if (value === 'completed') return 'bg-green-100 text-green-700';
     if (value === 'rejected') return 'bg-red-100 text-red-700';
 
@@ -308,7 +308,7 @@ export function AdminWithdrawalsPage() {
               className={cn(
                 'px-3 py-1.5 rounded-full text-sm font-medium transition-colors',
                 statusFilter === status
-                  ? 'bg-violet-600 text-white'
+                  ? 'bg-emerald-600 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               )}
             >
@@ -493,7 +493,7 @@ export function AdminWithdrawalsPage() {
                       <Button
                         onClick={() => handleUpdateStatus('processing')}
                         disabled={isProcessing}
-                        className="col-span-2 bg-violet-600 hover:bg-violet-700 text-white"
+                        className="col-span-2 bg-emerald-600 hover:bg-emerald-700 text-white"
                       >
                         <Clock3 className="w-4 h-4 mr-2" />
                         Mark Processing

@@ -9,20 +9,20 @@ export function LoadingScreen() {
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#0a0914]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(139,92,246,0.30),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(217,70,239,0.24),transparent_28%),linear-gradient(135deg,#0a0914_0%,#17142b_45%,#120f24_100%)]" />
 
-      <div className="absolute -left-20 top-24 h-56 w-56 rounded-full bg-violet-500/20 blur-3xl" />
-      <div className="absolute -right-20 bottom-24 h-56 w-56 rounded-full bg-fuchsia-500/20 blur-3xl" />
+      <div className="absolute -left-20 top-24 h-56 w-56 rounded-full bg-emerald-500/20 blur-3xl" />
+      <div className="absolute -right-20 bottom-24 h-56 w-56 rounded-full bg-teal-500/20 blur-3xl" />
       <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.02),transparent_20%,transparent_80%,rgba(255,255,255,0.02))]" />
 
       <div className="relative z-10 flex w-full max-w-sm flex-col items-center px-6 text-center">
         <div className="relative mb-7">
-          <div className="absolute inset-1 rounded-[30px] bg-violet-400/20 blur-2xl" />
+          <div className="absolute inset-1 rounded-[30px] bg-emerald-400/20 blur-2xl" />
 
           <div className="absolute left-1/2 top-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 animate-[pulse_2.8s_ease-in-out_infinite]" />
 
-          <div className="absolute left-1/2 top-1/2 h-36 w-36 -translate-x-1/2 -translate-y-1/2 rounded-full border border-violet-300/10 animate-ping" style={{ animationDuration: '2.4s' }} />
+          <div className="absolute left-1/2 top-1/2 h-36 w-36 -translate-x-1/2 -translate-y-1/2 rounded-full border border-emerald-300/10 animate-ping" style={{ animationDuration: '2.4s' }} />
 
-          <div className="relative flex h-28 w-28 items-center justify-center rounded-[28px] border border-white/10 bg-white/10 shadow-[0_20px_60px_rgba(124,58,237,0.28)] backdrop-blur-2xl">
-            <div className="absolute inset-0 rounded-[28px] bg-gradient-to-br from-white/10 via-transparent to-fuchsia-300/10" />
+          <div className="relative flex h-28 w-28 items-center justify-center rounded-[28px] border border-white/10 bg-white/10 shadow-[0_20px_60px_rgba(16,185,129,0.28)] backdrop-blur-2xl">
+            <div className="absolute inset-0 rounded-[28px] bg-gradient-to-br from-white/10 via-transparent to-teal-300/10" />
             <Package className="relative h-12 w-12 text-white" strokeWidth={2.2} />
           </div>
         </div>

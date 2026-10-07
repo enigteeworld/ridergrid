@@ -211,7 +211,7 @@ export function HomePage() {
       case 'awaiting_funding':
         return 'bg-amber-100 text-amber-700';
       case 'funded':
-        return 'bg-violet-100 text-violet-700';
+        return 'bg-emerald-100 text-emerald-700';
       case 'cancelled':
       case 'refunded':
       case 'disputed':
@@ -235,7 +235,7 @@ export function HomePage() {
       case 'awaiting_rider':
       case 'awaiting_funding':
       case 'funded':
-        return 'from-violet-500 to-fuchsia-500';
+        return 'from-emerald-500 to-teal-500';
       case 'cancelled':
       case 'refunded':
       case 'disputed':
@@ -270,15 +270,15 @@ export function HomePage() {
       className={cn(
         'group relative overflow-hidden rounded-[30px] border shadow-[0_10px_35px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_20px_45px_rgba(15,23,42,0.10)]',
         featured
-          ? 'border-violet-100 bg-gradient-to-br from-white via-violet-50/60 to-fuchsia-50/60'
+          ? 'border-slate-200 bg-gradient-to-br from-white via-slate-50 to-teal-50/25'
           : 'border-gray-100 bg-white'
       )}
     >
       <div className={cn('absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b', accent)} />
       {featured && (
         <>
-          <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-violet-200/25 blur-2xl" />
-          <div className="absolute -bottom-12 left-10 h-28 w-28 rounded-full bg-fuchsia-200/20 blur-2xl" />
+          <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-emerald-100/20 blur-2xl" />
+          <div className="absolute -bottom-12 left-10 h-28 w-28 rounded-full bg-teal-100/20 blur-2xl" />
         </>
       )}
 
@@ -335,8 +335,8 @@ export function HomePage() {
       className={cn(
         'overflow-hidden rounded-[28px] shadow-sm',
         tone === 'violet'
-          ? 'border-violet-100 bg-gradient-to-br from-violet-50/80 via-white to-fuchsia-50/60'
-          : 'border-emerald-100 bg-gradient-to-br from-emerald-50/80 via-white to-green-50/60'
+          ? 'border-slate-200 bg-gradient-to-br from-emerald-50/80 via-white to-teal-50/60'
+          : 'border-slate-200 bg-gradient-to-br from-emerald-50/80 via-white to-green-50/60'
       )}
     >
       <CardContent className="p-5">
@@ -353,12 +353,12 @@ export function HomePage() {
 
   return (
     <div className="space-y-7">
-      <div className="relative overflow-hidden rounded-[32px] border border-violet-100 bg-gradient-to-br from-violet-50 via-white to-fuchsia-50/70 p-5 shadow-sm sm:p-6">
-        <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-violet-200/25 blur-3xl" />
-        <div className="absolute -bottom-14 left-8 h-32 w-32 rounded-full bg-fuchsia-200/20 blur-3xl" />
+      <div className="relative overflow-hidden rounded-[32px] border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-teal-50/30 p-5 shadow-sm sm:p-6">
+        <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-emerald-100/20 blur-3xl" />
+        <div className="absolute -bottom-14 left-8 h-32 w-32 rounded-full bg-teal-100/20 blur-3xl" />
 
         <div className="relative">
-          <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-violet-700 ring-1 ring-violet-100 backdrop-blur-sm">
+          <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-100 backdrop-blur-sm">
             <Sparkles className="h-3.5 w-3.5" />
             Dispatch NG Customer
           </div>
@@ -370,11 +370,11 @@ export function HomePage() {
         </div>
       </div>
 
-      <Card className="overflow-hidden rounded-[28px] border-violet-100 bg-gradient-to-r from-violet-50 via-white to-fuchsia-50 shadow-sm">
+      <Card className="overflow-hidden rounded-[28px] border-slate-200 bg-gradient-to-r from-white via-slate-50 to-teal-50/30 shadow-sm">
         <CardContent className="p-4 sm:p-5">
           <div className="flex items-start gap-3">
-            <div className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-violet-100">
-              <ShieldCheck className="h-5 w-5 text-violet-600" />
+            <div className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-100">
+              <ShieldCheck className="h-5 w-5 text-emerald-600" />
             </div>
 
             <div className="min-w-0">
@@ -393,8 +393,8 @@ export function HomePage() {
           title="Wallet Balance"
           value={formatCurrency(wallet?.available_balance || 0)}
           icon={Wallet}
-          accent="from-violet-500 to-fuchsia-500"
-          iconClassName="bg-violet-50 text-violet-500 group-hover:bg-violet-100"
+          accent="from-emerald-500 to-teal-500"
+          iconClassName="bg-slate-50 text-emerald-500 group-hover:bg-emerald-100"
           subtitle="Available now for funding deliveries"
           featured
         />
@@ -404,8 +404,8 @@ export function HomePage() {
             title="Total Deliveries"
             value={`${totalDeliveries}`}
             icon={Package}
-            accent="from-violet-500 to-fuchsia-500"
-            iconClassName="bg-violet-50 text-violet-500 group-hover:bg-violet-100"
+            accent="from-emerald-500 to-teal-500"
+            iconClassName="bg-slate-50 text-emerald-500 group-hover:bg-emerald-100"
             subtitle="All delivery requests created"
           />
 
@@ -423,7 +423,7 @@ export function HomePage() {
             value={`${nearbyRiders.length}`}
             icon={Bike}
             accent="from-emerald-400 to-green-500"
-            iconClassName="bg-emerald-50 text-emerald-500 group-hover:bg-emerald-100"
+            iconClassName="bg-slate-50 text-emerald-500 group-hover:bg-emerald-100"
             subtitle="Verified riders available to book"
           />
         </div>
@@ -434,14 +434,14 @@ export function HomePage() {
           title="Recent Deliveries"
           subtitle={
             recentJobs.length > 0
-              ? `${recentJobs.length} recent delivery${recentJobs.length !== 1 ? 'ies' : ''}`
+              ? `${recentJobs.length} recent ${recentJobs.length === 1 ? 'delivery' : 'deliveries'}`
               : 'Your most recent delivery activity'
           }
           tone="violet"
           action={
             <Link
               to="/jobs"
-              className="flex items-center gap-1 text-sm font-medium text-violet-600 hover:text-violet-700"
+              className="flex items-center gap-1 text-sm font-medium text-emerald-600 hover:text-emerald-700"
             >
               View All
               <ChevronRight className="h-4 w-4" />
@@ -452,15 +452,15 @@ export function HomePage() {
         {recentJobs.length === 0 ? (
           <Card className="rounded-[28px] border-2 border-dashed">
             <CardContent className="p-8 text-center">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-violet-100">
-                <Package className="h-8 w-8 text-violet-500" />
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
+                <Package className="h-8 w-8 text-emerald-500" />
               </div>
               <h3 className="mb-2 text-lg font-medium text-gray-900">No deliveries yet</h3>
               <p className="mb-4 text-gray-500">
                 Start by choosing a rider and creating your first delivery
               </p>
               <Link to="/find-riders">
-                <Button className="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white">
+                <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white">
                   Find Riders
                 </Button>
               </Link>
@@ -520,7 +520,7 @@ export function HomePage() {
                               </p>
                             </div>
 
-                            <div className="flex items-center gap-2 rounded-full bg-violet-50 px-4 py-2 text-sm font-semibold text-violet-700 transition-colors duration-200 group-hover:bg-violet-100">
+                            <div className="flex items-center gap-2 rounded-full bg-slate-50 px-4 py-2 text-sm font-semibold text-emerald-700 transition-colors duration-200 group-hover:bg-emerald-100">
                               <span>{isExpanded ? 'Hide details' : 'View details'}</span>
                               <ChevronDown
                                 className={cn(
@@ -542,7 +542,7 @@ export function HomePage() {
                     )}
                   >
                     <div className="overflow-hidden">
-                      <div className="border-t border-violet-100/80 bg-white/80 px-5 pb-5 pt-2 sm:px-6">
+                      <div className="border-t border-slate-200/80 bg-white/80 px-5 pb-5 pt-2 sm:px-6">
                         <div className="space-y-4 pt-3">
                           <div className="rounded-2xl bg-gray-50 p-4">
                             <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">
@@ -552,19 +552,19 @@ export function HomePage() {
                             <p className="text-sm leading-6 text-gray-700">{job.pickup_address}</p>
                           </div>
 
-                          <div className="rounded-2xl bg-violet-50 p-4">
-                            <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-violet-600">
-                              <MapPin className="h-3.5 w-3.5 text-violet-500" />
+                          <div className="rounded-2xl bg-slate-50 p-4">
+                            <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-emerald-600">
+                              <MapPin className="h-3.5 w-3.5 text-emerald-500" />
                               Delivery
                             </div>
                             <p className="text-sm leading-6 text-gray-700">{job.delivery_address}</p>
                           </div>
 
                           {job.rider_name && (
-                            <div className="rounded-2xl border border-violet-100 bg-white p-4">
+                            <div className="rounded-2xl border border-slate-200 bg-white p-4">
                               <div className="flex items-center justify-between gap-3">
                                 <div className="flex min-w-0 items-center gap-3">
-                                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-violet-100 text-sm font-semibold text-violet-700">
+                                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-sm font-semibold text-emerald-700">
                                     {job.rider_name.charAt(0)}
                                   </div>
                                   <div className="min-w-0">
@@ -588,7 +588,7 @@ export function HomePage() {
 
                           <div className="pt-1">
                             <Link to={`/jobs/${job.id}`} className="block">
-                              <Button className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white">
+                              <Button className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white">
                                 Open Delivery
                                 <ArrowRight className="ml-2 h-4 w-4" />
                               </Button>
@@ -613,7 +613,7 @@ export function HomePage() {
           action={
             <Link
               to="/find-riders"
-              className="flex items-center gap-1 text-sm font-medium text-violet-600 hover:text-violet-700"
+              className="flex items-center gap-1 text-sm font-medium text-emerald-600 hover:text-emerald-700"
             >
               Find More
               <ChevronRight className="h-4 w-4" />
@@ -656,7 +656,7 @@ export function HomePage() {
                             className="mx-auto h-20 w-20 rounded-full border-4 border-white object-cover shadow-lg"
                           />
                         ) : (
-                          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-violet-400 to-fuchsia-400 text-2xl font-semibold text-white shadow-lg">
+                          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-emerald-400 to-teal-400 text-2xl font-semibold text-white shadow-lg">
                             {rider.full_name.charAt(0).toUpperCase()}
                           </div>
                         )}
@@ -734,7 +734,7 @@ export function HomePage() {
 
                     <div className="space-y-3">
                       <Button
-                        className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white"
+                        className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white"
                         onClick={() => handleBookRider(rider)}
                       >
                         Book Rider

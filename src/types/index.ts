@@ -274,6 +274,7 @@ export interface DeliveryProof {
   dispatch_job_id: string;
   proof_type: ProofType;
   image_url: string | null;
+  storage_path?: string | null;
   signature_data: string | null;
   notes: string | null;
   uploaded_by: string;
@@ -323,16 +324,11 @@ export interface Rating {
 }
 
 // Notification Types
-export type NotificationType = 
-  | 'job_assigned' 
-  | 'job_funded' 
-  | 'job_started' 
-  | 'job_completed' 
-  | 'payment_received' 
-  | 'withdrawal_processed' 
-  | 'kyc_status' 
-  | 'dispute_opened' 
-  | 'system';
+export type NotificationType =
+  | 'job_created' | 'job_request' | 'job_assigned' | 'job_funded' | 'job_started'
+  | 'job_delivered' | 'job_completed' | 'job_cancelled' | 'payment_received'
+  | 'withdrawal_processed' | 'kyc_status' | 'dispute_opened' | 'ticket_reply'
+  | 'ticket_resolved' | 'chat_message' | 'system';
 
 export interface Notification {
   id: string;

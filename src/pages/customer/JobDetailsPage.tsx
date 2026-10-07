@@ -38,6 +38,7 @@ import {
   formatJobStatus,
 } from '@/utils/format';
 import { cn } from '@/lib/utils';
+import { DeliveryChat } from '@/components/DeliveryChat';
 
 type RpcResponse = {
   ok?: boolean;
@@ -129,7 +130,12 @@ export function JobDetailsPage() {
       if (proofsError) {
         console.error('Error fetching delivery proofs:', proofsError);
       } else {
-        setDeliveryProofs(proofsData ?? []);
+        const signedProofs = await Promise.all((proofsData ?? []).map(async (proof: any) => {
+          if (!proof.storage_path) return proof;
+          const { data: signed } = await supabase.storage.from('delivery-proofs').createSignedUrl(proof.storage_path, 3600);
+          return { ...proof, image_url: signed?.signedUrl ?? null };
+        }));
+        setDeliveryProofs(signedProofs);
       }
 
       const { data: ratingData, error: ratingError } = await supabase
@@ -306,7 +312,7 @@ export function JobDetailsPage() {
         .from('disputes')
         .select('id, status')
         .eq('dispatch_job_id', job.id)
-        .in('status', ['open', 'under_review'])
+        .in('status', ['open', 'under_review', 'waiting_customer', 'waiting_rider', 'waiting_support'])
         .order('created_at', { ascending: false })
         .limit(1)
         .maybeSingle();
@@ -329,6 +335,8 @@ export function JobDetailsPage() {
         raised_by: user.id,
         dispute_type: disputeReason || 'other',
         description: disputeDescription.trim(),
+        priority: 'normal',
+        waiting_on: 'support',
       });
 
       if (error) throw error;
@@ -422,7 +430,7 @@ export function JobDetailsPage() {
       case 'awaiting_rider':
       case 'awaiting_funding':
       case 'funded':
-        return 'from-violet-500 to-fuchsia-500';
+        return 'from-emerald-500 to-teal-500';
       case 'cancelled':
       case 'refunded':
       case 'disputed':
@@ -462,7 +470,7 @@ export function JobDetailsPage() {
   if (isLoading) {
     return (
       <div className="flex h-64 items-center justify-center">
-        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-violet-600" />
+        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-emerald-600" />
       </div>
     );
   }
@@ -491,13 +499,13 @@ export function JobDetailsPage() {
         Back to My Deliveries
       </button>
 
-      <div className="relative overflow-hidden rounded-[32px] border border-violet-100 bg-gradient-to-br from-violet-50 via-white to-fuchsia-50/70 p-5 shadow-sm sm:p-6">
-        <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-violet-200/25 blur-3xl" />
-        <div className="absolute -bottom-14 left-8 h-32 w-32 rounded-full bg-fuchsia-200/20 blur-3xl" />
+      <div className="relative overflow-hidden rounded-[32px] border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-teal-50/30 p-5 shadow-sm sm:p-6">
+        <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-emerald-100/20 blur-3xl" />
+        <div className="absolute -bottom-14 left-8 h-32 w-32 rounded-full bg-teal-100/20 blur-3xl" />
 
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
-            <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-violet-700 ring-1 ring-violet-100 backdrop-blur-sm">
+            <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-100 backdrop-blur-sm">
               <Sparkles className="h-3.5 w-3.5" />
               Delivery Details
             </div>
@@ -528,10 +536,10 @@ export function JobDetailsPage() {
         'customer_marked_complete',
         'completed',
       ].includes(job.status) && (
-        <Card className="overflow-hidden rounded-[28px] border-violet-100 bg-gradient-to-br from-violet-50/80 via-white to-fuchsia-50/50 shadow-sm">
+        <Card className="overflow-hidden rounded-[28px] border-slate-200 bg-gradient-to-br from-white via-slate-50 to-teal-50/25 shadow-sm">
           <CardContent className="p-5 sm:p-6">
             <div className="mb-5 flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-100 text-violet-600">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600">
                 <ShieldCheck className="h-5 w-5" />
               </div>
               <div>
@@ -554,8 +562,8 @@ export function JobDetailsPage() {
                         <div
                           className={cn(
                             'flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors',
-                            isActive ? 'bg-violet-600 text-white' : 'bg-white text-gray-400 ring-1 ring-gray-200',
-                            isCurrent && 'ring-4 ring-violet-100'
+                            isActive ? 'bg-emerald-600 text-white' : 'bg-white text-gray-400 ring-1 ring-gray-200',
+                            isCurrent && 'ring-4 ring-emerald-100'
                           )}
                         >
                           <Icon className="h-5 w-5" />
@@ -565,7 +573,7 @@ export function JobDetailsPage() {
                           <div
                             className={cn(
                               'mt-2 h-9 w-0.5 rounded-full',
-                              index < currentIndex ? 'bg-violet-600' : 'bg-gray-200'
+                              index < currentIndex ? 'bg-emerald-600' : 'bg-gray-200'
                             )}
                           />
                         )}
@@ -599,7 +607,7 @@ export function JobDetailsPage() {
               <div className="relative">
                 <div className="absolute left-0 right-0 top-5 h-1 rounded-full bg-gray-200" />
                 <div
-                  className="absolute left-0 top-5 h-1 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 transition-all"
+                  className="absolute left-0 top-5 h-1 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 transition-all"
                   style={{
                     width: `${steps.length > 1 ? (currentIndex / (steps.length - 1)) * 100 : 0}%`,
                   }}
@@ -620,9 +628,9 @@ export function JobDetailsPage() {
                           className={cn(
                             'flex h-11 w-11 items-center justify-center rounded-full border-4 bg-white transition-colors',
                             isActive
-                              ? 'border-violet-600 text-violet-600'
+                              ? 'border-emerald-600 text-emerald-600'
                               : 'border-gray-200 text-gray-400',
-                            isCurrent && 'ring-4 ring-violet-100'
+                            isCurrent && 'ring-4 ring-emerald-100'
                           )}
                         >
                           <Icon className="h-5 w-5" />
@@ -694,8 +702,8 @@ export function JobDetailsPage() {
         <InfoCard
           title="Pickup"
           icon={MapPin}
-          iconClassName="bg-violet-50 text-violet-600"
-          accent="from-violet-500 to-fuchsia-500"
+          iconClassName="bg-slate-50 text-emerald-600"
+          accent="from-emerald-500 to-teal-500"
         >
           <p className="break-words text-gray-700">{job.pickup_address}</p>
 
@@ -723,7 +731,7 @@ export function JobDetailsPage() {
         <InfoCard
           title="Delivery"
           icon={MapPin}
-          iconClassName="bg-emerald-50 text-green-600"
+          iconClassName="bg-slate-50 text-green-600"
           accent="from-emerald-400 to-green-500"
         >
           <p className="break-words text-gray-700">{job.delivery_address}</p>
@@ -774,8 +782,8 @@ export function JobDetailsPage() {
         <InfoCard
           title="Payment"
           icon={Wallet}
-          iconClassName="bg-violet-50 text-violet-600"
-          accent="from-violet-500 to-fuchsia-500"
+          iconClassName="bg-slate-50 text-emerald-600"
+          accent="from-emerald-500 to-teal-500"
         >
           <div className="space-y-4">
             <div className="flex items-start justify-between gap-3">
@@ -790,9 +798,9 @@ export function JobDetailsPage() {
               </span>
             </div>
 
-            <div className="flex items-start justify-between gap-3 rounded-2xl bg-violet-50 p-4">
+            <div className="flex items-start justify-between gap-3 rounded-2xl bg-slate-50 p-4">
               <span className="font-medium text-gray-900">Rider Receives</span>
-              <span className="text-right text-lg font-bold text-violet-700">
+              <span className="text-right text-lg font-bold text-emerald-700">
                 {formatCurrency(job.rider_earnings)}
               </span>
             </div>
@@ -805,7 +813,7 @@ export function JobDetailsPage() {
           <div className={cn('absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b', getAccentGradient(job.status))} />
           <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
             <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-50 text-violet-600">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-50 text-emerald-600">
                 <User className="h-5 w-5" />
               </div>
               <h3 className="text-lg font-semibold tracking-tight text-gray-900">Rider</h3>
@@ -813,7 +821,7 @@ export function JobDetailsPage() {
 
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <div className="min-w-0 flex items-center gap-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 text-xl font-medium text-white shadow-md">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-400 text-xl font-medium text-white shadow-md">
                   {job.rider_name.charAt(0)}
                 </div>
 
@@ -842,7 +850,7 @@ export function JobDetailsPage() {
                 >
                   <Button
                     variant="outline"
-                    className="w-full rounded-xl border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 sm:w-auto"
+                    className="w-full rounded-xl border-emerald-200 bg-slate-50 text-emerald-700 hover:bg-emerald-100 sm:w-auto"
                     size="icon"
                   >
                     <MessageCircle className="h-4 w-4" />
@@ -888,7 +896,7 @@ export function JobDetailsPage() {
         </Card>
       )}
 
-      <Card className="overflow-hidden rounded-[28px] border-violet-100 bg-gradient-to-br from-violet-50/80 via-white to-fuchsia-50/50 shadow-sm">
+      <Card className="overflow-hidden rounded-[28px] border-slate-200 bg-gradient-to-br from-white via-slate-50 to-teal-50/25 shadow-sm">
         <CardContent className="p-5 sm:p-6">
           <div className="mb-4">
             <h3 className="text-lg font-semibold text-gray-900">Actions</h3>
@@ -900,7 +908,7 @@ export function JobDetailsPage() {
               <Button
                 onClick={handleFundDelivery}
                 disabled={isFunding}
-                className="h-12 w-full rounded-2xl bg-violet-600 text-white hover:bg-violet-700 sm:w-auto"
+                className="h-12 w-full rounded-2xl bg-emerald-600 text-white hover:bg-emerald-700 sm:w-auto"
               >
                 {isFunding ? (
                   <div className="flex items-center gap-2">
@@ -950,7 +958,7 @@ export function JobDetailsPage() {
             {job.status === 'completed' && !existingRating && (
               <Button
                 onClick={() => setShowRatingDialog(true)}
-                className="h-12 w-full rounded-2xl bg-violet-600 text-white hover:bg-violet-700 sm:w-auto"
+                className="h-12 w-full rounded-2xl bg-emerald-600 text-white hover:bg-emerald-700 sm:w-auto"
               >
                 <Star className="mr-2 h-4 w-4" />
                 Rate Rider
@@ -971,9 +979,11 @@ export function JobDetailsPage() {
         </CardContent>
       </Card>
 
+      {job && <DeliveryChat jobId={job.id} enabled={!['cancelled','refunded'].includes(job.status)} />}
+
       <Dialog open={showRatingDialog} onOpenChange={setShowRatingDialog}>
         <DialogContent className="overflow-hidden rounded-[28px] border-0 p-0 shadow-2xl sm:max-w-md">
-          <div className="bg-gradient-to-br from-violet-50 via-white to-fuchsia-50/70 p-6">
+          <div className="bg-gradient-to-br from-white via-slate-50 to-teal-50/30 p-6">
             <DialogHeader className="space-y-1">
               <DialogTitle className="text-2xl font-bold tracking-tight text-gray-950">
                 Rate Your Delivery
@@ -1007,12 +1017,12 @@ export function JobDetailsPage() {
                 value={review}
                 onChange={(e) => setReview(e.target.value)}
                 rows={4}
-                className="rounded-2xl border-violet-100 bg-white"
+                className="rounded-2xl border-slate-200 bg-white"
               />
 
               <Button
                 onClick={handleSubmitRating}
-                className="h-12 w-full rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white"
+                className="h-12 w-full rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white"
               >
                 Submit Rating
                 <ChevronRight className="ml-2 h-4 w-4" />

@@ -18,17 +18,20 @@ import {
 import { useState } from 'react';
 import { useAuthStore } from '@/stores/authStore';
 import { cn } from '@/lib/utils';
+import { BrandMark } from '@/components/BrandMark';
+import { useBranding } from '@/hooks/useBranding';
 
 const navItems = [
   { path: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
   { path: '/admin/riders', icon: Users, label: 'Riders' },
   { path: '/admin/verifications', icon: ClipboardCheck, label: 'Verifications' },
   { path: '/admin/jobs', icon: ClipboardList, label: 'Jobs' },
-  { path: '/admin/disputes', icon: AlertTriangle, label: 'Disputes' },
+  { path: '/admin/disputes', icon: AlertTriangle, label: 'Resolution Center' },
   { path: '/admin/settings', icon: Settings, label: 'Settings' },
 ];
 
 export function AdminLayout() {
+  const branding = useBranding();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const { signOut } = useAuthStore();
@@ -53,11 +56,9 @@ export function AdminLayout() {
               </button>
 
               <NavLink to="/admin" className="flex min-w-0 items-center gap-2">
-                <div className="rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 p-2">
-                  <Package className="h-6 w-6 text-white" />
-                </div>
-                <span className="truncate text-xl font-bold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">
-                  Admin
+                <BrandMark className="h-10 min-w-10" iconClassName="h-5 w-5" />
+                <span className="truncate text-xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                  {branding.site_name} Admin
                 </span>
               </NavLink>
             </div>
@@ -100,7 +101,7 @@ export function AdminLayout() {
                   cn(
                     'flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200',
                     isActive
-                      ? 'bg-violet-50 font-medium text-violet-600'
+                      ? 'bg-slate-50 font-medium text-emerald-600'
                       : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
                   )
                 }
@@ -126,7 +127,7 @@ export function AdminLayout() {
                       cn(
                         'flex items-center gap-4 rounded-xl p-4 transition-all duration-200',
                         isActive
-                          ? 'bg-violet-50 font-medium text-violet-600'
+                          ? 'bg-slate-50 font-medium text-emerald-600'
                           : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
                       )
                     }

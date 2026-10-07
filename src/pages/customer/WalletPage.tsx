@@ -320,19 +320,19 @@ export function WalletPage() {
     onToggle: () => void;
   }) => (
     <button type="button" onClick={onToggle} className="w-full">
-      <Card className="overflow-hidden rounded-[28px] border-violet-100 bg-gradient-to-br from-violet-50/70 via-white to-fuchsia-50/50 shadow-sm transition-all duration-200 hover:shadow-md">
+      <Card className="overflow-hidden rounded-[28px] border-slate-200 bg-gradient-to-br from-emerald-50/70 via-white to-teal-50/50 shadow-sm transition-all duration-200 hover:shadow-md">
         <CardContent className="p-5">
           <div className="flex items-center justify-between gap-4">
             <div className="min-w-0 flex-1">
               <div className="grid grid-cols-[1fr_auto] items-center gap-3">
                 <p className="truncate text-left text-xl font-semibold text-gray-900">{title}</p>
-                <span className="inline-flex min-w-[2.25rem] items-center justify-center rounded-full bg-violet-100 px-2.5 py-1 text-xs font-semibold text-violet-700">
+                <span className="inline-flex min-w-[2.25rem] items-center justify-center rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700">
                   {count}
                 </span>
               </div>
             </div>
 
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-violet-600 shadow-sm ring-1 ring-violet-100">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-emerald-600 shadow-sm ring-1 ring-emerald-100">
               {isOpen ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
             </div>
           </div>
@@ -348,11 +348,11 @@ export function WalletPage() {
         <p className="text-gray-500">Manage your funds and transactions</p>
       </div>
 
-      <Card className="overflow-hidden rounded-[28px] border-violet-100 bg-gradient-to-r from-violet-50 via-white to-fuchsia-50 shadow-sm">
+      <Card className="overflow-hidden rounded-[28px] border-slate-200 bg-gradient-to-r from-white via-slate-50 to-teal-50/30 shadow-sm">
         <CardContent className="p-4 sm:p-5">
           <div className="flex items-start gap-3">
-            <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-100">
-              <ShieldCheck className="h-5 w-5 text-violet-600" />
+            <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100">
+              <ShieldCheck className="h-5 w-5 text-emerald-600" />
             </div>
 
             <div className="min-w-0">
@@ -367,24 +367,24 @@ export function WalletPage() {
       </Card>
 
       <div className="space-y-4 rounded-3xl bg-gray-50/60 p-2">
-        <Card className="overflow-hidden border-0 bg-gradient-to-br from-violet-500 to-purple-600 text-white shadow-[0_10px_30px_rgba(124,58,237,0.25)]">
+        <Card className="overflow-hidden border-0 bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-[0_10px_30px_rgba(16,185,129,0.25)]">
           <CardContent className="p-6">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="text-sm text-violet-100">Available Balance</p>
+                <p className="text-sm text-emerald-100">Available Balance</p>
                 <p className="mt-2 text-4xl font-bold tracking-tight">
                   {formatCurrency(Number(wallet?.available_balance || 0))}
                 </p>
               </div>
 
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm">
-                <Wallet className="h-8 w-8 text-violet-100" />
+                <Wallet className="h-8 w-8 text-emerald-100" />
               </div>
             </div>
 
             <Button
               onClick={() => setShowFundDialog(true)}
-              className="mt-5 h-11 rounded-2xl bg-white text-violet-600 hover:bg-violet-50"
+              className="mt-5 h-11 rounded-2xl bg-white text-emerald-600 hover:bg-slate-50"
             >
               <Plus className="mr-2 h-4 w-4" />
               Fund Wallet
@@ -437,7 +437,7 @@ export function WalletPage() {
                   </p>
                 </div>
 
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-500 transition-colors duration-200 group-hover:bg-emerald-100">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-50 text-emerald-500 transition-colors duration-200 group-hover:bg-emerald-100">
                   <ArrowDownLeft className="h-6 w-6" />
                 </div>
               </div>
@@ -558,9 +558,9 @@ export function WalletPage() {
 
       <Dialog open={showFundDialog} onOpenChange={setShowFundDialog}>
         <DialogContent className="max-h-[88vh] overflow-y-auto rounded-[28px] border-0 bg-white p-0 shadow-[0_24px_80px_rgba(15,23,42,0.20)] sm:max-w-md">
-          <div className="bg-gradient-to-br from-violet-50 via-white to-fuchsia-50">
-            <DialogHeader className="border-b border-violet-100/70 px-6 pb-4 pt-4 text-left sm:pt-6">
-              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 shadow-[0_10px_30px_rgba(124,58,237,0.25)]">
+          <div className="bg-gradient-to-br from-white via-slate-50 to-teal-50/30">
+            <DialogHeader className="border-b border-slate-200 px-6 pb-4 pt-4 text-left sm:pt-6">
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 shadow-[0_10px_30px_rgba(16,185,129,0.25)]">
                 <Wallet className="h-7 w-7 text-white" />
               </div>
 
@@ -574,14 +574,14 @@ export function WalletPage() {
             </DialogHeader>
 
             <div className="space-y-5 px-6 pb-5 pt-4 sm:py-5">
-              <div className="rounded-2xl border border-violet-200 bg-violet-50/80 p-4">
+              <div className="rounded-2xl border border-emerald-200 bg-slate-50 p-4">
                 <div className="flex items-start gap-3">
-                  <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-violet-600">
+                  <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-emerald-600">
                     <ShieldCheck className="h-5 w-5" />
                   </div>
                   <div className="min-w-0">
-                    <p className="font-medium text-violet-900">Secure checkout</p>
-                    <p className="mt-1 text-sm leading-6 text-violet-800">
+                    <p className="font-medium text-emerald-900">Secure checkout</p>
+                    <p className="mt-1 text-sm leading-6 text-emerald-800">
                       Payments are processed securely through Paystack. Your wallet balance updates
                       after successful verification.
                     </p>
@@ -603,7 +603,7 @@ export function WalletPage() {
                     placeholder={`Minimum ${formatCurrency(MIN_FUNDING)}`}
                     value={fundAmount}
                     onChange={(e) => setFundAmount(e.target.value)}
-                    className="h-14 rounded-2xl border-gray-200 bg-gray-50 pl-10 text-base font-medium text-gray-900 placeholder:text-gray-400 focus:border-violet-300 focus:ring-violet-200"
+                    className="h-14 rounded-2xl border-gray-200 bg-gray-50 pl-10 text-base font-medium text-gray-900 placeholder:text-gray-400 focus:border-emerald-300 focus:ring-emerald-200"
                   />
                 </div>
 
@@ -616,7 +616,7 @@ export function WalletPage() {
                   </p>
 
                   {fundAmount && !Number.isNaN(parseFloat(fundAmount)) && (
-                    <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-semibold text-violet-700">
+                    <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
                       {formatCurrency(parseFloat(fundAmount || '0'))}
                     </span>
                   )}
@@ -639,7 +639,7 @@ export function WalletPage() {
                 <Button
                   onClick={handleFundWallet}
                   disabled={isFunding || !fundAmount || parseFloat(fundAmount) < MIN_FUNDING}
-                  className="h-12 w-full rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-[0_12px_30px_rgba(124,58,237,0.20)] hover:from-violet-700 hover:to-fuchsia-700"
+                  className="h-12 w-full rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-[0_12px_30px_rgba(16,185,129,0.20)] hover:from-emerald-700 hover:to-teal-700"
                 >
                   {isFunding ? (
                     <div className="flex items-center gap-2">

@@ -241,15 +241,15 @@ export function RiderDashboardPage() {
       className={cn(
         'group relative overflow-hidden rounded-[30px] border shadow-[0_10px_35px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_20px_45px_rgba(15,23,42,0.10)]',
         featured
-          ? 'border-violet-100 bg-gradient-to-br from-white via-violet-50/60 to-fuchsia-50/60'
+          ? 'border-slate-200 bg-gradient-to-br from-white via-slate-50 to-teal-50/25'
           : 'border-gray-100 bg-white'
       )}
     >
       <div className={cn('absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b', accent)} />
       {featured && (
         <>
-          <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-violet-200/25 blur-2xl" />
-          <div className="absolute -bottom-12 left-10 h-28 w-28 rounded-full bg-fuchsia-200/20 blur-2xl" />
+          <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-emerald-100/20 blur-2xl" />
+          <div className="absolute -bottom-12 left-10 h-28 w-28 rounded-full bg-teal-100/20 blur-2xl" />
         </>
       )}
 
@@ -315,8 +315,8 @@ export function RiderDashboardPage() {
         className={cn(
           'overflow-hidden rounded-[28px] shadow-sm transition-all duration-200 hover:shadow-md',
           tone === 'violet'
-            ? 'border-violet-100 bg-gradient-to-br from-violet-50/80 via-white to-fuchsia-50/60'
-            : 'border-emerald-100 bg-gradient-to-br from-emerald-50/80 via-white to-green-50/60'
+            ? 'border-slate-200 bg-gradient-to-br from-emerald-50/80 via-white to-teal-50/60'
+            : 'border-slate-200 bg-gradient-to-br from-emerald-50/80 via-white to-green-50/60'
         )}
       >
         <CardContent className="p-5">
@@ -332,7 +332,7 @@ export function RiderDashboardPage() {
                 className={cn(
                   'flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-sm',
                   tone === 'violet'
-                    ? 'text-violet-600 ring-1 ring-violet-100'
+                    ? 'text-emerald-600 ring-1 ring-emerald-100'
                     : 'text-emerald-600 ring-1 ring-emerald-100'
                 )}
               >
@@ -372,13 +372,13 @@ export function RiderDashboardPage() {
 
   return (
     <div className="space-y-7">
-      <div className="relative overflow-hidden rounded-[32px] border border-violet-100 bg-gradient-to-br from-violet-50 via-white to-fuchsia-50/70 p-5 shadow-sm sm:p-6">
-        <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-violet-200/25 blur-3xl" />
-        <div className="absolute -bottom-14 left-8 h-32 w-32 rounded-full bg-fuchsia-200/20 blur-3xl" />
+      <div className="relative overflow-hidden rounded-[32px] border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-teal-50/30 p-5 shadow-sm sm:p-6">
+        <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-emerald-100/20 blur-3xl" />
+        <div className="absolute -bottom-14 left-8 h-32 w-32 rounded-full bg-teal-100/20 blur-3xl" />
 
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-violet-700 ring-1 ring-violet-100 backdrop-blur-sm">
+            <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-100 backdrop-blur-sm">
               <Sparkles className="h-3.5 w-3.5" />
               Dispatch NG Rider
             </div>
@@ -413,8 +413,8 @@ export function RiderDashboardPage() {
           title="Available to Withdraw"
           value={formatCurrency(availableBalance)}
           icon={Wallet}
-          accent="from-violet-500 to-fuchsia-500"
-          iconClassName="bg-violet-50 text-violet-500 group-hover:bg-violet-100"
+          accent="from-emerald-500 to-teal-500"
+          iconClassName="bg-slate-50 text-emerald-500 group-hover:bg-emerald-100"
           subtitle="Ready for payout when you request withdrawal"
           featured
         />
@@ -425,7 +425,7 @@ export function RiderDashboardPage() {
             value={formatCurrency(stats.totalEarnings)}
             icon={TrendingUp}
             accent="from-emerald-400 to-green-500"
-            iconClassName="bg-emerald-50 text-emerald-500 group-hover:bg-emerald-100"
+            iconClassName="bg-slate-50 text-emerald-500 group-hover:bg-emerald-100"
             subtitle="Total confirmed rider income"
           />
 
@@ -466,7 +466,7 @@ export function RiderDashboardPage() {
               <Link
                 to="/rider/jobs"
                 onClick={(e) => e.stopPropagation()}
-                className="hidden text-sm font-medium text-violet-600 hover:text-violet-700 sm:inline"
+                className="hidden text-sm font-medium text-emerald-600 hover:text-emerald-700 sm:inline"
               >
                 View All
               </Link>
@@ -478,7 +478,7 @@ export function RiderDashboardPage() {
               {myJobs.slice(0, 3).map((job) => (
                 <Link key={job.id} to={`/rider/jobs/${job.id}`}>
                   <Card className="group relative cursor-pointer overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 active:scale-[0.995] hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
-                    <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-violet-500 to-fuchsia-500" />
+                    <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-500 to-teal-500" />
 
                     <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
                       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -500,7 +500,7 @@ export function RiderDashboardPage() {
                           <div className="space-y-3">
                             <div className="rounded-2xl bg-gray-50 p-4">
                               <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">
-                                <MapPin className="h-3.5 w-3.5 text-violet-500" />
+                                <MapPin className="h-3.5 w-3.5 text-emerald-500" />
                                 Pickup
                               </div>
                               <p className="break-words text-sm leading-6 text-gray-700">
@@ -508,8 +508,8 @@ export function RiderDashboardPage() {
                               </p>
                             </div>
 
-                            <div className="rounded-2xl bg-violet-50/70 p-4">
-                              <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-violet-700">
+                            <div className="rounded-2xl bg-slate-50 p-4">
+                              <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-emerald-700">
                                 <MapPin className="h-3.5 w-3.5 text-green-500" />
                                 Delivery
                               </div>
@@ -522,7 +522,7 @@ export function RiderDashboardPage() {
 
                         <div className="flex shrink-0 items-center justify-between sm:block sm:w-[132px] sm:text-right">
                           <div>
-                            <p className="text-2xl font-bold tracking-tight text-violet-700">
+                            <p className="text-2xl font-bold tracking-tight text-emerald-700">
                               {formatCurrency(job.rider_earnings)}
                             </p>
                             <p className="mt-1 text-xs uppercase tracking-[0.14em] text-gray-400">
@@ -530,7 +530,7 @@ export function RiderDashboardPage() {
                             </p>
                           </div>
 
-                          <div className="mt-3 flex h-11 w-11 items-center justify-center rounded-full bg-violet-50 text-gray-400 transition-colors duration-200 group-hover:bg-violet-100 group-hover:text-violet-600 sm:ml-auto">
+                          <div className="mt-3 flex h-11 w-11 items-center justify-center rounded-full bg-slate-50 text-gray-400 transition-colors duration-200 group-hover:bg-emerald-100 group-hover:text-emerald-600 sm:ml-auto">
                             <ChevronRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
                           </div>
                         </div>
@@ -591,7 +591,7 @@ export function RiderDashboardPage() {
                             <div className="mb-4 space-y-3">
                               <div className="rounded-2xl bg-gray-50 p-4">
                                 <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">
-                                  <MapPin className="h-3.5 w-3.5 text-violet-500" />
+                                  <MapPin className="h-3.5 w-3.5 text-emerald-500" />
                                   Pickup
                                 </div>
                                 <p className="break-words text-sm leading-6 text-gray-700">
@@ -599,7 +599,7 @@ export function RiderDashboardPage() {
                                 </p>
                               </div>
 
-                              <div className="rounded-2xl bg-emerald-50/80 p-4">
+                              <div className="rounded-2xl bg-slate-50 p-4">
                                 <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-emerald-700">
                                   <MapPin className="h-3.5 w-3.5 text-green-500" />
                                   Delivery
@@ -621,7 +621,7 @@ export function RiderDashboardPage() {
                           </div>
 
                           <div className="shrink-0 sm:w-[130px] sm:text-right">
-                            <p className="text-2xl font-bold tracking-tight text-violet-700">
+                            <p className="text-2xl font-bold tracking-tight text-emerald-700">
                               {formatCurrency(job.rider_earnings)}
                             </p>
                             <p className="mt-1 text-xs uppercase tracking-[0.14em] text-gray-400">
@@ -633,7 +633,7 @@ export function RiderDashboardPage() {
                         <Button
                           onClick={() => handleAcceptJob(job.id)}
                           disabled={acceptingJobId === job.id}
-                          className="h-12 w-full rounded-2xl bg-violet-600 text-white hover:bg-violet-700"
+                          className="h-12 w-full rounded-2xl bg-emerald-600 text-white hover:bg-emerald-700"
                         >
                           {acceptingJobId === job.id ? 'Accepting...' : 'Accept Job'}
                         </Button>

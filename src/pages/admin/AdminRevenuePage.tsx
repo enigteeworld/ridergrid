@@ -122,7 +122,7 @@ export function AdminRevenuePage() {
                   {formatCurrency(stats.totalRevenue)}
                 </p>
               </div>
-              <div className="p-3 rounded-xl bg-emerald-500">
+              <div className="p-3 rounded-xl bg-slate-500">
                 <DollarSign className="w-6 h-6 text-white" />
               </div>
             </div>
@@ -138,7 +138,7 @@ export function AdminRevenuePage() {
                   {formatCurrency(stats.monthRevenue)}
                 </p>
               </div>
-              <div className="p-3 rounded-xl bg-violet-500">
+              <div className="p-3 rounded-xl bg-slate-500">
                 <CalendarDays className="w-6 h-6 text-white" />
               </div>
             </div>

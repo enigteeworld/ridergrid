@@ -126,7 +126,7 @@ export function AdminJobsPage() {
                         <span className="break-words">{job.pickup_address}</span>
                       </p>
                       <p className="text-sm text-gray-600 flex items-start gap-2">
-                        <MapPin className="w-4 h-4 text-violet-500 mt-0.5 shrink-0" />
+                        <MapPin className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
                         <span className="break-words">{job.delivery_address}</span>
                       </p>
                     </div>
@@ -198,7 +198,7 @@ export function AdminJobsPage() {
 
                 <div className="rounded-lg bg-gray-50 p-4">
                   <p className="text-sm text-gray-500 mb-1">Rider Earnings</p>
-                  <p className="font-medium text-violet-700">
+                  <p className="font-medium text-emerald-700">
                     {formatCurrency(selectedJob.rider_earnings)}
                   </p>
                 </div>

@@ -213,7 +213,7 @@ export function AdminVerificationsPage() {
                     className="w-16 h-16 rounded-full object-cover border border-gray-200"
                   />
                 ) : (
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 flex items-center justify-center text-white text-xl font-medium">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-400 to-teal-400 flex items-center justify-center text-white text-xl font-medium">
                     {(selectedRider.full_name || 'R').charAt(0)}
                   </div>
                 )}

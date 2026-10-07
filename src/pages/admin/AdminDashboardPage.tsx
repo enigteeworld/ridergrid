@@ -295,7 +295,7 @@ export function AdminDashboardPage() {
       label: 'Total Riders',
       value: stats.totalRiders,
       icon: Package,
-      color: 'bg-violet-500',
+      color: 'bg-slate-500',
       link: '/admin/riders',
     },
     {
@@ -330,7 +330,7 @@ export function AdminDashboardPage() {
       label: 'Platform Revenue',
       value: formatCurrency(stats.platformRevenue),
       icon: DollarSign,
-      color: 'bg-emerald-500',
+      color: 'bg-slate-500',
       link: '/admin/revenue',
     },
   ];
@@ -342,7 +342,7 @@ export function AdminDashboardPage() {
       case 'approved':
         return 'bg-blue-100 text-blue-700';
       case 'processing':
-        return 'bg-violet-100 text-violet-700';
+        return 'bg-emerald-100 text-emerald-700';
       case 'completed':
         return 'bg-green-100 text-green-700';
       case 'rejected':
@@ -473,7 +473,7 @@ export function AdminDashboardPage() {
 
               <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg gap-3">
                 <span className="text-sm text-gray-600">Completed Jobs</span>
-                <span className="px-2 py-1 bg-violet-100 text-violet-700 rounded-full text-xs sm:text-sm font-medium shrink-0">
+                <span className="px-2 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs sm:text-sm font-medium shrink-0">
                   {stats.completedJobs}
                 </span>
               </div>
@@ -491,7 +491,7 @@ export function AdminDashboardPage() {
               </h3>
               <Link
                 to="/admin/jobs"
-                className="text-sm font-medium text-violet-600 hover:text-violet-700 shrink-0"
+                className="text-sm font-medium text-emerald-600 hover:text-emerald-700 shrink-0"
               >
                 View all
               </Link>
@@ -558,7 +558,7 @@ export function AdminDashboardPage() {
               </h3>
               <Link
                 to="/admin/withdrawals"
-                className="text-sm font-medium text-violet-600 hover:text-violet-700 shrink-0"
+                className="text-sm font-medium text-emerald-600 hover:text-emerald-700 shrink-0"
               >
                 View all
               </Link>

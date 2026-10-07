@@ -517,6 +517,7 @@ export interface Database {
           dispatch_job_id: string;
           proof_type: 'photo' | 'signature' | 'otp' | 'note' | 'receipt';
           image_url: string | null;
+          storage_path: string | null;
           signature_data: string | null;
           notes: string | null;
           uploaded_by: string;
@@ -527,6 +528,7 @@ export interface Database {
           dispatch_job_id: string;
           proof_type: 'photo' | 'signature' | 'otp' | 'note' | 'receipt';
           image_url?: string | null;
+          storage_path?: string | null;
           signature_data?: string | null;
           notes?: string | null;
           uploaded_by: string;
@@ -537,6 +539,7 @@ export interface Database {
           dispatch_job_id?: string;
           proof_type?: 'photo' | 'signature' | 'otp' | 'note' | 'receipt';
           image_url?: string | null;
+          storage_path?: string | null;
           signature_data?: string | null;
           notes?: string | null;
           uploaded_by?: string;
@@ -655,7 +658,7 @@ export interface Database {
         Row: {
           id: string;
           profile_id: string;
-          type: 'job_assigned' | 'job_funded' | 'job_started' | 'job_completed' | 'payment_received' | 'withdrawal_processed' | 'kyc_status' | 'dispute_opened' | 'system';
+          type: 'job_created' | 'job_request' | 'job_assigned' | 'job_funded' | 'job_started' | 'job_delivered' | 'job_completed' | 'job_cancelled' | 'payment_received' | 'withdrawal_processed' | 'kyc_status' | 'dispute_opened' | 'ticket_reply' | 'ticket_resolved' | 'chat_message' | 'system';
           title: string;
           message: string;
           data: Json | null;
@@ -665,7 +668,7 @@ export interface Database {
         Insert: {
           id?: string;
           profile_id: string;
-          type: 'job_assigned' | 'job_funded' | 'job_started' | 'job_completed' | 'payment_received' | 'withdrawal_processed' | 'kyc_status' | 'dispute_opened' | 'system';
+          type: 'job_created' | 'job_request' | 'job_assigned' | 'job_funded' | 'job_started' | 'job_delivered' | 'job_completed' | 'job_cancelled' | 'payment_received' | 'withdrawal_processed' | 'kyc_status' | 'dispute_opened' | 'ticket_reply' | 'ticket_resolved' | 'chat_message' | 'system';
           title: string;
           message: string;
           data?: Json | null;
@@ -675,7 +678,7 @@ export interface Database {
         Update: {
           id?: string;
           profile_id?: string;
-          type?: 'job_assigned' | 'job_funded' | 'job_started' | 'job_completed' | 'payment_received' | 'withdrawal_processed' | 'kyc_status' | 'dispute_opened' | 'system';
+          type?: 'job_created' | 'job_request' | 'job_assigned' | 'job_funded' | 'job_started' | 'job_delivered' | 'job_completed' | 'job_cancelled' | 'payment_received' | 'withdrawal_processed' | 'kyc_status' | 'dispute_opened' | 'ticket_reply' | 'ticket_resolved' | 'chat_message' | 'system';
           title?: string;
           message?: string;
           data?: Json | null;

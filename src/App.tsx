@@ -29,6 +29,7 @@ import { JobDetailsPage } from '@/pages/customer/JobDetailsPage';
 import { MyJobsPage } from '@/pages/customer/MyJobsPage';
 import { WalletPage } from '@/pages/customer/WalletPage';
 import { ProfilePage } from '@/pages/customer/ProfilePage';
+import { SupportTicketsPage } from '@/pages/shared/SupportTicketsPage';
 
 // Rider Pages
 import { RiderDashboardPage } from '@/pages/rider/RiderDashboardPage';
@@ -54,8 +55,10 @@ import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { ToastContainer } from '@/components/ToastContainer';
 import { GlobalLoader } from '@/components/GlobalLoader';
+import { useBranding } from '@/hooks/useBranding';
 
 function App() {
+  useBranding();
   const { initializeAuth, isLoading, isAuthenticated, user, riderProfile } = useAuthStore();
   const { globalLoading, loadingMessage } = useUIStore();
 
@@ -146,6 +149,7 @@ function App() {
             <Route path="/jobs/:jobId" element={<JobDetailsPage />} />
             <Route path="/wallet" element={<WalletPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/support" element={<SupportTicketsPage />} />
           </Route>
 
           {/* Rider Routes */}
@@ -162,6 +166,7 @@ function App() {
             <Route path="/rider/wallet" element={<RiderWalletPage />} />
             <Route path="/rider/earnings" element={<RiderEarningsPage />} />
             <Route path="/rider/profile" element={<RiderProfilePage />} />
+            <Route path="/rider/support" element={<SupportTicketsPage />} />
           </Route>
 
           {/* Admin Routes */}

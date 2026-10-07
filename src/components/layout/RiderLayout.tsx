@@ -15,11 +15,14 @@ import {
   Power,
   LogOut,
   ChevronRight,
+  LifeBuoy,
 } from 'lucide-react';
 import { useState } from 'react';
 import { useAuthStore } from '@/stores/authStore';
-import { useNotificationStore } from '@/stores/notificationStore';
+import { NotificationBell } from '@/components/NotificationBell';
 import { cn } from '@/lib/utils';
+import { BrandMark } from '@/components/BrandMark';
+import { useBranding } from '@/hooks/useBranding';
 import { supabase } from '@/lib/supabase';
 import { showToast } from '@/stores/uiStore';
 
@@ -28,13 +31,18 @@ const navItems = [
   { path: '/rider/jobs', icon: ClipboardList, label: 'Jobs', shortLabel: 'Jobs' },
   { path: '/rider/wallet', icon: Wallet, label: 'Wallet', shortLabel: 'Wallet' },
   { path: '/rider/earnings', icon: TrendingUp, label: 'Earnings', shortLabel: 'Earnings' },
+  { path: '/rider/support', icon: LifeBuoy, label: 'Support', shortLabel: 'Support' },
   { path: '/rider/profile', icon: User, label: 'Profile', shortLabel: 'Profile' },
 ];
 
+// Keep the mobile bottom bar to five primary destinations.
+// Support remains available from the menu and contextual support links.
+const mobileNavItems = navItems.filter((item) => item.path !== '/rider/support');
+
 export function RiderLayout() {
+  const branding = useBranding();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, riderProfile, signOut, setRiderProfile } = useAuthStore();
-  const { unreadCount } = useNotificationStore();
 
   const handleSignOut = async () => {
     if (riderProfile?.is_online) {
@@ -79,11 +87,9 @@ export function RiderLayout() {
         <div className="mx-auto max-w-5xl px-4">
           <div className="flex h-16 items-center justify-between">
             <NavLink to="/rider" className="flex items-center gap-3">
-              <div className="rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 p-2.5 shadow-[0_10px_24px_rgba(124,58,237,0.22)]">
-                <Package className="h-6 w-6 text-white" />
-              </div>
+              <BrandMark className="h-10 min-w-10" iconClassName="h-5 w-5" />
 
-              <span className="hidden bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-xl font-bold text-transparent sm:block">
+              <span className="hidden bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-xl font-bold text-transparent sm:block">
                 Rider Portal
               </span>
             </NavLink>
@@ -98,7 +104,7 @@ export function RiderLayout() {
                     cn(
                       'flex items-center gap-2 rounded-2xl px-4 py-2.5 text-sm font-medium transition-all duration-200',
                       isActive
-                        ? 'bg-violet-50 text-violet-700 shadow-sm ring-1 ring-violet-100'
+                        ? 'bg-slate-50 text-emerald-700 shadow-sm ring-1 ring-emerald-100'
                         : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
                     )
                   }
@@ -130,14 +136,7 @@ export function RiderLayout() {
                 </span>
               </button>
 
-              <button className="relative rounded-2xl p-2.5 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700">
-                <Bell className="h-6 w-6" />
-                {unreadCount > 0 && (
-                  <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-semibold text-white">
-                    {unreadCount > 9 ? '9+' : unreadCount}
-                  </span>
-                )}
-              </button>
+              <NotificationBell />
 
               <button
                 onClick={() => setMobileMenuOpen((prev) => !prev)}
@@ -169,10 +168,8 @@ export function RiderLayout() {
           <div className="border-b border-gray-100 px-5 pb-5 pt-5">
             <div className="mb-5 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 p-2.5 shadow-[0_10px_24px_rgba(124,58,237,0.22)]">
-                  <Package className="h-5 w-5 text-white" />
-                </div>
-                <span className="bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-lg font-bold text-transparent">
+                <BrandMark className="h-10 min-w-10" iconClassName="h-5 w-5" />
+                <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-lg font-bold text-transparent">
                   Rider Portal
                 </span>
               </div>
@@ -191,8 +188,8 @@ export function RiderLayout() {
               onClick={() => setMobileMenuOpen(false)}
               className="block"
             >
-              <div className="flex items-center gap-3 rounded-2xl border border-violet-100 bg-gradient-to-r from-violet-50/80 via-white to-fuchsia-50/70 p-3">
-                <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 text-base font-semibold text-white shadow-sm">
+              <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-gradient-to-r from-emerald-50/80 via-white to-teal-50/70 p-3">
+                <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-emerald-400 to-teal-400 text-base font-semibold text-white shadow-sm">
                   {user?.avatar_url ? (
                     <img
                       src={user.avatar_url}
@@ -213,7 +210,7 @@ export function RiderLayout() {
                   </p>
                 </div>
 
-                <ChevronRight className="h-5 w-5 text-violet-500" />
+                <ChevronRight className="h-5 w-5 text-emerald-500" />
               </div>
             </NavLink>
 
@@ -266,7 +263,7 @@ export function RiderLayout() {
                     cn(
                       'group flex items-center gap-4 rounded-2xl px-4 py-3.5 transition-all duration-200',
                       isActive
-                        ? 'bg-violet-50 text-violet-700 shadow-sm ring-1 ring-violet-100'
+                        ? 'bg-slate-50 text-emerald-700 shadow-sm ring-1 ring-emerald-100'
                         : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
                     )
                   }
@@ -306,7 +303,7 @@ export function RiderLayout() {
       <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200/80 bg-white/95 backdrop-blur-xl md:hidden">
         <div className="mx-auto max-w-5xl px-2 pb-[max(env(safe-area-inset-bottom),0.35rem)] pt-2">
           <div className="grid grid-cols-5 gap-1">
-            {navItems.map((item) => (
+            {mobileNavItems.map((item) => (
               <NavLink
                 key={item.path}
                 to={item.path}
@@ -315,7 +312,7 @@ export function RiderLayout() {
                   cn(
                     'flex flex-col items-center justify-center rounded-2xl px-1 py-2.5 transition-all duration-200',
                     isActive
-                      ? 'bg-violet-50 text-violet-700'
+                      ? 'bg-slate-50 text-emerald-700'
                       : 'text-gray-400 hover:bg-gray-50 hover:text-gray-600'
                   )
                 }
@@ -325,7 +322,7 @@ export function RiderLayout() {
                     <div
                       className={cn(
                         'mb-1.5 flex h-9 w-9 items-center justify-center rounded-2xl transition-all duration-200',
-                        isActive ? 'bg-white shadow-sm ring-1 ring-violet-100' : 'bg-transparent'
+                        isActive ? 'bg-white shadow-sm ring-1 ring-emerald-100' : 'bg-transparent'
                       )}
                     >
                       <item.icon className="h-5 w-5" />

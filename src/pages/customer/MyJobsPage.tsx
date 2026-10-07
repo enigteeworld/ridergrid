@@ -103,8 +103,8 @@ export function MyJobsPage() {
 
   const filterSummaryLabel =
     filter === 'all'
-      ? `${filteredJobs.length} total deliver${filteredJobs.length !== 1 ? 'ies' : 'y'}`
-      : `${filteredJobs.length} ${filter} deliver${filteredJobs.length !== 1 ? 'ies' : 'y'}`;
+      ? `${filteredJobs.length} total ${filteredJobs.length === 1 ? 'delivery' : 'deliveries'}`
+      : `${filteredJobs.length} ${filter} ${filteredJobs.length === 1 ? 'delivery' : 'deliveries'}`;
 
   const getCardAccent = (status: string) => {
     switch (status) {
@@ -116,7 +116,7 @@ export function MyJobsPage() {
       case 'awaiting_rider':
       case 'awaiting_funding':
       case 'funded':
-        return 'from-violet-500 to-fuchsia-500';
+        return 'from-emerald-500 to-teal-500';
       case 'cancelled':
       case 'refunded':
       case 'disputed':
@@ -137,7 +137,7 @@ export function MyJobsPage() {
         
       </div>
 
-      <div className="rounded-2xl border border-violet-100 bg-gradient-to-r from-violet-50/80 via-white to-fuchsia-50/70 p-3 shadow-sm">
+      <div className="rounded-2xl border border-slate-200 bg-gradient-to-r from-emerald-50/80 via-white to-teal-50/70 p-3 shadow-sm">
         <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {filters.map((f) => {
             const isActive = filter === f.value;
@@ -149,7 +149,7 @@ export function MyJobsPage() {
                 className={cn(
                   'group flex shrink-0 snap-start items-center gap-2 whitespace-nowrap rounded-2xl border px-5 py-2.5 transition-all duration-200',
                   isActive
-                    ? 'border-violet-200 bg-white text-violet-700 shadow-sm shadow-violet-100'
+                    ? 'border-emerald-200 bg-white text-emerald-700 shadow-sm shadow-emerald-100'
                     : 'border-gray-200 bg-white/70 text-gray-600 hover:bg-white hover:text-gray-900'
                 )}
               >
@@ -159,7 +159,7 @@ export function MyJobsPage() {
                   className={cn(
                     'inline-flex min-w-[1.6rem] items-center justify-center rounded-full px-1.5 py-0.5 text-[11px] font-semibold',
                     isActive
-                      ? 'bg-violet-100 text-violet-700'
+                      ? 'bg-emerald-100 text-emerald-700'
                       : 'bg-gray-100 text-gray-500'
                   )}
                 >
@@ -172,7 +172,7 @@ export function MyJobsPage() {
       </div>
 
       <button type="button" onClick={() => setShowJobsList((prev) => !prev)} className="w-full">
-        <Card className="overflow-hidden border-violet-100 bg-gradient-to-br from-violet-50/70 via-white to-fuchsia-50/50 shadow-sm transition-all duration-200 hover:shadow-md">
+        <Card className="overflow-hidden border-slate-200 bg-gradient-to-br from-emerald-50/70 via-white to-teal-50/50 shadow-sm transition-all duration-200 hover:shadow-md">
           <CardContent className="p-5">
             <div className="flex items-center justify-between gap-4">
               <div className="min-w-0 text-left">
@@ -180,7 +180,7 @@ export function MyJobsPage() {
                 <p className="mt-1 text-sm text-gray-500">{filterSummaryLabel}</p>
               </div>
 
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-violet-600 shadow-sm ring-1 ring-violet-100">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-emerald-600 shadow-sm ring-1 ring-emerald-100">
                 {showJobsList ? (
                   <ChevronUp className="h-5 w-5" />
                 ) : (
@@ -223,7 +223,7 @@ export function MyJobsPage() {
 
                 {filter === 'all' && (
                   <Link to="/create-job">
-                    <Button className="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white">
+                    <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white">
                       Create Delivery
                     </Button>
                   </Link>
@@ -265,7 +265,7 @@ export function MyJobsPage() {
 
                           <div className="mb-4 space-y-3">
                             <div className="flex items-start gap-2.5">
-                              <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-violet-500" />
+                              <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-slate-500" />
                               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
                               <span className="break-words text-sm text-gray-600">
                                 {job.pickup_address}
@@ -283,7 +283,7 @@ export function MyJobsPage() {
 
                           {job.rider_name && (
                             <div className="flex min-w-0 items-center gap-2.5 text-sm">
-                              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-violet-100 text-xs font-semibold text-violet-700">
+                              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-semibold text-emerald-700">
                                 {job.rider_name.charAt(0)}
                               </div>
                               <span className="break-words text-gray-600">{job.rider_name}</span>
@@ -298,7 +298,7 @@ export function MyJobsPage() {
                             </p>
                           </div>
 
-                          <div className="mt-3 flex h-11 w-11 items-center justify-center rounded-full bg-violet-50 text-gray-400 transition-colors duration-200 group-hover:bg-violet-100 group-hover:text-violet-600 sm:ml-auto">
+                          <div className="mt-3 flex h-11 w-11 items-center justify-center rounded-full bg-slate-50 text-gray-400 transition-colors duration-200 group-hover:bg-emerald-100 group-hover:text-emerald-600 sm:ml-auto">
                             <ChevronRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
                           </div>
                         </div>

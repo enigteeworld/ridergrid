@@ -14,9 +14,9 @@ export function GlobalLoader({ message = 'Please wait...' }: GlobalLoaderProps) 
       <div className="bg-white rounded-2xl p-8 shadow-2xl flex flex-col items-center">
         <div className="relative">
           <div className="absolute inset-0 -m-4">
-            <div className="w-16 h-16 rounded-full border-4 border-violet-200 animate-ping" style={{ animationDuration: '1.5s' }} />
+            <div className="w-16 h-16 rounded-full border-4 border-emerald-200 animate-ping" style={{ animationDuration: '1.5s' }} />
           </div>
-          <div className="relative bg-gradient-to-br from-violet-500 to-fuchsia-500 p-4 rounded-xl">
+          <div className="relative bg-gradient-to-br from-emerald-500 to-teal-500 p-4 rounded-xl">
             <Package className="w-8 h-8 text-white animate-pulse" />
           </div>
         </div>

@@ -213,7 +213,7 @@ export function FindRidersPage() {
           />
         </div>
 
-        <div className="rounded-2xl border border-violet-100 bg-gradient-to-r from-violet-50/80 via-white to-fuchsia-50/70 p-3 shadow-sm">
+        <div className="rounded-2xl border border-slate-200 bg-gradient-to-r from-emerald-50/80 via-white to-teal-50/70 p-3 shadow-sm">
           <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {vehicleTypes.map((type) => {
               const isActive = selectedVehicle === type;
@@ -225,7 +225,7 @@ export function FindRidersPage() {
                   className={cn(
                     'group flex shrink-0 snap-start items-center gap-2 whitespace-nowrap rounded-2xl border px-5 py-2.5 transition-all duration-200',
                     isActive
-                      ? 'border-violet-200 bg-white text-violet-700 shadow-sm shadow-violet-100'
+                      ? 'border-emerald-200 bg-white text-emerald-700 shadow-sm shadow-emerald-100'
                       : 'border-gray-200 bg-white/70 text-gray-600 hover:bg-white hover:text-gray-900'
                   )}
                 >
@@ -305,7 +305,7 @@ export function FindRidersPage() {
                             className="h-16 w-16 rounded-full border border-gray-200 object-cover shadow-sm"
                           />
                         ) : (
-                          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 text-xl font-medium text-white shadow-sm">
+                          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-400 text-xl font-medium text-white shadow-sm">
                             {rider.full_name.charAt(0).toUpperCase()}
                           </div>
                         )}
@@ -318,7 +318,7 @@ export function FindRidersPage() {
                       </div>
 
                       <div className="min-w-0">
-                        <h3 className="truncate text-lg font-semibold text-gray-900 transition-colors group-hover:text-violet-600">
+                        <h3 className="truncate text-lg font-semibold text-gray-900 transition-colors group-hover:text-emerald-600">
                           {rider.full_name}
                         </h3>
                         {rider.company_name && (
@@ -365,14 +365,14 @@ export function FindRidersPage() {
                       </span>
                     )}
 
-                    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-violet-50 text-gray-400 transition-colors duration-200 group-hover:bg-violet-100 group-hover:text-violet-600">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-slate-50 text-gray-400 transition-colors duration-200 group-hover:bg-emerald-100 group-hover:text-emerald-600">
                       <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
                     </div>
                   </div>
 
                   <Button
                     variant="outline"
-                    className="h-12 w-full rounded-2xl border-violet-200 bg-white text-violet-700 transition-colors hover:bg-violet-50 hover:text-violet-800"
+                    className="h-12 w-full rounded-2xl border-emerald-200 bg-white text-emerald-700 transition-colors hover:bg-slate-50 hover:text-emerald-800"
                   >
                     View Profile
                   </Button>
@@ -386,8 +386,8 @@ export function FindRidersPage() {
       <Dialog open={!!selectedRider} onOpenChange={() => setSelectedRider(null)}>
         <DialogContent className="overflow-hidden rounded-[28px] border-0 bg-white p-0 shadow-[0_24px_80px_rgba(15,23,42,0.20)] sm:max-w-md">
           {selectedRider && (
-            <div className="bg-gradient-to-br from-violet-50 via-white to-fuchsia-50">
-              <DialogHeader className="border-b border-violet-100/70 px-6 pb-4 pt-6 text-left">
+            <div className="bg-gradient-to-br from-white via-slate-50 to-teal-50/30">
+              <DialogHeader className="border-b border-slate-200 px-6 pb-4 pt-6 text-left">
                 <div className="mb-4 flex items-center gap-4">
                   <div className="relative shrink-0">
                     {selectedRider.avatar_url ? (
@@ -397,7 +397,7 @@ export function FindRidersPage() {
                         className="h-20 w-20 rounded-full border border-gray-200 object-cover shadow-sm"
                       />
                     ) : (
-                      <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 text-2xl font-medium text-white shadow-sm">
+                      <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-400 text-2xl font-medium text-white shadow-sm">
                         {selectedRider.full_name.charAt(0).toUpperCase()}
                       </div>
                     )}
@@ -498,7 +498,7 @@ export function FindRidersPage() {
                 </div>
 
                 <Button
-                  className="h-12 w-full rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-700 hover:to-fuchsia-700"
+                  className="h-12 w-full rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:from-emerald-700 hover:to-teal-700"
                   onClick={handleCreateDeliveryWithRider}
                 >
                   Create Delivery with this Rider
