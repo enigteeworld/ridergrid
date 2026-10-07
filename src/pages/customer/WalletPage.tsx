@@ -13,7 +13,6 @@ import {
   ChevronDown,
   ChevronUp,
   ShieldCheck,
-  Sparkles,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -648,7 +647,7 @@ export function WalletPage() {
                     </div>
                   ) : (
                     <>
-                      <Sparkles className="mr-2 h-4 w-4" />
+                      <ShieldCheck className="mr-2 h-4 w-4" />
                       {fundAmount
                         ? `Fund ${formatCurrency(parseFloat(fundAmount))}`
                         : 'Fund Wallet'}

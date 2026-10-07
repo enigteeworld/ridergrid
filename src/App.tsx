@@ -1,7 +1,7 @@
 // ============================================
 // DISPATCH NG - Main App Component
 // ============================================
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore, initializeAuthListener } from '@/stores/authStore';
 import { useUIStore } from '@/stores/uiStore';
@@ -55,10 +55,11 @@ import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { ToastContainer } from '@/components/ToastContainer';
 import { GlobalLoader } from '@/components/GlobalLoader';
-import { useBranding } from '@/hooks/useBranding';
+import { initializeBranding, useBranding } from '@/hooks/useBranding';
 
 function App() {
   useBranding();
+  const [startupReady, setStartupReady] = useState(false);
   const { initializeAuth, isLoading, isAuthenticated, user, riderProfile } = useAuthStore();
   const { globalLoading, loadingMessage } = useUIStore();
 
@@ -66,11 +67,11 @@ function App() {
     let isMounted = true;
 
     const boot = async () => {
-      if (!isMounted) return;
-      await initializeAuth();
+      await Promise.allSettled([initializeBranding(), initializeAuth()]);
+      if (isMounted) setStartupReady(true);
     };
 
-    boot();
+    void boot();
 
     const unsubscribe = initializeAuthListener();
 
@@ -93,7 +94,7 @@ function App() {
     return '/dashboard';
   };
 
-  if (isLoading) {
+  if (!startupReady || isLoading) {
     return <LoadingScreen />;
   }
 

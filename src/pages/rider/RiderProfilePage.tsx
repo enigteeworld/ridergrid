@@ -26,6 +26,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/stores/authStore';
 import { showToast } from '@/stores/uiStore';
 import { cn } from '@/lib/utils';
+import { PersonalAvatar } from '@/components/PersonalAvatar';
 import type { VehicleType, BankAccount } from '@/types';
 
 const vehicleTypes: VehicleType[] = ['bicycle', 'motorcycle', 'car', 'van', 'truck'];
@@ -264,6 +265,16 @@ export function RiderProfilePage() {
         <h1 className="text-2xl font-bold text-gray-900">My Profile</h1>
         <p className="text-gray-500">Manage your rider profile</p>
       </div>
+
+      <Card className="rounded-[20px] border border-slate-200 bg-white shadow-sm">
+        <CardContent className="flex items-center gap-4 p-4">
+          <PersonalAvatar size="lg" />
+          <div className="min-w-0 flex-1">
+            <p className="font-semibold text-gray-900">Your greeting character</p>
+            <p className="mt-1 text-sm text-gray-500">Tap the character to personalize your rider greeting without replacing your verified profile photo.</p>
+          </div>
+        </CardContent>
+      </Card>
 
       <Card className="overflow-hidden rounded-[20px] border-slate-200 bg-gradient-to-br from-emerald-50/70 via-white to-teal-50/50 shadow-sm">
         <CardContent className="p-6">

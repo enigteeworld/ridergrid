@@ -11,7 +11,7 @@ import {
   Edit2,
   Check,
   ShieldCheck,
-  Sparkles,
+  BadgeCheck,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -21,6 +21,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/stores/authStore';
 import { showToast } from '@/stores/uiStore';
 import { cn } from '@/lib/utils';
+import { PersonalAvatar } from '@/components/PersonalAvatar';
 
 export function ProfilePage() {
   const { user, setUser, signOut } = useAuthStore();
@@ -194,11 +195,21 @@ export function ProfilePage() {
               <p className="mt-1 capitalize text-gray-500">{user?.user_type}</p>
 
               <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-slate-50 px-4 py-2 text-sm font-medium text-emerald-700">
-                <Sparkles className="h-4 w-4" />
+                <BadgeCheck className="h-4 w-4" />
                 Customer profile
               </div>
 
               {isUploading && <p className="mt-3 text-sm text-gray-500">Uploading photo...</p>}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-[24px] border border-slate-200 bg-white shadow-sm">
+          <CardContent className="flex items-center gap-4 p-4">
+            <PersonalAvatar size="lg" />
+            <div className="min-w-0 flex-1">
+              <p className="font-semibold text-gray-900">Your greeting character</p>
+              <p className="mt-1 text-sm text-gray-500">Tap the character to choose the icon used in your Dispatch NG greeting badge.</p>
             </div>
           </CardContent>
         </Card>

@@ -19,7 +19,7 @@ import {
   XCircle,
   Wallet,
   FileText,
-  Sparkles,
+  PackageCheck,
   ShieldCheck,
   ChevronRight,
 } from 'lucide-react';
@@ -506,7 +506,7 @@ export function JobDetailsPage() {
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
             <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-100 backdrop-blur-sm">
-              <Sparkles className="h-3.5 w-3.5" />
+              <PackageCheck className="h-3.5 w-3.5" />
               Delivery Details
             </div>
 

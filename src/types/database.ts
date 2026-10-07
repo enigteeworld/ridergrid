@@ -21,6 +21,7 @@ export interface Database {
           phone: string | null;
           full_name: string;
           avatar_url: string | null;
+          personal_avatar_key: string | null;
           user_type: 'customer' | 'rider' | 'admin';
           is_active: boolean;
           created_at: string;
@@ -33,6 +34,7 @@ export interface Database {
           phone?: string | null;
           full_name: string;
           avatar_url?: string | null;
+          personal_avatar_key?: string | null;
           user_type: 'customer' | 'rider' | 'admin';
           is_active?: boolean;
           created_at?: string;
@@ -45,6 +47,7 @@ export interface Database {
           phone?: string | null;
           full_name?: string;
           avatar_url?: string | null;
+          personal_avatar_key?: string | null;
           user_type?: 'customer' | 'rider' | 'admin';
           is_active?: boolean;
           created_at?: string;

@@ -19,7 +19,6 @@ import {
   MessageCircle,
   ArrowRight,
   ShieldCheck,
-  Sparkles,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -29,6 +28,7 @@ import { showToast } from '@/stores/uiStore';
 import type { JobDetails } from '@/types';
 import { formatDistanceToNow, formatCurrency } from '@/utils/format';
 import { cn } from '@/lib/utils';
+import { PersonalAvatar } from '@/components/PersonalAvatar';
 
 type HomeRider = {
   id: string;
@@ -357,16 +357,21 @@ export function HomePage() {
         <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-emerald-100/20 blur-3xl" />
         <div className="absolute -bottom-14 left-8 h-32 w-32 rounded-full bg-teal-100/20 blur-3xl" />
 
-        <div className="relative">
-          <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-100 backdrop-blur-sm">
-            <Sparkles className="h-3.5 w-3.5" />
-            Dispatch NG Customer
+        <div className="relative flex min-h-[118px] items-center justify-between gap-4">
+          <div className="min-w-0 flex-1">
+            <div className="mb-2 inline-flex items-center rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-100 backdrop-blur-sm">
+              Dispatch NG Customer
+            </div>
+
+            <h1 className="text-3xl font-bold tracking-tight text-gray-950">
+              Hello, {user?.full_name?.split(' ')[0] || 'there'}!
+            </h1>
+            <p className="mt-2 text-base text-gray-600">Ready to send a package today?</p>
           </div>
 
-          <h1 className="text-3xl font-bold tracking-tight text-gray-950">
-            Hello, {user?.full_name?.split(' ')[0] || 'there'}!
-          </h1>
-          <p className="mt-2 text-base text-gray-600">Ready to send a package today?</p>
+          <div className="flex shrink-0 items-center justify-center pr-1">
+            <PersonalAvatar size="hero" className="shadow-md ring-4 ring-white/90" />
+          </div>
         </div>
       </div>
 

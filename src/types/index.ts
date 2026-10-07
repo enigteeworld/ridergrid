@@ -11,6 +11,7 @@ export interface Profile {
   phone: string | null;
   full_name: string;
   avatar_url: string | null;
+  personal_avatar_key?: string | null;
   user_type: UserType;
   is_active: boolean;
   created_at: string;

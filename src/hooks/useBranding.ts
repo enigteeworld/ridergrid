@@ -41,7 +41,7 @@ function publish(next: BrandingSettings) {
   listeners.forEach((listener) => listener(next));
 }
 
-async function loadBranding(force = false): Promise<BrandingSettings> {
+export async function loadBranding(force = false): Promise<BrandingSettings> {
   if (!force && cache?.isLoaded) return cache;
   if (!force && request) return request;
   request = (async () => {
@@ -82,4 +82,26 @@ export async function refreshBranding() { request = null; return loadBranding(tr
 export function setBrandingImmediately(patch: Partial<Omit<BrandingSettings, 'isLoaded'>>) {
   const next = { ...(cache?.isLoaded ? cache : { ...defaults, isLoaded: true }), ...patch, isLoaded: true };
   publish(next);
+}
+
+
+export async function initializeBranding(timeoutMs = 6500): Promise<BrandingSettings> {
+  const timeout = new Promise<BrandingSettings>((resolve) => {
+    window.setTimeout(() => resolve(cache?.isLoaded ? cache : { ...defaults, isLoaded: true }), timeoutMs);
+  });
+
+  const branding = await Promise.race([loadBranding(), timeout]);
+  if (branding.logo_url) {
+    await Promise.race([
+      new Promise<void>((resolve) => {
+        const image = new Image();
+        image.onload = () => resolve();
+        image.onerror = () => resolve();
+        image.src = branding.logo_url;
+      }),
+      new Promise<void>((resolve) => window.setTimeout(resolve, 2500)),
+    ]);
+  }
+  applyDocumentBranding(branding);
+  return branding;
 }

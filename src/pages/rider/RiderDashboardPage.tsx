@@ -15,7 +15,6 @@ import {
   ChevronDown,
   ChevronUp,
   Clock3,
-  Sparkles,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -30,6 +29,7 @@ import {
   formatJobStatus,
 } from '@/utils/format';
 import { cn } from '@/lib/utils';
+import { PersonalAvatar } from '@/components/PersonalAvatar';
 
 export function RiderDashboardPage() {
   const { user, riderProfile } = useAuthStore();
@@ -376,10 +376,9 @@ export function RiderDashboardPage() {
         
         
 
-        <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-100 backdrop-blur-sm">
-              <Sparkles className="h-3.5 w-3.5" />
+        <div className="relative grid min-h-[126px] grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
+          <div className="min-w-0">
+            <div className="mb-2 inline-flex items-center rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-100 backdrop-blur-sm">
               Dispatch NG Rider
             </div>
 
@@ -387,23 +386,26 @@ export function RiderDashboardPage() {
             <p className="mt-1.5 text-sm text-gray-600 sm:text-base">
               Welcome back, {user?.full_name?.split(' ')[0]}
             </p>
-          </div>
-
-          <div
-            className={cn(
-              'inline-flex w-fit items-center gap-2 rounded-full px-3.5 py-2 text-sm font-medium ring-1',
-              riderProfile?.is_online
-                ? 'bg-green-100 text-green-700 ring-green-200'
-                : 'bg-gray-100 text-gray-600 ring-gray-200'
-            )}
-          >
+            <div
+              className={cn(
+                'mt-3 inline-flex w-fit items-center gap-2 rounded-full px-3.5 py-2 text-sm font-medium ring-1',
+                riderProfile?.is_online
+                  ? 'bg-green-100 text-green-700 ring-green-200'
+                  : 'bg-gray-100 text-gray-600 ring-gray-200'
+              )}
+            >
             <div
               className={cn(
                 'h-2.5 w-2.5 rounded-full',
                 riderProfile?.is_online ? 'bg-green-500 animate-pulse' : 'bg-gray-400'
               )}
             />
-            {riderProfile?.is_online ? 'Online' : 'Offline'}
+              {riderProfile?.is_online ? 'Online' : 'Offline'}
+            </div>
+          </div>
+
+          <div className="flex shrink-0 items-center justify-center">
+            <PersonalAvatar size="hero" className="shadow-md ring-4 ring-white/90" />
           </div>
         </div>
       </div>

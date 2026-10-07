@@ -158,11 +158,11 @@ export function RiderLayout() {
 
       <aside
         className={cn(
-          'fixed right-0 top-0 z-50 h-full w-[88%] max-w-sm border-l border-gray-200/80 bg-white shadow-[0_18px_55px_rgba(15,23,42,0.16)] transition-transform duration-200 md:hidden',
+          'fixed inset-y-0 right-0 z-50 h-[100dvh] max-h-[100dvh] w-[88%] max-w-sm border-l border-gray-200/80 bg-white shadow-[0_18px_55px_rgba(15,23,42,0.16)] transition-transform duration-200 md:hidden',
           mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         )}
       >
-        <div className="flex h-full flex-col">
+        <div className="flex h-full min-h-0 flex-col overflow-hidden">
           <div className="border-b border-gray-100 px-5 pb-5 pt-5">
             <div className="mb-5 flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -249,7 +249,7 @@ export function RiderLayout() {
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto px-4 py-4">
+          <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4">
             <nav className="space-y-2">
               {navItems.map((item) => (
                 <NavLink
@@ -280,7 +280,7 @@ export function RiderLayout() {
             </nav>
           </div>
 
-          <div className="border-t border-gray-100 px-4 py-4">
+          <div className="shrink-0 border-t border-gray-100 bg-white px-4 pb-[max(env(safe-area-inset-bottom),1rem)] pt-3">
             <button
               onClick={handleSignOut}
               className="flex w-full items-center gap-4 rounded-2xl px-4 py-3.5 text-red-500 transition-colors hover:bg-red-50"

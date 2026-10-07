@@ -89,16 +89,20 @@ export function AdminLayout() {
       </header>
 
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-30 bg-white lg:hidden">
-          <div className="px-4 pb-4 pt-20"><nav className="space-y-2">
-            {navItems.map((item) => (
-              <NavLink key={item.path} to={item.path} onClick={() => setMobileMenuOpen(false)} className={({ isActive }) => cn(
-                'flex items-center gap-4 rounded-xl p-4 transition-colors duration-200',
-                isActive ? 'bg-slate-50 font-medium text-emerald-600' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
-              )}><item.icon className="h-6 w-6 shrink-0" /><span className="text-lg">{item.label}</span></NavLink>
-            ))}
+        <div className="fixed inset-0 z-30 flex h-[100dvh] max-h-[100dvh] min-h-0 flex-col overflow-hidden bg-white lg:hidden">
+          <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-4 pt-20">
+            <nav className="space-y-2">
+              {navItems.map((item) => (
+                <NavLink key={item.path} to={item.path} onClick={() => setMobileMenuOpen(false)} className={({ isActive }) => cn(
+                  'flex items-center gap-4 rounded-xl p-4 transition-colors duration-200',
+                  isActive ? 'bg-slate-50 font-medium text-emerald-600' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
+                )}><item.icon className="h-6 w-6 shrink-0" /><span className="text-lg">{item.label}</span></NavLink>
+              ))}
+            </nav>
+          </div>
+          <div className="shrink-0 border-t border-gray-100 bg-white px-4 pb-[max(env(safe-area-inset-bottom),1rem)] pt-3">
             <button onClick={handleSignOut} className="flex w-full items-center gap-4 rounded-xl p-4 text-red-500 hover:bg-red-50"><LogOut className="h-6 w-6" /><span className="text-lg">Sign Out</span></button>
-          </nav></div>
+          </div>
         </div>
       )}
 
