@@ -125,7 +125,7 @@ export function RiderJobsPage() {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">My Jobs</h1>
         <p className="text-gray-500">View and manage your deliveries</p>
@@ -211,18 +211,18 @@ export function RiderJobsPage() {
               </CardContent>
             </Card>
           ) : (
-            <div className="space-y-5 rounded-3xl bg-gray-50/60 p-2">
+            <div className="space-y-4 rounded-3xl bg-gray-50/60 p-2">
               {filteredJobs.map((job) => (
                 <Link key={job.id} to={`/rider/jobs/${job.id}`} className="block">
-                  <Card className="group relative overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 active:scale-[0.985] hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+                  <Card className="group relative overflow-hidden rounded-[20px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 active:scale-[0.985] hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
                     <div
                       className={cn(
                         'absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b',
                         getCardAccent(job.status)
                       )}
                     />
-                    <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
-                      <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+                    <CardContent className="p-4 pl-5 sm:p-5 sm:pl-6">
+                      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div className="min-w-0 flex-1">
                           <div className="mb-4 flex flex-wrap items-center gap-2">
                             <span className="text-sm font-semibold tracking-tight text-gray-600">

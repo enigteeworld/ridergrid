@@ -187,7 +187,7 @@ export function RiderJobDetailsPage() {
 
   if (!job) {
     return (
-      <div className="py-12 text-center">
+      <div className="py-9 text-center">
         <h2 className="text-xl font-semibold text-gray-900">Job not found</h2>
         <Button onClick={() => navigate('/rider/jobs')} className="mt-4">
           Back to Jobs
@@ -197,7 +197,7 @@ export function RiderJobDetailsPage() {
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4">
       <button
         onClick={() => navigate('/rider/jobs')}
         className="inline-flex items-center gap-2 text-gray-500 transition-colors hover:text-gray-700"
@@ -206,8 +206,8 @@ export function RiderJobDetailsPage() {
         Back to Jobs
       </button>
 
-      <Card className="overflow-hidden rounded-[24px] border-slate-200 bg-gradient-to-br from-emerald-50/70 via-white to-teal-50/50 shadow-sm">
-        <CardContent className="p-5 sm:p-6">
+      <Card className="overflow-hidden rounded-[20px] border-slate-200 bg-gradient-to-br from-emerald-50/70 via-white to-teal-50/50 shadow-sm">
+        <CardContent className="p-4 sm:p-5">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="min-w-0">
               <div className="mb-3 flex flex-wrap items-center gap-2">
@@ -247,9 +247,9 @@ export function RiderJobDetailsPage() {
       </Card>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <Card className="group relative overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+        <Card className="group relative overflow-hidden rounded-[20px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
           <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-500 to-teal-500" />
-          <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
+          <CardContent className="p-4 pl-5 sm:p-5 sm:pl-6">
             <h3 className="mb-4 flex items-center gap-2 font-semibold text-gray-900">
               <MapPin className="h-5 w-5 text-emerald-600" />
               Pickup
@@ -280,9 +280,9 @@ export function RiderJobDetailsPage() {
           </CardContent>
         </Card>
 
-        <Card className="group relative overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+        <Card className="group relative overflow-hidden rounded-[20px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
           <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-400 to-green-500" />
-          <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
+          <CardContent className="p-4 pl-5 sm:p-5 sm:pl-6">
             <h3 className="mb-4 flex items-center gap-2 font-semibold text-gray-900">
               <MapPin className="h-5 w-5 text-green-600" />
               Delivery
@@ -314,9 +314,9 @@ export function RiderJobDetailsPage() {
         </Card>
       </div>
 
-      <Card className="group relative overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+      <Card className="group relative overflow-hidden rounded-[20px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
         <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-amber-400 to-orange-500" />
-        <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
+        <CardContent className="p-4 pl-5 sm:p-5 sm:pl-6">
           <h3 className="mb-4 flex items-center gap-2 font-semibold text-gray-900">
             <Package className="h-5 w-5 text-amber-600" />
             Package Details
@@ -334,9 +334,9 @@ export function RiderJobDetailsPage() {
         </CardContent>
       </Card>
 
-      <Card className="group relative overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+      <Card className="group relative overflow-hidden rounded-[20px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
         <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-500 to-teal-500" />
-        <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
+        <CardContent className="p-4 pl-5 sm:p-5 sm:pl-6">
           <h3 className="mb-4 flex items-center gap-2 font-semibold text-gray-900">
             <Wallet className="h-5 w-5 text-emerald-600" />
             Earnings
@@ -401,7 +401,7 @@ export function RiderJobDetailsPage() {
       {job && <DeliveryChat jobId={job.id} enabled={!['cancelled','refunded'].includes(job.status)} />}
 
       <Dialog open={showCompleteDialog} onOpenChange={setShowCompleteDialog}>
-        <DialogContent className="overflow-hidden rounded-[24px] border-0 bg-white p-0 shadow-[0_24px_80px_rgba(15,23,42,0.20)] sm:max-w-md">
+        <DialogContent className="overflow-hidden rounded-[20px] border-0 bg-white p-0 shadow-[0_24px_80px_rgba(15,23,42,0.20)] sm:max-w-md">
           <div className="bg-gradient-to-br from-emerald-50 via-white to-green-50">
             <DialogHeader className="border-b border-slate-200 px-6 pb-4 pt-6 text-left">
               <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-green-500 to-emerald-500 shadow-[0_10px_30px_rgba(34,197,94,0.22)]">
@@ -416,7 +416,7 @@ export function RiderJobDetailsPage() {
               </p>
             </DialogHeader>
 
-            <div className="space-y-5 px-6 py-5">
+            <div className="space-y-4 px-6 py-5">
               <div className="rounded-2xl border border-emerald-200 bg-slate-50 p-4">
                 <div className="flex items-start gap-3">
                   <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-emerald-600">

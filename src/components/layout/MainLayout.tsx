@@ -53,9 +53,9 @@ export function MainLayout() {
     <div className="min-h-screen bg-gray-50">
       <header className="sticky top-0 z-50 border-b border-gray-200/80 bg-white md:bg-white/95 md:backdrop-blur-xl">
         <div className="mx-auto max-w-5xl px-4">
-          <div className="flex h-16 items-center justify-between">
+          <div className="flex h-14 items-center justify-between">
             <NavLink to="/dashboard" className="flex items-center gap-3">
-              <BrandMark className="h-10 min-w-10" iconClassName="h-5 w-5" />
+              <BrandMark className="h-9 min-w-9" iconClassName="h-4.5 w-4.5" />
 
               <span className="hidden bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-xl font-bold text-transparent sm:block">
                 {branding.site_name}
@@ -129,7 +129,7 @@ export function MainLayout() {
           <div className="border-b border-gray-100 px-5 pb-5 pt-5">
             <div className="mb-5 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <BrandMark className="h-10 min-w-10" iconClassName="h-5 w-5" />
+                <BrandMark className="h-9 min-w-9" iconClassName="h-4.5 w-4.5" />
                 <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-lg font-bold text-transparent">
                   {branding.site_name}
                 </span>
@@ -233,7 +233,7 @@ export function MainLayout() {
                 to={item.path}
                 className={({ isActive }) =>
                   cn(
-                    'flex flex-col items-center justify-center rounded-2xl px-1 py-2.5 transition-all duration-200',
+                    'flex flex-col items-center justify-center rounded-xl px-1 py-2 transition-all duration-200',
                     isActive
                       ? 'bg-slate-50 text-emerald-700'
                       : 'text-gray-400 hover:bg-gray-50 hover:text-gray-600'
@@ -244,7 +244,7 @@ export function MainLayout() {
                   <>
                     <div
                       className={cn(
-                        'mb-1.5 flex h-9 w-9 items-center justify-center rounded-2xl transition-all duration-200',
+                        'mb-1 flex h-8 w-8 items-center justify-center rounded-xl transition-all duration-200',
                         isActive ? 'bg-white shadow-sm ring-1 ring-emerald-100' : 'bg-transparent'
                       )}
                     >

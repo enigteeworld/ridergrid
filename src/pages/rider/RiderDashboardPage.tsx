@@ -239,7 +239,7 @@ export function RiderDashboardPage() {
   }) => (
     <Card
       className={cn(
-        'group relative overflow-hidden rounded-[24px] border shadow-[0_6px_22px_rgba(15,23,42,0.05)] transition-colors duration-150',
+        'group relative overflow-hidden rounded-[20px] border shadow-[0_6px_22px_rgba(15,23,42,0.05)] transition-colors duration-150',
         featured
           ? 'border-slate-200 bg-gradient-to-br from-white via-slate-50 to-teal-50/25'
           : 'border-gray-100 bg-white'
@@ -347,8 +347,8 @@ export function RiderDashboardPage() {
 
   if (riderProfile?.verification_status === 'pending') {
     return (
-      <div className="py-12 text-center">
-        <AlertCircle className="mx-auto mb-4 h-16 w-16 text-amber-500" />
+      <div className="py-9 text-center">
+        <AlertCircle className="mx-auto mb-4 h-14 w-14 text-amber-500" />
         <h2 className="mb-2 text-xl font-semibold text-gray-900">Verification Pending</h2>
         <p className="mx-auto max-w-md text-gray-500">
           Your rider application is under review. We&apos;ll notify you once your account is approved.
@@ -359,8 +359,8 @@ export function RiderDashboardPage() {
 
   if (riderProfile?.verification_status === 'rejected') {
     return (
-      <div className="py-12 text-center">
-        <AlertCircle className="mx-auto mb-4 h-16 w-16 text-red-500" />
+      <div className="py-9 text-center">
+        <AlertCircle className="mx-auto mb-4 h-14 w-14 text-red-500" />
         <h2 className="mb-2 text-xl font-semibold text-gray-900">Application Rejected</h2>
         <p className="mx-auto max-w-md text-gray-500">
           Unfortunately, your rider application was not approved. Please contact support for more
@@ -371,8 +371,8 @@ export function RiderDashboardPage() {
   }
 
   return (
-    <div className="space-y-5">
-      <div className="relative overflow-hidden rounded-[26px] border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+    <div className="space-y-4">
+      <div className="relative overflow-hidden rounded-[22px] border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
         
         
 
@@ -408,7 +408,7 @@ export function RiderDashboardPage() {
         </div>
       </div>
 
-      <div className="space-y-3 rounded-[26px] bg-gray-50/70 p-1.5">
+      <div className="space-y-3 rounded-[22px] bg-gray-50/70 p-1.5">
         <MetricCard
           title="Available to Withdraw"
           value={formatCurrency(availableBalance)}
@@ -474,13 +474,13 @@ export function RiderDashboardPage() {
           />
 
           {showActiveJobs && (
-            <div className="space-y-5 rounded-[26px] bg-gradient-to-b from-gray-50/90 to-white p-2">
+            <div className="space-y-4 rounded-[22px] bg-gradient-to-b from-gray-50/90 to-white p-2">
               {myJobs.slice(0, 3).map((job) => (
                 <Link key={job.id} to={`/rider/jobs/${job.id}`}>
-                  <Card className="group relative cursor-pointer overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 active:scale-[0.995] hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+                  <Card className="group relative cursor-pointer overflow-hidden rounded-[20px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 active:scale-[0.995] hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
                     <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-500 to-teal-500" />
 
-                    <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
+                    <CardContent className="p-4 pl-5 sm:p-5 sm:pl-6">
                       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div className="min-w-0 flex-1">
                           <div className="mb-3 flex flex-wrap items-center gap-2">
@@ -556,7 +556,7 @@ export function RiderDashboardPage() {
         {showAvailableJobs && (
           <>
             {availableJobs.length === 0 ? (
-              <Card className="rounded-[24px] border-2 border-dashed">
+              <Card className="rounded-[20px] border-2 border-dashed">
                 <CardContent className="p-8 text-center">
                   <Package className="mx-auto mb-4 h-12 w-12 text-gray-300" />
                   <h3 className="mb-2 text-lg font-medium text-gray-900">No jobs available</h3>
@@ -566,16 +566,16 @@ export function RiderDashboardPage() {
                 </CardContent>
               </Card>
             ) : (
-              <div className="space-y-5 rounded-[26px] bg-gradient-to-b from-gray-50/90 to-white p-2">
+              <div className="space-y-4 rounded-[22px] bg-gradient-to-b from-gray-50/90 to-white p-2">
                 {availableJobs.map((job) => (
                   <Card
                     key={job.id}
-                    className="group relative overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]"
+                    className="group relative overflow-hidden rounded-[20px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]"
                   >
                     <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-400 to-green-500" />
 
-                    <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
-                      <div className="flex flex-col gap-5">
+                    <CardContent className="p-4 pl-5 sm:p-5 sm:pl-6">
+                      <div className="flex flex-col gap-4">
                         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                           <div className="min-w-0 flex-1">
                             <div className="mb-3 flex flex-wrap items-center gap-2">

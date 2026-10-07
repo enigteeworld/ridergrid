@@ -144,9 +144,9 @@ export function RiderEarningsPage() {
     }
 
     return (
-      <Card className="group relative overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+      <Card className="group relative overflow-hidden rounded-[20px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
         <div className={cn('absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b', accent)} />
-        <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
+        <CardContent className="p-4 pl-5 sm:p-5 sm:pl-6">
           <div className="flex items-center justify-between gap-4">
             <div className="min-w-0">
               <p className="text-sm font-medium uppercase tracking-[0.14em] text-gray-400">
@@ -201,7 +201,7 @@ export function RiderEarningsPage() {
   );
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">My Earnings</h1>
         <p className="text-gray-500">Track your income and performance</p>
@@ -244,12 +244,12 @@ export function RiderEarningsPage() {
         </div>
       </div>
 
-      <Card className="overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)]">
+      <Card className="overflow-hidden rounded-[20px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)]">
         <CardContent className="p-6">
           <h3 className="mb-5 text-xl font-semibold text-gray-900">Performance Stats</h3>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5 text-center">
+            <div className="rounded-[20px] border border-slate-200 bg-slate-50 p-5 text-center">
               <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-emerald-600 shadow-sm">
                 <CheckCircle className="h-6 w-6" />
               </div>
@@ -257,7 +257,7 @@ export function RiderEarningsPage() {
               <p className="mt-1 text-sm text-gray-500">Total Deliveries</p>
             </div>
 
-            <div className="rounded-[24px] border border-amber-100 bg-amber-50 p-5 text-center">
+            <div className="rounded-[20px] border border-amber-100 bg-amber-50 p-5 text-center">
               <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-amber-500 shadow-sm">
                 <Star className="h-6 w-6 fill-amber-400 text-amber-400" />
               </div>
@@ -267,7 +267,7 @@ export function RiderEarningsPage() {
               <p className="mt-1 text-sm text-gray-500">Average Rating</p>
             </div>
 
-            <div className="rounded-[24px] border border-green-100 bg-green-50 p-5 text-center">
+            <div className="rounded-[20px] border border-green-100 bg-green-50 p-5 text-center">
               <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-green-600 shadow-sm">
                 <TrendingUp className="h-6 w-6" />
               </div>
@@ -305,15 +305,15 @@ export function RiderEarningsPage() {
                 </CardContent>
               </Card>
             ) : (
-              <div className="space-y-5 rounded-3xl bg-gray-50/60 p-2">
+              <div className="space-y-4 rounded-3xl bg-gray-50/60 p-2">
                 {recentEarnings.map((earning) => (
                   <Card
                     key={earning.id}
-                    className="group relative overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]"
+                    className="group relative overflow-hidden rounded-[20px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]"
                   >
                     <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-400 to-green-500" />
 
-                    <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
+                    <CardContent className="p-4 pl-5 sm:p-5 sm:pl-6">
                       <div className="flex items-center justify-between gap-4">
                         <div className="min-w-0 flex items-center gap-3">
                           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-green-100">

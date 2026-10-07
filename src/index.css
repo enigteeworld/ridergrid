@@ -157,3 +157,40 @@ body {
   /* Avoid costly hover transforms/repaints while a finger is scrolling. */
   .hover\\:-translate-y-0\\.5:hover { transform: none !important; }
 }
+
+
+/* RiderGrid responsive density normalization */
+/*
+ * Tailwind's spacing/type scale is rem-based. Reducing the root size only at
+ * app-sized viewports gives the UI a genuinely denser mobile/tablet rhythm
+ * without CSS zoom/transform tricks or changing desktop rendering.
+ */
+@media (max-width: 767px) {
+  html {
+    font-size: 14px;
+  }
+
+  body {
+    font-size: 1rem;
+  }
+
+  /* Keep native form controls comfortably tappable even with the denser scale. */
+  button,
+  [role="button"],
+  input,
+  select,
+  textarea {
+    min-height: 2.75rem;
+  }
+
+  /* Icon-only controls may stay square and compact. */
+  button[aria-label] {
+    min-height: 2.5rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  html {
+    font-size: 15px;
+  }
+}
