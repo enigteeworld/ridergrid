@@ -51,7 +51,7 @@ export function MainLayout() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="sticky top-0 z-50 border-b border-gray-200/80 bg-white/95 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-gray-200/80 bg-white md:bg-white/95 md:backdrop-blur-xl">
         <div className="mx-auto max-w-5xl px-4">
           <div className="flex h-16 items-center justify-between">
             <NavLink to="/dashboard" className="flex items-center gap-3">
@@ -113,7 +113,7 @@ export function MainLayout() {
 
       <div
         className={cn(
-          'fixed inset-0 z-40 bg-black/30 backdrop-blur-[2px] transition-all duration-300 md:hidden',
+          'fixed inset-0 z-40 bg-black/30 transition-opacity duration-200 md:hidden',
           mobileMenuOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         )}
         onClick={() => setMobileMenuOpen(false)}
@@ -121,7 +121,7 @@ export function MainLayout() {
 
       <aside
         className={cn(
-          'fixed right-0 top-0 z-50 h-full w-[88%] max-w-sm border-l border-gray-200/80 bg-white/95 shadow-[0_24px_80px_rgba(15,23,42,0.18)] backdrop-blur-xl transition-transform duration-300 md:hidden',
+          'fixed right-0 top-0 z-50 h-full w-[88%] max-w-sm border-l border-gray-200/80 bg-white shadow-[0_18px_55px_rgba(15,23,42,0.16)] transition-transform duration-200 md:hidden',
           mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         )}
       >
@@ -220,11 +220,11 @@ export function MainLayout() {
         </div>
       </aside>
 
-      <main className="mx-auto max-w-5xl px-4 py-6">
+      <main className="mx-auto max-w-5xl px-4 py-4 sm:py-6">
         <Outlet />
       </main>
 
-      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200/80 bg-white/95 backdrop-blur-xl md:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200/80 bg-white md:bg-white/95 md:backdrop-blur-xl md:hidden">
         <div className="mx-auto max-w-5xl px-2 pb-[max(env(safe-area-inset-bottom),0.35rem)] pt-2">
           <div className="grid grid-cols-5 gap-1">
             {mobileNavItems.map((item) => (

@@ -467,7 +467,7 @@ export function HomePage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="space-y-5 rounded-[32px] bg-gradient-to-b from-gray-50/90 to-white p-2">
+          <div className="space-y-3 rounded-[24px] bg-gray-50/60 p-1.5">
             {recentJobs.map((job) => {
               const isExpanded = expandedJobs.includes(job.id);
 
@@ -628,137 +628,58 @@ export function HomePage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="space-y-5 rounded-[32px] bg-gradient-to-b from-gray-50/90 to-white p-2">
+          <div className="space-y-3 rounded-[24px] bg-gray-50/60 p-1.5">
             {nearbyRiders.map((rider) => (
               <Card
                 key={rider.id}
-                className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]"
+                className="relative overflow-hidden rounded-[22px] border border-gray-100 bg-white shadow-[0_5px_18px_rgba(15,23,42,0.05)]"
               >
-                <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-400 to-green-500" />
-
-                <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
-                  <div className="relative">
-                    <div className="absolute right-0 top-0">
-                      <div
-                        className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-500 shadow-sm"
-                        title="Verified"
-                      >
-                        <CheckCircle className="h-4 w-4 text-white" />
-                      </div>
-                    </div>
-
-                    <div className="text-center">
-                      <div className="relative inline-block">
-                        {rider.avatar_url ? (
-                          <img
-                            src={rider.avatar_url}
-                            alt={rider.full_name}
-                            className="mx-auto h-20 w-20 rounded-full border-4 border-white object-cover shadow-lg"
-                          />
-                        ) : (
-                          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-emerald-400 to-teal-400 text-2xl font-semibold text-white shadow-lg">
-                            {rider.full_name.charAt(0).toUpperCase()}
-                          </div>
-                        )}
-
-                        {rider.is_online && (
-                          <span className="absolute bottom-1 right-1 h-4 w-4 rounded-full border-2 border-white bg-green-500" />
-                        )}
-                      </div>
-
-                      <h3 className="mt-4 text-2xl font-semibold tracking-tight text-gray-900">
-                        {rider.full_name}
-                      </h3>
-
-                      <div className="mt-2 flex items-center justify-center gap-1 text-base text-gray-500">
-                        <UserCircle className="h-4 w-4" />
-                        <span className="capitalize">{rider.vehicle_type}</span>
-                      </div>
-
-                      {rider.company_name && (
-                        <p className="mt-2 text-base text-gray-500">{rider.company_name}</p>
-                      )}
-                    </div>
-
-                    <div className="my-6 grid grid-cols-3 gap-4">
-                      <div className="text-center">
-                        <div className="flex items-center justify-center gap-1 text-2xl font-bold text-gray-900">
-                          <Star className="h-5 w-5 fill-amber-400 text-amber-400" />
-                          <span>
-                            {Number(rider.rating_average || 0).toFixed(1).replace('.0', '')}
-                          </span>
-                        </div>
-                        <span className="mt-1 block text-sm text-gray-500">rating</span>
-                      </div>
-
-                      <div className="border-x border-gray-100 text-center">
-                        <div className="text-2xl font-bold text-gray-900">
-                          {rider.completed_jobs_count || 0}
-                        </div>
-                        <span className="mt-1 block text-sm text-gray-500">deliveries</span>
-                      </div>
-
-                      <div className="text-center">
-                        <div
-                          className={cn(
-                            'text-2xl font-bold',
-                            rider.is_online ? 'text-green-600' : 'text-amber-700'
-                          )}
-                        >
-                          {rider.is_online ? 'Online' : 'Active'}
-                        </div>
-                        <span className="mt-1 block text-sm text-gray-500">status</span>
-                      </div>
-                    </div>
-
-                    <div className="mb-4 flex justify-center">
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-4 py-2 text-base text-gray-600">
-                        <MapPin className="h-4 w-4" />
-                        {rider.service_radius_km || 0}km radius
-                      </span>
-                    </div>
-
-                    <div className="mb-5 flex justify-center">
-                      {rider.is_online ? (
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1.5 text-base font-medium text-green-700">
-                          <span className="h-2 w-2 rounded-full bg-green-500" />
-                          Online now
-                        </span>
+                <div className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-emerald-500 to-teal-500" />
+                <CardContent className="p-4 pl-5">
+                  <div className="flex items-start gap-3">
+                    <div className="relative shrink-0">
+                      {rider.avatar_url ? (
+                        <img src={rider.avatar_url} alt={rider.full_name} className="h-16 w-16 rounded-2xl object-cover ring-1 ring-gray-100" />
                       ) : (
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1.5 text-base font-medium text-amber-700">
-                          <Clock3 className="h-4 w-4" />
-                          Available on request
-                        </span>
+                        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 text-xl font-semibold text-white">
+                          {rider.full_name.charAt(0).toUpperCase()}
+                        </div>
                       )}
+                      {rider.is_online && <span className="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full border-2 border-white bg-green-500" />}
                     </div>
-
-                    <div className="space-y-3">
-                      <Button
-                        className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white"
-                        onClick={() => handleBookRider(rider)}
-                      >
-                        Book Rider
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
-
-                      <div className="flex gap-3">
-                        <button
-                          onClick={() => handleContactRider(rider, 'call')}
-                          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-green-100 py-3 transition-colors hover:bg-green-200"
-                        >
-                          <Phone className="h-5 w-5 text-green-600" />
-                          <span className="text-base font-medium text-green-700">Call</span>
-                        </button>
-
-                        <button
-                          onClick={() => handleContactRider(rider, 'whatsapp')}
-                          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-100 py-3 transition-colors hover:bg-emerald-200"
-                        >
-                          <MessageCircle className="h-5 w-5 text-emerald-600" />
-                          <span className="text-base font-medium text-emerald-700">WhatsApp</span>
-                        </button>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="min-w-0">
+                          <h3 className="truncate text-lg font-semibold text-gray-900">{rider.full_name}</h3>
+                          <p className="mt-0.5 truncate text-sm text-gray-500">
+                            <span className="capitalize">{rider.vehicle_type}</span>{rider.company_name ? ` · ${rider.company_name}` : ''}
+                          </p>
+                        </div>
+                        <CheckCircle className="h-5 w-5 shrink-0 text-blue-500" />
+                      </div>
+                      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
+                        <span className="inline-flex items-center gap-1 font-semibold text-gray-800"><Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />{Number(rider.rating_average || 0).toFixed(1).replace('.0', '')}</span>
+                        <span>{rider.completed_jobs_count || 0} deliveries</span>
+                        <span className="inline-flex items-center gap-1"><MapPin className="h-3.5 w-3.5" />{rider.service_radius_km || 0}km</span>
                       </div>
                     </div>
+                  </div>
+
+                  <div className="mt-3 flex items-center justify-between gap-2">
+                    {rider.is_online ? (
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700"><span className="h-1.5 w-1.5 rounded-full bg-green-500" />Online now</span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700"><Clock3 className="h-3.5 w-3.5" />Available on request</span>
+                    )}
+                    <span className="text-xs text-gray-400">Verified rider</span>
+                  </div>
+
+                  <div className="mt-3 grid grid-cols-[1fr_auto_auto] gap-2">
+                    <Button className="h-10 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-sm text-white" onClick={() => handleBookRider(rider)}>
+                      Book Rider <ArrowRight className="ml-1.5 h-4 w-4" />
+                    </Button>
+                    <button aria-label="Call rider" onClick={() => handleContactRider(rider, 'call')} className="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-50 text-emerald-700 ring-1 ring-gray-100"><Phone className="h-4 w-4" /></button>
+                    <button aria-label="WhatsApp rider" onClick={() => handleContactRider(rider, 'whatsapp')} className="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-50 text-teal-700 ring-1 ring-gray-100"><MessageCircle className="h-4 w-4" /></button>
                   </div>
                 </CardContent>
               </Card>

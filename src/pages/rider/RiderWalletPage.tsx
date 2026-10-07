@@ -337,7 +337,7 @@ export function RiderWalletPage() {
   );
 
   return (
-    <div className="space-y-7">
+    <div className="space-y-5">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">My Wallet</h1>
         <p className="text-gray-500">Manage your earnings</p>
@@ -393,7 +393,7 @@ export function RiderWalletPage() {
           </CardContent>
         </Card>
 
-        <Card className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+        <Card className="group relative overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
           <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-amber-400 to-orange-500" />
           <CardContent className="p-6 pl-7">
             <div className="flex items-center justify-between gap-4">
@@ -432,11 +432,11 @@ export function RiderWalletPage() {
                 </CardContent>
               </Card>
             ) : (
-              <div className="space-y-6 rounded-3xl bg-gray-50/60 p-2">
+              <div className="space-y-5 rounded-3xl bg-gray-50/60 p-2">
                 {activeWithdrawals.map((request: any) => (
                   <Card
                     key={request.id}
-                    className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]"
+                    className="group relative overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]"
                   >
                     <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-amber-400 to-orange-500" />
                     <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
@@ -494,11 +494,11 @@ export function RiderWalletPage() {
                 </CardContent>
               </Card>
             ) : (
-              <div className="space-y-6 rounded-3xl bg-gray-50/60 p-2">
+              <div className="space-y-5 rounded-3xl bg-gray-50/60 p-2">
                 {completedWithdrawals.slice(0, 10).map((request: any) => (
                   <Card
                     key={request.id}
-                    className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]"
+                    className="group relative overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]"
                   >
                     <div
                       className={cn(
@@ -584,11 +584,11 @@ export function RiderWalletPage() {
                 </CardContent>
               </Card>
             ) : (
-              <div className="space-y-6 rounded-3xl bg-gray-50/60 p-2">
+              <div className="space-y-5 rounded-3xl bg-gray-50/60 p-2">
                 {transactions.map((tx) => (
                   <Card
                     key={tx.id}
-                    className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]"
+                    className="group relative overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]"
                   >
                     <div
                       className={cn(
@@ -642,7 +642,7 @@ export function RiderWalletPage() {
       </div>
 
       <Dialog open={showWithdrawDialog} onOpenChange={setShowWithdrawDialog}>
-        <DialogContent className="overflow-hidden rounded-[28px] border-0 bg-white p-0 shadow-[0_24px_80px_rgba(15,23,42,0.20)] sm:max-w-md">
+        <DialogContent className="overflow-hidden rounded-[24px] border-0 bg-white p-0 shadow-[0_24px_80px_rgba(15,23,42,0.20)] sm:max-w-md">
           <div className="bg-gradient-to-br from-white via-slate-50 to-teal-50/30">
             <DialogHeader className="border-b border-slate-200 px-6 pb-4 pt-6 text-left">
               <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 shadow-[0_10px_30px_rgba(16,185,129,0.22)]">

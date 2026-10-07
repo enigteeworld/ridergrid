@@ -239,7 +239,7 @@ export function RiderDashboardPage() {
   }) => (
     <Card
       className={cn(
-        'group relative overflow-hidden rounded-[30px] border shadow-[0_10px_35px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_20px_45px_rgba(15,23,42,0.10)]',
+        'group relative overflow-hidden rounded-[24px] border shadow-[0_6px_22px_rgba(15,23,42,0.05)] transition-colors duration-150',
         featured
           ? 'border-slate-200 bg-gradient-to-br from-white via-slate-50 to-teal-50/25'
           : 'border-gray-100 bg-white'
@@ -248,47 +248,47 @@ export function RiderDashboardPage() {
       <div className={cn('absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b', accent)} />
       {featured && (
         <>
-          <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-emerald-100/20 blur-2xl" />
-          <div className="absolute -bottom-12 left-10 h-28 w-28 rounded-full bg-teal-100/20 blur-2xl" />
+          <div className="absolute -right-10 -top-10 h-24 w-24 rounded-full bg-emerald-50/40" />
+          
         </>
       )}
 
-      <CardContent className="relative p-5 pl-6 sm:p-6 sm:pl-7">
+      <CardContent className="relative p-4 pl-5 sm:p-5 sm:pl-6">
         <div className="flex items-center justify-between gap-4">
           <div className="min-w-0">
             <p
               className={cn(
-                'text-sm font-medium uppercase tracking-[0.18em]',
+                'text-xs font-semibold uppercase tracking-[0.16em]',
                 featured ? 'text-gray-500' : 'text-gray-400'
               )}
             >
               {title}
             </p>
 
-            <div className="mt-3">
+            <div className="mt-2">
               <p
                 className={cn(
-                  'break-words text-3xl font-bold tracking-tight text-gray-950',
-                  featured && 'text-[2.2rem] sm:text-[2.35rem]',
+                  'break-words text-2xl font-bold tracking-tight text-gray-950 sm:text-3xl',
+                  featured && 'text-[2rem] sm:text-[2.15rem]',
                   valueClassName
                 )}
               >
                 {value}
               </p>
 
-              {subtitle && <p className="mt-2 text-sm text-gray-500">{subtitle}</p>}
+              {subtitle && <p className="mt-1.5 text-sm leading-5 text-gray-500">{subtitle}</p>}
               {children}
             </div>
           </div>
 
           <div
             className={cn(
-              'flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl transition-all duration-200',
+              'flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl transition-colors duration-150',
               featured ? 'shadow-sm ring-1 ring-white/70' : '',
               iconClassName
             )}
           >
-            <Icon className={cn('h-8 w-8', featured && 'scale-105')} />
+            <Icon className={cn('h-6 w-6', featured && 'scale-105')} />
           </div>
         </div>
       </CardContent>
@@ -313,16 +313,16 @@ export function RiderDashboardPage() {
     <button type="button" onClick={onToggle} className="w-full">
       <Card
         className={cn(
-          'overflow-hidden rounded-[28px] shadow-sm transition-all duration-200 hover:shadow-md',
+          'overflow-hidden rounded-[22px] shadow-sm transition-colors duration-150',
           tone === 'violet'
             ? 'border-slate-200 bg-gradient-to-br from-emerald-50/80 via-white to-teal-50/60'
             : 'border-slate-200 bg-gradient-to-br from-emerald-50/80 via-white to-green-50/60'
         )}
       >
-        <CardContent className="p-5">
+        <CardContent className="p-4">
           <div className="flex items-center justify-between gap-4">
             <div className="min-w-0 flex-1 text-left">
-              <h2 className="text-xl font-semibold tracking-tight text-gray-900">{title}</h2>
+              <h2 className="text-lg font-semibold tracking-tight text-gray-900">{title}</h2>
               <p className="mt-1 text-sm text-gray-500">{subtitle}</p>
             </div>
 
@@ -330,7 +330,7 @@ export function RiderDashboardPage() {
               {rightContent}
               <div
                 className={cn(
-                  'flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-sm',
+                  'flex h-9 w-9 items-center justify-center rounded-full bg-white shadow-sm',
                   tone === 'violet'
                     ? 'text-emerald-600 ring-1 ring-emerald-100'
                     : 'text-emerald-600 ring-1 ring-emerald-100'
@@ -371,27 +371,27 @@ export function RiderDashboardPage() {
   }
 
   return (
-    <div className="space-y-7">
-      <div className="relative overflow-hidden rounded-[32px] border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-teal-50/30 p-5 shadow-sm sm:p-6">
-        <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-emerald-100/20 blur-3xl" />
-        <div className="absolute -bottom-14 left-8 h-32 w-32 rounded-full bg-teal-100/20 blur-3xl" />
+    <div className="space-y-5">
+      <div className="relative overflow-hidden rounded-[26px] border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+        
+        
 
-        <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-100 backdrop-blur-sm">
               <Sparkles className="h-3.5 w-3.5" />
               Dispatch NG Rider
             </div>
 
-            <h1 className="text-3xl font-bold tracking-tight text-gray-950">Rider Dashboard</h1>
-            <p className="mt-2 text-base text-gray-600">
+            <h1 className="text-2xl font-bold tracking-tight text-gray-950 sm:text-3xl">Rider Dashboard</h1>
+            <p className="mt-1.5 text-sm text-gray-600 sm:text-base">
               Welcome back, {user?.full_name?.split(' ')[0]}
             </p>
           </div>
 
           <div
             className={cn(
-              'inline-flex w-fit items-center gap-2 rounded-full px-4 py-2.5 font-medium shadow-sm ring-1',
+              'inline-flex w-fit items-center gap-2 rounded-full px-3.5 py-2 text-sm font-medium ring-1',
               riderProfile?.is_online
                 ? 'bg-green-100 text-green-700 ring-green-200'
                 : 'bg-gray-100 text-gray-600 ring-gray-200'
@@ -408,7 +408,7 @@ export function RiderDashboardPage() {
         </div>
       </div>
 
-      <div className="space-y-4 rounded-[32px] bg-gradient-to-b from-gray-50/90 to-white p-2">
+      <div className="space-y-3 rounded-[26px] bg-gray-50/70 p-1.5">
         <MetricCard
           title="Available to Withdraw"
           value={formatCurrency(availableBalance)}
@@ -419,7 +419,7 @@ export function RiderDashboardPage() {
           featured
         />
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
           <MetricCard
             title="Lifetime Earnings"
             value={formatCurrency(stats.totalEarnings)}
@@ -474,10 +474,10 @@ export function RiderDashboardPage() {
           />
 
           {showActiveJobs && (
-            <div className="space-y-5 rounded-[32px] bg-gradient-to-b from-gray-50/90 to-white p-2">
+            <div className="space-y-5 rounded-[26px] bg-gradient-to-b from-gray-50/90 to-white p-2">
               {myJobs.slice(0, 3).map((job) => (
                 <Link key={job.id} to={`/rider/jobs/${job.id}`}>
-                  <Card className="group relative cursor-pointer overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 active:scale-[0.995] hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+                  <Card className="group relative cursor-pointer overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 active:scale-[0.995] hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
                     <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-500 to-teal-500" />
 
                     <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
@@ -556,7 +556,7 @@ export function RiderDashboardPage() {
         {showAvailableJobs && (
           <>
             {availableJobs.length === 0 ? (
-              <Card className="rounded-[28px] border-2 border-dashed">
+              <Card className="rounded-[24px] border-2 border-dashed">
                 <CardContent className="p-8 text-center">
                   <Package className="mx-auto mb-4 h-12 w-12 text-gray-300" />
                   <h3 className="mb-2 text-lg font-medium text-gray-900">No jobs available</h3>
@@ -566,11 +566,11 @@ export function RiderDashboardPage() {
                 </CardContent>
               </Card>
             ) : (
-              <div className="space-y-5 rounded-[32px] bg-gradient-to-b from-gray-50/90 to-white p-2">
+              <div className="space-y-5 rounded-[26px] bg-gradient-to-b from-gray-50/90 to-white p-2">
                 {availableJobs.map((job) => (
                   <Card
                     key={job.id}
-                    className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]"
+                    className="group relative overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]"
                   >
                     <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-emerald-400 to-green-500" />
 

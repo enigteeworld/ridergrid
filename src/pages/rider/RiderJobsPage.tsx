@@ -125,7 +125,7 @@ export function RiderJobsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">My Jobs</h1>
         <p className="text-gray-500">View and manage your deliveries</p>
@@ -211,10 +211,10 @@ export function RiderJobsPage() {
               </CardContent>
             </Card>
           ) : (
-            <div className="space-y-6 rounded-3xl bg-gray-50/60 p-2">
+            <div className="space-y-5 rounded-3xl bg-gray-50/60 p-2">
               {filteredJobs.map((job) => (
                 <Link key={job.id} to={`/rider/jobs/${job.id}`} className="block">
-                  <Card className="group relative overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 active:scale-[0.985] hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
+                  <Card className="group relative overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.05)] transition-all duration-200 active:scale-[0.985] hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
                     <div
                       className={cn(
                         'absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b',

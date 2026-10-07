@@ -142,3 +142,18 @@ html {
   background: #22c55e;
   animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
 }
+/* Mobile scroll performance: keep the document as the primary scroller. */
+html, body, #root {
+  min-height: 100%;
+}
+body {
+  overflow-x: hidden;
+  overscroll-behavior-y: auto;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+@media (hover: none) and (pointer: coarse) {
+  html { scroll-behavior: auto; }
+  /* Avoid costly hover transforms/repaints while a finger is scrolling. */
+  .hover\\:-translate-y-0\\.5:hover { transform: none !important; }
+}

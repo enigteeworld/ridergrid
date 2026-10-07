@@ -277,35 +277,35 @@ export function FindRidersPage() {
           </CardContent>
         </Card>
       ) : (
-        <div className="space-y-6 rounded-3xl bg-gray-50/60 p-2">
+        <div className="space-y-3 rounded-[24px] bg-gray-50/60 p-1.5">
           {filteredRiders.map((rider) => {
             const VehicleIcon = getVehicleIcon(rider.vehicle_type);
 
             return (
               <Card
                 key={rider.id}
-                className="group relative cursor-pointer overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-200 active:scale-[0.985] hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]"
+                className="group relative cursor-pointer overflow-hidden rounded-[22px] border border-gray-100 bg-white shadow-[0_5px_18px_rgba(15,23,42,0.05)] transition-colors duration-150 active:bg-gray-50"
                 onClick={() => setSelectedRider(rider)}
               >
                 <div
                   className={cn(
-                    'absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b',
+                    'absolute inset-y-0 left-0 w-1 bg-gradient-to-b',
                     getRiderAccent(rider)
                   )}
                 />
 
-                <CardContent className="p-5 pl-6 sm:p-6 sm:pl-7">
-                  <div className="mb-5 flex items-start justify-between gap-4">
+                <CardContent className="p-4 pl-5">
+                  <div className="mb-3 flex items-start justify-between gap-3">
                     <div className="flex min-w-0 items-center gap-3">
                       <div className="relative shrink-0">
                         {rider.avatar_url ? (
                           <img
                             src={rider.avatar_url}
                             alt={rider.full_name}
-                            className="h-16 w-16 rounded-full border border-gray-200 object-cover shadow-sm"
+                            className="h-14 w-14 rounded-2xl border border-gray-200 object-cover"
                           />
                         ) : (
-                          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-400 text-xl font-medium text-white shadow-sm">
+                          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 text-lg font-medium text-white">
                             {rider.full_name.charAt(0).toUpperCase()}
                           </div>
                         )}
@@ -335,7 +335,7 @@ export function FindRidersPage() {
                     </div>
                   </div>
 
-                  <div className="mb-5 flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                  <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-gray-500">
                     <div className="flex items-center gap-1.5">
                       <VehicleIcon className="h-4 w-4" />
                       <span className="capitalize">{rider.vehicle_type}</span>
@@ -352,7 +352,7 @@ export function FindRidersPage() {
                     </div>
                   </div>
 
-                  <div className="mb-5 flex items-center justify-between gap-3">
+                  <div className="mb-3 flex items-center justify-between gap-3">
                     {rider.is_online ? (
                       <span className="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1.5 text-sm font-medium text-green-700">
                         <span className="h-2 w-2 rounded-full bg-green-500" />
@@ -365,14 +365,14 @@ export function FindRidersPage() {
                       </span>
                     )}
 
-                    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-slate-50 text-gray-400 transition-colors duration-200 group-hover:bg-emerald-100 group-hover:text-emerald-600">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gray-50 text-gray-400">
                       <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
                     </div>
                   </div>
 
                   <Button
                     variant="outline"
-                    className="h-12 w-full rounded-2xl border-emerald-200 bg-white text-emerald-700 transition-colors hover:bg-slate-50 hover:text-emerald-800"
+                    className="h-10 w-full rounded-xl border-gray-200 bg-white text-emerald-700 transition-colors hover:bg-gray-50 hover:text-emerald-800"
                   >
                     View Profile
                   </Button>
