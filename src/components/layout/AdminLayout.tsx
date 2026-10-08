@@ -5,7 +5,7 @@
 import { Outlet, NavLink } from 'react-router-dom';
 import {
   LayoutDashboard, Users, ClipboardCheck, ClipboardList, AlertTriangle,
-  Settings, Menu, X, LogOut,
+  Settings, Menu, X, LogOut, CreditCard,
 } from 'lucide-react';
 import { useState } from 'react';
 import { useAuthStore } from '@/stores/authStore';
@@ -19,6 +19,7 @@ const navItems = [
   { path: '/admin/verifications', icon: ClipboardCheck, label: 'Verifications' },
   { path: '/admin/jobs', icon: ClipboardList, label: 'Jobs' },
   { path: '/admin/disputes', icon: AlertTriangle, label: 'Resolution Center' },
+  { path: '/admin/reconciliation', icon: CreditCard, label: 'Reconcile Payments' },
   { path: '/admin/settings', icon: Settings, label: 'Settings' },
 ];
 
@@ -46,7 +47,7 @@ export function AdminLayout() {
           </button>
           {sidebarOpen && (
             <NavLink to="/admin" className="ml-2 flex min-w-0 flex-1 items-center overflow-hidden">
-              <BrandMark className="max-h-9" imageClassName="max-h-9 max-w-[140px] object-contain" iconClassName="h-5 w-5" />
+              <BrandMark className="max-h-11" imageClassName="max-h-11 max-w-[155px] object-contain" iconClassName="h-5 w-5" />
               {!branding.logo_url && <span className="ml-2 truncate text-base font-bold text-emerald-700">{branding.site_name}</span>}
             </NavLink>
           )}
@@ -74,7 +75,7 @@ export function AdminLayout() {
         <div className="flex h-full items-center px-4 lg:px-6">
           <div className="flex min-w-0 flex-1 items-center lg:hidden">
             <NavLink to="/admin" className="flex min-w-0 items-center">
-              <BrandMark className="max-h-9" imageClassName="max-h-9 max-w-[138px] object-contain" iconClassName="h-5 w-5" />
+              <BrandMark className="max-h-11" imageClassName="max-h-11 max-w-[155px] object-contain" iconClassName="h-5 w-5" />
             </NavLink>
           </div>
           <div className="ml-auto flex shrink-0 items-center gap-1">

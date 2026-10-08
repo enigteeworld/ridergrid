@@ -561,15 +561,6 @@ export function RiderProfilePage() {
         </CardContent>
       </Card>
 
-      <Button
-        onClick={handleSignOut}
-        variant="outline"
-        className="h-12 w-full rounded-2xl border-red-200 text-red-600 hover:bg-red-50"
-      >
-        <LogOut className="mr-2 h-4 w-4" />
-        Sign Out
-      </Button>
-
       <Dialog open={showBankDialog} onOpenChange={setShowBankDialog}>
         <DialogContent className="overflow-hidden rounded-[20px] border-0 bg-white p-0 shadow-[0_24px_80px_rgba(15,23,42,0.20)] sm:max-w-md">
           <div className="bg-gradient-to-br from-blue-50 via-white to-cyan-50">
@@ -626,8 +617,18 @@ export function RiderProfilePage() {
           </div>
         </DialogContent>
       </Dialog>
-    <div className="mt-5"><KycVerificationCard /></div>
+      <div className="mt-5"><KycVerificationCard /></div>
       <div className="mt-5"><AccountVerificationCard /></div>
+      <div className="pt-5 pb-6">
+      <Button
+        onClick={handleSignOut}
+        variant="outline"
+        className="h-12 w-full rounded-2xl border-red-200 text-red-600 hover:bg-red-50"
+      >
+        <LogOut className="mr-2 h-4 w-4" />
+        Sign Out
+      </Button>
+      </div>
       </div>
   );
 }

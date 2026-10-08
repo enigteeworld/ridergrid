@@ -61,15 +61,15 @@ const getInitials = (name: string) =>
 const howItWorks = [
   {
     icon: Smartphone,
-    title: 'Download the app',
+    title: 'Start on the web',
     description:
-      'Get Dispatch NG on your phone. Sign up in seconds and verify your account to start booking.',
+      'Open Dispatch NG in your mobile browser, create an account and complete the available verification steps.',
   },
   {
     icon: MapPin,
-    title: 'Drop your pin',
+    title: 'Set delivery details',
     description:
-      'Set pickup and delivery locations. See available verified riders nearby in real-time.',
+      'Enter pickup and destination information and create a delivery request.',
   },
   {
     icon: Wallet,
@@ -81,7 +81,7 @@ const howItWorks = [
     icon: CheckCircle,
     title: 'Track & confirm',
     description:
-      'Follow your rider live. Confirm delivery and release payment — or flag issues instantly.',
+      'Review delivery status updates, confirm completion, or raise a support issue.',
   },
 ];
 
@@ -90,13 +90,13 @@ const features = [
     icon: Shield,
     title: 'Verified riders only',
     description:
-      'Every rider is ID-verified and background-checked before they hit the road. No exceptions.',
+      'Rider verification is managed through the platform’s identity review process.',
   },
   {
     icon: Wallet,
     title: 'Escrow-backed payments',
     description:
-      'Your money stays protected in-app until delivery is confirmed. Zero risk, full control.',
+      'Supported deliveries use an escrow workflow to manage payment release and disputes.',
   },
   {
     icon: Star,
@@ -106,16 +106,16 @@ const features = [
   },
   {
     icon: HeartHandshake,
-    title: '24/7 dispute support',
+    title: 'Dispute support',
     description:
-      'Something went wrong? Our support team and ticket trail have your back, always.',
+      'Open a support ticket and keep a record of delivery issues and resolutions.',
   },
 ];
 
 const appFeatures = [
-  { icon: Zap, label: 'Lightning Fast', desc: 'Average pickup in under 15 mins' },
-  { icon: Clock, label: 'Real-time Tracking', desc: 'Watch your delivery live on map' },
-  { icon: BadgeCheck, label: 'Verified Fleet', desc: 'Every rider, every bike, checked' },
+  { icon: Zap, label: 'Mobile-first', desc: 'Designed for your phone browser' },
+  { icon: Clock, label: 'Delivery updates', desc: 'Follow job status in your account' },
+  { icon: BadgeCheck, label: 'Identity review', desc: 'Admin-managed rider verification' },
   { icon: TrendingUp, label: 'Fair Pricing', desc: 'Transparent rates, no hidden fees' },
 ];
 
@@ -409,11 +409,8 @@ export function LandingPage() {
             <div className="space-y-8">
               {/* Badge */}
               <div className="inline-flex items-center gap-2 rounded-full border border-slate-500/30 bg-slate-500/10 px-4 py-2 text-sm font-semibold text-slate-400 backdrop-blur-sm">
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-slate-400 opacity-75" />
-                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-slate-500" />
-                </span>
-                Launching soon on iOS & Android
+                <Smartphone className="h-4 w-4" />
+                Lauching soon on iOS & Android
               </div>
 
               <div className="space-y-6">
@@ -911,7 +908,7 @@ export function LandingPage() {
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div className="space-y-8">
               <div>
-                <p className="text-sm font-bold uppercase tracking-widest text-slate-400">Get the app</p>
+                <p className="text-sm font-bold uppercase tracking-widest text-slate-400">Available on the web</p>
                 <h2 className="mt-3 text-4xl font-black text-white sm:text-5xl lg:text-6xl">
                   Your delivery,
                   <br />
@@ -924,26 +921,14 @@ export function LandingPage() {
               </div>
 
               <div className="flex flex-wrap gap-4">
-                <button className="group flex items-center gap-3 rounded-2xl bg-white px-6 py-4 transition-transform hover:scale-105">
-                  <Apple className="h-8 w-8 text-gray-900" />
-                  <div className="text-left">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Coming soon</p>
-                    <p className="text-base font-bold text-gray-900">App Store</p>
-                  </div>
-                </button>
-                <button className="group flex items-center gap-3 rounded-2xl bg-white px-6 py-4 transition-transform hover:scale-105">
-                  <Download className="h-8 w-8 text-gray-900" />
-                  <div className="text-left">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Coming soon</p>
-                    <p className="text-base font-bold text-gray-900">Google Play</p>
-                  </div>
-                </button>
+                <Button onClick={() => navigate('/signup')} className="h-14 rounded-2xl bg-emerald-600 px-7 text-white hover:bg-emerald-700">Get started on the web <ArrowRight className="ml-2 h-5 w-5" /></Button>
+                <div className="flex items-center gap-2 rounded-2xl border border-slate-600 px-5 py-3 text-sm text-slate-300"><Smartphone className="h-5 w-5" /> Native apps planned for later</div>
               </div>
 
               <div className="flex items-center gap-6 text-sm text-gray-500">
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-slate-500" />
-                  <span>Free download</span>
+                  <span>No app installation needed</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-slate-500" />
@@ -951,7 +936,7 @@ export function LandingPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-slate-500" />
-                  <span>iOS & Android</span>
+                  <span>Mobile browser friendly</span>
                 </div>
               </div>
             </div>
@@ -1117,19 +1102,19 @@ export function LandingPage() {
             <div>
               <h4 className="mb-5 text-sm font-bold uppercase tracking-widest text-white">Support</h4>
               <ul className="space-y-3 text-sm">
-                <li className="text-gray-500">Help Center</li>
-                <li className="text-gray-500">Dispute Review</li>
-                <li className="text-gray-500">Safety Guidelines</li>
-                <li className="text-gray-500">Platform Terms</li>
+                <li><a href="/help" className="hover:text-white transition-colors">Help Center</a></li>
+                <li><a href="/disputes" className="hover:text-white transition-colors">Dispute Review</a></li>
+                <li><a href="/safety" className="hover:text-white transition-colors">Safety Guidelines</a></li>
+                <li><a href="/terms" className="hover:text-white transition-colors">Platform Terms</a></li>
               </ul>
             </div>
 
             <div>
               <h4 className="mb-5 text-sm font-bold uppercase tracking-widest text-white">Contact</h4>
               <ul className="space-y-3 text-sm text-gray-500">
-                <li>support@dispatchng.com</li>
-                <li>+234 800 123 4567</li>
-                <li>Lagos, Nigeria</li>
+                <li>Support available through your account</li>
+                
+                
               </ul>
             </div>
           </div>
@@ -1137,9 +1122,9 @@ export function LandingPage() {
           <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/5 pt-8 sm:flex-row">
             <p className="text-sm text-gray-600">© 2026 Dispatch NG. All rights reserved.</p>
             <div className="flex gap-6 text-sm text-gray-600">
-              <span className="hover:text-gray-400 cursor-pointer">Privacy</span>
-              <span className="hover:text-gray-400 cursor-pointer">Terms</span>
-              <span className="hover:text-gray-400 cursor-pointer">Cookies</span>
+              <a href="/privacy" className="hover:text-white">Privacy</a>
+              <a href="/terms" className="hover:text-white">Terms</a>
+              <a href="/cookies" className="hover:text-white">Cookies</a>
             </div>
           </div>
         </div>

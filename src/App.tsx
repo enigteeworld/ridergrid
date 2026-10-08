@@ -20,6 +20,7 @@ import { OnboardingPage } from '@/pages/auth/OnboardingPage';
 // Public Pages
 import { LandingPage } from '@/pages/public/LandingPage';
 import { PublicRidersPage } from '@/pages/public/PublicRidersPage';
+import { PublicInfoPage } from '@/pages/public/PublicInfoPage';
 
 // Customer Pages
 import { HomePage } from '@/pages/customer/HomePage';
@@ -49,6 +50,7 @@ import { AdminSettingsPage } from '@/pages/admin/AdminSettingsPage';
 import { AdminCustomersPage } from '@/pages/admin/AdminCustomersPage';
 import { AdminWithdrawalsPage } from '@/pages/admin/AdminWithdrawalsPage';
 import { AdminRevenuePage } from '@/pages/admin/AdminRevenuePage';
+import { AdminReconciliationPage } from '@/pages/admin/AdminReconciliationPage';
 
 // Components
 import { ProtectedRoute } from '@/components/ProtectedRoute';
@@ -110,6 +112,7 @@ function App() {
             }
           />
           <Route path="/riders" element={<PublicRidersPage />} />
+          {(['help','disputes','safety','terms','privacy','cookies'] as const).map(page => <Route key={page} path={`/${page}`} element={<PublicInfoPage page={page} />} />)}
 
           {/* Public Auth Routes */}
           <Route element={<AuthLayout />}>
@@ -186,6 +189,7 @@ function App() {
             <Route path="/admin/disputes" element={<AdminDisputesPage />} />
             <Route path="/admin/withdrawals" element={<AdminWithdrawalsPage />} />
             <Route path="/admin/revenue" element={<AdminRevenuePage />} />
+            <Route path="/admin/reconciliation" element={<AdminReconciliationPage />} />
             <Route path="/admin/settings" element={<AdminSettingsPage />} />
           </Route>
 

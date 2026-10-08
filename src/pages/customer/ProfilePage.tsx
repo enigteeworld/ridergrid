@@ -316,6 +316,9 @@ export function ProfilePage() {
         </Card>
       </div>
 
+    <div className="mt-5"><KycVerificationCard /></div>
+      <div className="mt-5"><AccountVerificationCard /></div>
+    <div className="pt-5 pb-6">
       <Button
         onClick={handleSignOut}
         variant="outline"
@@ -324,8 +327,7 @@ export function ProfilePage() {
         <LogOut className="mr-2 h-4 w-4" />
         Sign Out
       </Button>
-    <div className="mt-5"><KycVerificationCard /></div>
-      <div className="mt-5"><AccountVerificationCard /></div>
+    </div>
       </div>
   );
 }
